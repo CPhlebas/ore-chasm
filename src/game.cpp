@@ -74,7 +74,7 @@ void Game::init()
     m_app->SetView(*m_view);
 
     m_font = new sf::Font();
-    if (!m_font->LoadFromFile("../font/ProggyCleanSZBP.ttf", 20))
+    if (!m_font->LoadFromFile("../font/DejaVuSerif.ttf", 10))
     {
         abort_game("unable to load font");
     }
@@ -97,9 +97,9 @@ void Game::tick()
     }
 
     sf::Sprite sprite;
-    sprite.SetColor(sf::Color(0, 255, 255, 128));
     sprite.SetX(200.f);
     sprite.SetY(100.f);
+    sprite.SetImage(image);
     sprite.SetPosition(200.f, 100.f);
     sprite.SetRotation(30.f);
     sprite.SetCenter(0, 0);
@@ -112,7 +112,7 @@ void Game::tick()
 
     sf::String text;
     text.SetFont(*m_font);
-    text.SetSize(20.0);
+    text.SetSize(10.0);
     text.SetColor(sf::Color::Yellow);
 
     std::stringstream ss;
