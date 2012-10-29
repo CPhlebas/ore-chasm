@@ -43,6 +43,7 @@ src/imagemanager.cpp
 src/player.cpp
 src/world.cpp
 src/renderer.cpp
+src/renderable.cpp
 )
 
 #YAML, needed later

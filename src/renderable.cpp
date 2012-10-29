@@ -18,10 +18,16 @@
 #include "renderable.h"
 #include "imagemanager.h"
 
-Player::Player(const char* texture)
+Renderable::Renderable(const char* texture)
 {
     ImageManager* manager = ImageManager::instance();
     sf::Image image = manager->loadImage("../textures/stone.png");
 
-    this->SetImage(image);
+    SetImage(image);
 }
+
+void Renderable::SetImage(const sf::Image& image)
+{
+    sf::Sprite::SetImage(image);
+}
+

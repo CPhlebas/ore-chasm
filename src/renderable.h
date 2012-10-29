@@ -27,7 +27,7 @@ public:
      * Small basica wrapper which inherits an sf::Sprite and automagically
      * integrates itself with the RenderManager.
      */
-    Renderable();
+    Renderable(const char* texture);
 
     void SetImage(const sf::Image& image);
 
