@@ -5,6 +5,16 @@ project (buildarrhea)
 if(CMAKE_BUILD_TYPE STREQUAL "")
   set(CMAKE_BUILD_TYPE Debug)
 endif()
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_definitions(-DDEBUG)
+    set(CMAKE_CXX_FLAGS "-std=c++11 -Wall -Wno-unused-variable -Wno-unused-function -funroll-loops -fexpensive-optimizations -Woverloaded-virtual -g3 -ggdb")
+    set(CMAKE_C_FLAGS "-Wall -Wno-unused-variable -Wno-unused-function -funroll-loops -fexpensive-optimizations -g3 -ggdb")
+else(CMAKE_BUILD_TYPE STREQUAL "")
+    set(CMAKE_CXX_FLAGS "-std=c++11 -O2 -Wall -Wno-unused-variable -Wno-unused-function -funroll-loops -fexpensive-optimizations -Woverloaded-virtual")
+    set(CMAKE_C_FLAGS "-O2 -Wall -Wno-unused-variable -Wno-unused-function -funroll-loops -fexpensive-optimizations")
+endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
+
 # (you can also set it on the command line: -D CMAKE_BUILD_TYPE=Release)
 
 # Set version information in a config.h file
@@ -28,7 +38,6 @@ src/renderer.cpp
 
 add_executable(${EXECUTABLE_NAME} ${SRC})
 
-
 # Detect and add SFML
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 find_package(SFML 1.6 REQUIRED system window graphics network audio)
@@ -46,33 +55,10 @@ install(TARGETS ${EXECUTABLE_NAME} DESTINATION bin)
 # CPack packaging
 include(InstallRequiredSystemLibraries)
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/COPYING")
-set(CPACK_PACKAGE_VERSION_MAJOR "${myproject_VERSION_MAJOR}")
-set(CPACK_PACKAGE_VERSION_MINOR "${myproject_VERSION_MINOR}")
+set(CPACK_PACKAGE_VERSION_MAJOR "${buildarrhea_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${buildarrhea_VERSION_MINOR}")
 include(CPack)
 
-
-include(CheckCSourceCompiles)
-include(CheckCXXSourceCompiles)
-include(${ALLEGRO_INCLUDE_DIR})
-
-option(DEBUG "Compile buildarrhea with debug information?" OFF)
-
-if($ENV{DEBUG})
-    set(DEBUG ON)
-elseif(NOT $ENV{DEBUG})
-    set(DEBUG OFF)
-endif($ENV{DEBUG})
-
-if(DEBUG)
-    add_definitions(-DDEBUG)
-    set(CMAKE_CXX_FLAGS "-std=c++11 -Wall -Wno-unused-variable -Wno-unused-function -funroll-loops -fexpensive-optimizations -Woverloaded-virtual -g3 -ggdb")
-    set(CMAKE_C_FLAGS "-Wall -Wno-unused-variable -Wno-unused-function -funroll-loops -fexpensive-optimizations -g3 -ggdb")
-else(DEBUG)
-    set(CMAKE_CXX_FLAGS "-std=c++11 -O2 -Wall -Wno-unused-variable -Wno-unused-function -funroll-loops -fexpensive-optimizations -Woverloaded-virtual")
-    set(CMAKE_C_FLAGS "-O2 -Wall -Wno-unused-variable -Wno-unused-function -funroll-loops -fexpensive-optimizations")
-endif(DEBUG)
-
-find_package(ALLEGRO5)
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/src/)
 install(DIRECTORY textures/ DESTINATION "textures") #FILES_MATCHING PATTERN "*")
