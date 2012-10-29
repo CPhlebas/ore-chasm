@@ -40,6 +40,14 @@ public:
     void SetTexture(const char* texture);
 
 private:
+    /**
+     * Hidden!! So that we don't screw up and start caching stuff outside, and not using
+     * this API.
+     *
+     * ONLY setTexture should be used.
+     */
+    void SetImage(const sf::Image& image);
+
     ImageManager* m_imageManager = nullptr;
 };
 

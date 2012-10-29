@@ -20,8 +20,5 @@
 
 Player::Player(const char* texture) : Renderable(texture)
 {
-    ImageManager* manager = ImageManager::instance();
-    sf::Image image = manager->loadImage("../textures/stone.png");
-
-    this->SetImage(image);
+    this->SetTexture("../textures/player.png");
 }
