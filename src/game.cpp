@@ -63,9 +63,19 @@ void Game::init()
     // sf::WindowSettings Settings = App.GetSettings();
 
     sf::WindowSettings settings;
-    settings.depthBits = 24; // Request a 24 bits depth buffer
-    settings.stencilBits = 8;  // Request a 8 bits stencil buffer
-//    settings.AntialiasingLevel = 2;  // Request 2 levels of antialiasing
+
+    settings.depthBits = 24;
+    settings.stencilBits = 8;
+    settings.antialiasingLevel = 4;
+    settings.majorVersion = 3;
+    settings.minorVersion = 0;
+
+    sf::ContextSettings settings = window.getSettings();
+
+    std::cout << "depth bits:" << settings.depthBits << std::endl;
+    std::cout << "stencil bits:" << settings.stencilBits << std::endl;
+    std::cout << "antialiasing level:" << settings.antialiasingLevel << std::endl;
+    std::cout << "version:" << settings.majorVersion << "." << settings.minorVersion << std::endl;
 
     m_app = new sf::RenderWindow(sf::VideoMode(SCREEN_W, SCREEN_H), "Buildarrhea", sf::Style::Resize, settings); //sf::Style::Fullscreen
     m_app->useVerticalSync(false);
@@ -134,21 +144,32 @@ void Game::tick()
         while (m_app->getEvent(event))
         {
 
-            bool LeftKeyDown = Input.isKeyDown(sf::Key::Left);
-            bool RightButtonDown = Input.isMouseButtonDown(sf::Mouse::Right);
-            unsigned int MouseX = Input.getMouseX();
-            unsigned int MouseY = Input.getMouseY();
-
+//            bool LeftKeyDown = Input.isKeyDown(sf::Key::Left);
+//            bool RightButtonDown = Input.isMouseButtonDown(sf::Mouse::Right);
+//            unsigned int MouseX = Input.getMouseX();
+//            unsigned int MouseY = Input.getMouseY();
+//
             // Move the sprite
             // if (m_app->GetInput().IsKeyDown(sf::Key::Left))  sprite.Move(-1000 * elapsedTime, 0);
             // if (m_app->GetInput().IsKeyDown(sf::Key::Right)) sprite.Move( 1000 * elapsedTime, 0);
             // if (m_app->GetInput().IsKeyDown(sf::Key::Up))    sprite.Move(0, -1000 * elapsedTime);
             // if (m_app->GetInput().IsKeyDown(sf::Key::Down))  sprite.Move(0,  1000 * elapsedTime);
 
-            if (m_app->getInput().isKeyDown(sf::Key::Left))  m_view->move(-1000 * elapsedTime, 0);
-            if (m_app->getInput().isKeyDown(sf::Key::Right)) m_view->move( 1000 * elapsedTime, 0);
-            if (m_app->getInput().isKeyDown(sf::Key::Up))    m_view->move(0, -1000 * elapsedTime);
-            if (m_app->getInput().isKeyDown(sf::Key::Down))  m_view->move(0,  1000 * elapsedTime);
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))  m_view->move(-1000 * elapsedTime, 0);
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) m_view->move( 1000 * elapsedTime, 0);
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))    m_view->move(0, -1000 * elapsedTime);
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))  m_view->move(0,  1000 * elapsedTime);
+
+            if (event.type == sf::Event::MouseMoved)
+            {
+                std::cout << "new mouse x: " << event.mouseMove.x << std::endl;
+                std::cout << "new mouse y: " << event.mouseMove.y << std::endl;
+            }
+
+
+
+            //sf::event::LostFocus
+            //sf::event::GainedFocus
 
             // Window closed
             if (event.type == sf::Event::Closed || ((event.Type == sf::Event::KeyPressed) && (event.Key.Code == sf::Key::Escape))) {
