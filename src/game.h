@@ -41,7 +41,7 @@ class Game
     const int SCREEN_H = 900;
 
 private:
-    sf::RenderWindow *m_app;
+    sf::RenderWindow *m_app = nullptr;
 };
 
 #endif

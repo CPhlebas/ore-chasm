@@ -103,7 +103,7 @@ void Game::tick()
     {
         float elapsedTime = m_app->GetFrameTime();
         float fps = 1.f / elapsedTime;
-        printf("Framerate: %s \n", fps);
+        printf("Framerate: %f \n", fps);
 
         while (m_app->GetEvent(Event))
         {
