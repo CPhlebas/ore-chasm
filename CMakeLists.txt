@@ -18,8 +18,8 @@ endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
 # (you can also set it on the command line: -D CMAKE_BUILD_TYPE=Release)
 
 # Set version information in a config.h file
-set(myproject_VERSION_MAJOR 1)
-set(myproject_VERSION_MINOR 0)
+set(buildarrhea_VERSION_MAJOR 0)
+set(buildarrhea_VERSION_MINOR 1)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 
