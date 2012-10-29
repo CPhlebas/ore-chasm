@@ -1,2 +1,13 @@
 TODO :)
 
+Periodically sync with releases from: http://sfgui.sfml-dev.de/download
+and
+
+CHIPMUNK http://chipmunk-physics.net/downloads.php.
+CURRENT VERSION: 6.1.1
+
+or use
+TGUI http://en.sfml-dev.org/forums/index.php?topic=7023.0
+
+it seems nice as well, and maybe the best choice at the present time
+

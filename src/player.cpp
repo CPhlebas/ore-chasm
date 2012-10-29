@@ -16,10 +16,14 @@
  *****************************************************************************/
 
 #include "player.h"
+#include "imagemanager.h"
 
-Player::Player()
+Player::Player(const char* texture)
 {
+    ImageManager* manager = ImageManager::instance();
+    sf::Image image = manager->loadImage("../textures/stone.png");
 
+    this->SetImage(image);
 }
 
 void Player::update()

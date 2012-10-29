@@ -15,29 +15,13 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#ifndef PLAYER_H
-#define PLAYER_H
+#include "renderable.h"
+#include "imagemanager.h"
 
-#include <SFML/Graphics.hpp>
-
-class Player : public sf::Sprite
+Player::Player(const char* texture)
 {
-public:
-    /**
-     * Create a player with the starting texture @p texture
-     * the ImageLoader is used automatically, so just pass a path
-     * to the image to load.
-     */
-    Player(const char* texture);
+    ImageManager* manager = ImageManager::instance();
+    sf::Image image = manager->loadImage("../textures/stone.png");
 
-    void update();
-
-private:
-    float x = 500.0;
-    float y = 500.0;
-
-    int health = 100;
-};
-
-
-#endif
+    this->SetImage(image);
+}

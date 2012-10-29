@@ -18,12 +18,13 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "player.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Font.hpp>
-
 
 class Game
 {
@@ -43,6 +44,7 @@ private:
     sf::RenderWindow *m_app = nullptr;
     sf::View *m_view = nullptr;
     sf::Font *m_font = nullptr;
+    Player *m_player = nullptr;
 };
 
 #endif

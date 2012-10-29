@@ -83,6 +83,8 @@ void Game::init()
     ImageManager* manager = ImageManager::instance();
     manager->addResourceDir("../textures");
 
+    m_player = new Player("../textures/stone.png");
+
     tick();
     shutdown();
 }
@@ -95,23 +97,17 @@ void Game::tick()
     float Left = 0.f;
     float Top  = 0.f;
 
-    ImageManager* manager = ImageManager::instance();
 
-    sf::Image image = manager->loadImage("../textures/stone.png");
+    m_player->SetX(200.f);
+    m_player->SetY(100.f);
+    m_player->SetPosition(200.f, 100.f);
+    m_player->SetRotation(30.f);
+    m_player->SetCenter(0, 0);
+    m_player->SetScale(10.0f, 10.0f);
+    m_player->SetBlendMode(sf::Blend::Multiply);
 
-    sf::Sprite sprite;
-    sprite.SetX(200.f);
-    sprite.SetY(100.f);
-    sprite.SetImage(image);
-    sprite.SetPosition(200.f, 100.f);
-    sprite.SetRotation(30.f);
-    sprite.SetCenter(0, 0);
-    sprite.SetScale(10.0f, 10.0f);
-    sprite.SetBlendMode(sf::Blend::Multiply);
-    sprite.SetImage(image);
-
-    sprite.Move(10, 5);
-    sprite.Rotate(90);
+    m_player->Move(10, 5);
+    m_player->Rotate(90);
 
     sf::String text;
     text.SetFont(*m_font);
@@ -158,7 +154,7 @@ void Game::tick()
         }
 
         m_app->Clear(sf::Color(200, 0, 0));
-        m_app->Draw(sprite);
+        m_app->Draw(*m_player);
 
         m_app->SetView(m_app->GetDefaultView());
         m_app->Draw(text);

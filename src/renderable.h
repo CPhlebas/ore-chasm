@@ -15,29 +15,23 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#ifndef PLAYER_H
-#define PLAYER_H
+#ifndef RENDERABLE_H
+#define RENDERABLE_H
 
 #include <SFML/Graphics.hpp>
 
-class Player : public sf::Sprite
+class Renderable : public sf::Sprite
 {
 public:
     /**
-     * Create a player with the starting texture @p texture
-     * the ImageLoader is used automatically, so just pass a path
-     * to the image to load.
+     * Small basica wrapper which inherits an sf::Sprite and automagically
+     * integrates itself with the RenderManager.
      */
-    Player(const char* texture);
+    Renderable();
 
-    void update();
+    void SetImage(const sf::Image& image);
 
 private:
-    float x = 500.0;
-    float y = 500.0;
-
-    int health = 100;
 };
-
 
 #endif
