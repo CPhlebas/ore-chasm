@@ -16,9 +16,16 @@
  *****************************************************************************/
 
 #include "game.h"
+#include "config.h"
+
+#include <iostream>
+
+using namespace std;
 
 int main(int argc, char* argv[])
 {
+    cout << "Version " << buildarrhea_VERSION_MAJOR << "." << buildarrhea_VERSION_MINOR << endl;
+
     Game game;
     game.init();
 }

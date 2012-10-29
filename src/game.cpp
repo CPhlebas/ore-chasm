@@ -17,6 +17,8 @@
 
 #include "game.h"
 
+#include <SFML/Graphics.hpp>
+
 Game::Game()
 {
 }
@@ -29,7 +31,17 @@ void Game::abort_game(const char* message)
 
 void Game::init()
 {
-
+    sf::Window App(sf::VideoMode(800, 600), "myproject");
+    App.Clear();
+    while (App.IsOpened()) {
+        sf::Event Event;
+        while (App.GetEvent(Event)) {
+            if (Event.Type == sf::Event::Closed)
+                App.Close();
+        }
+        App.Display();
+    }
+}
 
     // cap tickrate to FPS
     timer = al_create_timer(1.0 / FPS);
