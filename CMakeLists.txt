@@ -36,12 +36,25 @@ src/game.cpp
 src/renderer.cpp
 )
 
+#YAML, needed later
+## pkg-config-based library
+#include(FindPkgConfig)
+#pkg_check_modules(yaml-cpp REQUIRED yaml-cpp>=0.2.5)
+#if(yaml-cpp_FOUND)
+#  include_directories(${yaml-cpp_INCLUDE_DIRS})
+#  link_directories(${yaml-cpp_LIBRARY_DIRS})
+#endif()
+#add_executable(${EXECUTABLE_NAME} ${SOURCES})
+#target_link_libraries(${EXECUTABLE_NAME} ${yaml-cpp_LIBRARIES})
+#
+
 add_executable(${EXECUTABLE_NAME} ${SRC})
 
 # Detect and add SFML
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 
 find_package(SFML 1.6 REQUIRED system window graphics network audio)
+
 
 if(SFML_FOUND)
   include_directories(${SFML_INCLUDE_DIR})
