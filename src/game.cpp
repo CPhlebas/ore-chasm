@@ -157,7 +157,9 @@ void Game::tick()
         m_app->Clear(sf::Color(200, 0, 0));
         m_app->Draw(sprite);
 
+        m_app->SetView(m_app->GetDefaultView());
         m_app->Draw(text);
+        m_app->SetView(*m_view);
 
         // always after rendering!
         m_app->Display();
