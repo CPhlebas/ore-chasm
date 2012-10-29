@@ -31,17 +31,22 @@ void Game::abort_game(const char* message)
 
 void Game::init()
 {
-    sf::Window App(sf::VideoMode(800, 600), "myproject");
-    App.Clear();
-    while (App.IsOpened()) {
-        sf::Event Event;
-        while (App.GetEvent(Event)) {
-            if (Event.Type == sf::Event::Closed)
-                App.Close();
-        }
-        App.Display();
+    /*
+     * TODO:
+    unsigned int VideoModesCount = sf::VideoMode::GetModesCount();
+    for (unsigned int i = 0; i < VideoModesCount; ++i)
+    {
+        sf::VideoMode Mode = sf::VideoMode::GetMode(i);
+
+        // Mode is a valid video mode
     }
-}
+    // Creating a fullscreen window with the best video mode supported
+    App.Create(sf::VideoMode::GetMode(0), "SFML Window", sf::Style::Fullscreen);
+
+    sf::VideoMode DesktopMode = sf::VideoMode::GetDesktopMode();
+    */
+
+    m_app =sf::Window(sf::VideoMode(SCREEN_W, SCREEN_H), "Buildarrhea"); //sf::Style::Fullscreen
 
     // cap tickrate to FPS
     timer = al_create_timer(1.0 / FPS);
@@ -57,32 +62,23 @@ void Game::init()
 
 void Game::tick()
 {
-    bool redraw = true;
-    al_start_timer(timer);
-
-    while (!done) {
-
-        if (event.type == ALLEGRO_EVENT_TIMER) {
-            redraw = true;
-            //update_logic();
-        } else if (event.type == ALLEGRO_EVENT_KEY_DOWN) {
-            if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
-                done = true;
+    while (App.IsOpened())
+    {
+        sf::Event Event;
+        while (App.GetEvent(Event))
+        {
+            // Window closed
+            if (Event.Type == sf::Event::Closed || ((Event.Type == sf::Event::KeyPressed) && (Event.Key.Code == sf::Key::Escape))) {
+                shutdown();
             }
-            //get_user_input();
         }
 
-        if (redraw && al_is_event_queue_empty(event_queue)) {
-            redraw = false;
-            al_clear_to_color(al_map_rgb(255, 0, 0));
-            al_draw_bitmap(image, 200, 200, 0);
-            //update_graphics();
-            al_flip_display();
-        }
+        // always after rendering!
+        m_app.Display();
     }
 }
 
 void Game::shutdown()
 {
-
+    m_app.Close();
 }

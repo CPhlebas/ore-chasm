@@ -21,6 +21,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+namespace sf {
+    class Window;
+}
 
 class Game
 {
@@ -38,7 +41,8 @@ class Game
     const int SCREEN_W = 1600;
     const int SCREEN_H = 900;
 
-
+private:
+    sf::Window m_app;
 };
 
 #endif
