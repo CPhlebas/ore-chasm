@@ -70,7 +70,7 @@ endif()
 
 add_executable(${EXECUTABLE_NAME} ${SRC})
 
-find_package(SFML 1.6 REQUIRED system window graphics audio) #network
+find_package(SFML 2.0 REQUIRED system window graphics audio) #network
 
 if (NOT SFML_FOUND)
     message(FATAL_ERROR "Could not find SFML.")
