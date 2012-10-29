@@ -8,6 +8,10 @@ endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_definitions(-DDEBUG)
+
+    # because cmake has this annoying fucking bug that took me a while to figure out how i can use clang: http://www.cmake.org/pipermail/cmake/2011-February/042629.html
+    set(CMAKE_CXX_COMPILER "clang++")
+
     set(CMAKE_CXX_FLAGS "-std=c++11 -Wall -Wno-unused-variable -Wno-unused-function -funroll-loops -fexpensive-optimizations -Woverloaded-virtual -g3 -ggdb")
     set(CMAKE_C_FLAGS "-Wall -Wno-unused-variable -Wno-unused-function -funroll-loops -fexpensive-optimizations -g3 -ggdb")
 else(CMAKE_BUILD_TYPE STREQUAL "")
@@ -61,7 +65,6 @@ if (NOT CHIPMUNK_FOUND)
 endif()
 
 add_executable(${EXECUTABLE_NAME} ${SRC})
-
 
 find_package(SFML 1.6 REQUIRED system window graphics audio) #network
 

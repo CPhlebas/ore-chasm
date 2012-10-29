@@ -34,8 +34,6 @@ class Game
     void tick();
     void shutdown();
 
-    bool done;
-
     const float FPS = 60.0;
     const int SCREEN_W = 1600;
     const int SCREEN_H = 900;
