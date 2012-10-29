@@ -62,11 +62,19 @@ void Game::init()
 
 void Game::tick()
 {
-    while (App.IsOpened())
+    sf::Event Event;
+    const sf::Input& Input = m_app.GetInput();
+
+    while (m_app.IsOpened())
     {
-        sf::Event Event;
-        while (App.GetEvent(Event))
+        while (m_app.GetEvent(Event))
         {
+
+            bool LeftKeyDown = Input.IsKeyDown(sf::Key::Left);
+            bool RightButtonDown = Input.IsMouseButtonDown(sf::Mouse::Right);
+            unsigned int MouseX = Input.GetMouseX();
+            unsigned int MouseY = Input.GetMouseY();
+
             // Window closed
             if (Event.Type == sf::Event::Closed || ((Event.Type == sf::Event::KeyPressed) && (Event.Key.Code == sf::Key::Escape))) {
                 shutdown();
