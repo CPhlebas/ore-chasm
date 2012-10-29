@@ -21,6 +21,8 @@ endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
 set(myproject_VERSION_MAJOR 1)
 set(myproject_VERSION_MINOR 0)
 
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
+
 configure_file(
   "${PROJECT_SOURCE_DIR}/config.h.in"
   "${PROJECT_BINARY_DIR}/config.h"
@@ -38,7 +40,7 @@ src/renderer.cpp
 
 #YAML, needed later
 ## pkg-config-based library
-#include(FindPkgConfig)
+include(FindPkgConfig)
 #pkg_check_modules(yaml-cpp REQUIRED yaml-cpp>=0.2.5)
 #if(yaml-cpp_FOUND)
 #  include_directories(${yaml-cpp_INCLUDE_DIRS})
@@ -48,18 +50,28 @@ src/renderer.cpp
 #target_link_libraries(${EXECUTABLE_NAME} ${yaml-cpp_LIBRARIES})
 #
 
+find_package(Chipmunk 5.3.4 REQUIRED chipmunk)
+if (CHIPMUNK_FOUND)
+    include_directories(${CHIPMUNK_INCLUDE_DIRS})
+    link_directories(${CHIPMUNK_LIBRARIES})
+endif()
+
+if (NOT CHIPMUNK_FOUND)
+    message(FATAL_ERROR "Could not find chipmunk 2D physics library.")
+endif()
+
 add_executable(${EXECUTABLE_NAME} ${SRC})
 
-# Detect and add SFML
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 
 find_package(SFML 1.6 REQUIRED system window graphics audio) #network
 
-
-if(SFML_FOUND)
-  include_directories(${SFML_INCLUDE_DIR})
-  target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES})
+if (NOT SFML_FOUND)
+    message(FATAL_ERROR "Could not find SFML.")
 endif()
+
+include_directories(${SFML_INCLUDE_DIR})
+target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES} ${CHIPMUNK_LIBRARIES} )
+
 
 # CPack packaging
 include(InstallRequiredSystemLibraries)
