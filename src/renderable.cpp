@@ -21,11 +21,10 @@
 Renderable::Renderable(const char* texture)
 {
     m_imageManager = ImageManager::instance();
-    SetTexture(texture);
+    Renderable::setTexture(texture);
 }
 
-void Renderable::SetTexture(const char* texture)
+void Renderable::setTexture(const char* texture)
 {
-
-    sf::Sprite::SetImage(m_imageManager->loadImage(texture));
+    sf::Sprite::setTexture(m_imageManager->loadTexture(texture));
 }

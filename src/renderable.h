@@ -37,16 +37,15 @@ public:
      *
      * Internally, calls sf::Sprite::setImage with the texture it obtained.
      */
-    void SetTexture(const char* texture);
+    void setTexture(const char* texture);
 
 private:
     /**
      * Hidden!! So that we don't screw up and start caching stuff outside, and not using
      * this API.
      *
-     * ONLY setTexture should be used.
      */
-    void SetImage(const sf::Image& image);
+    void setTexture(const sf::Texture texture);
 
     ImageManager* m_imageManager = nullptr;
 };

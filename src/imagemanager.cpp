@@ -23,13 +23,13 @@
 
 static ImageManager* s_instance = 0;
 
-ImageManager::ImageManager() : images(), resourceDirs()
+ImageManager::ImageManager() : textures(), resourceDirs()
 {
 }
 
 ImageManager::~ImageManager()
 {
-        images.clear();
+        textures.clear();
         resourceDirs.clear();
 }
 
@@ -42,29 +42,29 @@ ImageManager* ImageManager::instance()
     return s_instance;
 }
 
-const sf::Image& ImageManager::loadImage( const std::string& filename )
+const sf::Texture& ImageManager::loadTexture( const std::string& filename )
 {
         // Check, whether the image already exists
-        for( std::map<std::string, sf::Image>::const_iterator it = images.begin();
-                 it != images.end();
+        for( std::map<std::string, sf::Texture>::const_iterator it = textures.begin();
+                 it != textures.end();
                  ++it)
         {
                 if( filename == it->first )
                 {
-                        std::cout << "DEBUG_MESSAGE: " << filename << " using existing image.\n";
+                        std::cout << "DEBUG_MESSAGE: " << filename << " using existing texture.\n";
                         return it->second;
                 }
         }
 
         // The image doesen't exists. Create it and save it.
-        sf::Image image;
+        sf::Texture texture;
 
         // Search project's main directory
-        if( image.LoadFromFile( filename ) )
+        if( texture.loadFromFile( filename ) )
         {
-                images[filename] = image;
-                std::cout << "DEBUG_MESSAGE: " << filename << " loading new image.\n";
-                return images[filename];
+                textures[filename] = texture;
+                std::cout << "DEBUG_MESSAGE: " << filename << " loading new texture.\n";
+                return textures[filename];
         }
 
         // If the image has still not been found, search all registered directories
@@ -72,39 +72,39 @@ const sf::Image& ImageManager::loadImage( const std::string& filename )
                  it != resourceDirs.end();
                  ++it )
         {
-                if( image.LoadFromFile( (*it) + filename ) )
+                if( texture.loadFromFile( (*it) + filename ) )
                 {
-                        images[filename] = image;
-                        std::cout << "DEBUG_MESSAGE: " << filename << " loading image.\n";
-                        return images[filename];
+                        textures[filename] = texture;
+                        std::cout << "DEBUG_MESSAGE: " << filename << " loading texture.\n";
+                        return textures[filename];
                 }
 
         }
 
-        std::cout << "GAME_ERROR: Image was not found. It is filled with an empty image.\n";
-        images[filename] = image;
-        return images[filename];
+        std::cout << "GAME_ERROR: Texture was not found. It is filled with an empty texture.\n";
+        textures[filename] = texture;
+        return textures[filename];
 }
 
-void ImageManager::deleteImage( const sf::Image& image )
+void ImageManager::deleteTexture( const sf::Texture& texture )
 {
-        for( std::map<std::string, sf::Image>::const_iterator it = images.begin();
-                 it != images.end();
+        for( std::map<std::string, sf::Texture>::const_iterator it = textures.begin();
+                 it != textures.end();
                  ++it)
         {
-                if( &image == &it->second )
+                if( &texture == &it->second )
                 {
-                        images.erase( it );
+                        textures.erase( it );
                         return;
                 }
         }
 }
 
-void ImageManager::deleteImage( const std::string& filename )
+void ImageManager::deleteTexture( const std::string& filename )
 {
-        std::map<std::string, sf::Image>::const_iterator it = images.find( filename );
-        if( it != images.end() )
-                images.erase( it );
+        std::map<std::string, sf::Texture>::const_iterator it = textures.find( filename );
+        if( it != textures.end() )
+                textures.erase( it );
 }
 
 void ImageManager::addResourceDir( const std::string& directory )

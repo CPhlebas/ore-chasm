@@ -27,16 +27,16 @@ public:
     ImageManager();
     static ImageManager* instance();
 
-    const sf::Image& loadImage(const std::string& filename);
-    void deleteImage(const sf::Image& image);
-    void deleteImage(const std::string& filename);
+    const sf::Texture& loadTexture(const std::string& filename);
+    void deleteTexture(const sf::Texture& texture);
+    void deleteTexture(const std::string& filename);
     void addResourceDir(const std::string& directory);
     void removeResourceDir(const std::string& directory);
 
 private:
     ~ImageManager();
 
-    std::map<std::string, sf::Image> images;
+    std::map<std::string, sf::Texture> textures;
     std::vector<std::string> resourceDirs;
 };
 #endif

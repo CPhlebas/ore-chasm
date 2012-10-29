@@ -102,25 +102,21 @@ void Game::init()
 void Game::tick()
 {
     sf::Event event;
-    const sf::Input& Input = m_app->getInput();
 
     float Left = 0.f;
     float Top  = 0.f;
 
-    m_player->setX(200.f);
-    m_player->setY(100.f);
-    m_player->setPosition(200.f, 100.f);
-    m_player->setRotation(30.f);
-    m_player->setCenter(0, 0);
-    m_player->setScale(10.0f, 10.0f);
-    m_player->setBlendMode(sf::Blend::Multiply);
-
-    m_player->move(10, 5);
-    m_player->rotate(90);
-
-    if (!m_player->getImage()) {
-        abort_game("no image");
-    }
+//    m_player->setX(200.f);
+//    m_player->setY(100.f);
+//    m_player->setPosition(200.f, 100.f);
+//    m_player->setRotation(30.f);
+//    m_player->setCenter(0, 0);
+//    m_player->setScale(10.0f, 10.0f);
+//    m_player->setBlendMode(sf::Blend::Multiply);
+//
+//    m_player->move(10, 5);
+//    m_player->rotate(90);
+//
 
     sf::String text;
     text.setFont(*m_font);
