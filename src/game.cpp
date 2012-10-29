@@ -74,7 +74,7 @@ void Game::init()
     m_app->SetView(*m_view);
 
     m_font = new sf::Font();
-    if (!m_font->LoadFromFile("../font/DejaVuSerif.ttf", 10))
+    if (!m_font->LoadFromFile("../font/DejaVuSerif.ttf", 12))
     {
         abort_game("unable to load font");
     }
@@ -112,7 +112,7 @@ void Game::tick()
 
     sf::String text;
     text.SetFont(*m_font);
-    text.SetSize(10.0);
+    text.SetSize(12.0);
     text.SetColor(sf::Color::Yellow);
 
     std::stringstream ss;
