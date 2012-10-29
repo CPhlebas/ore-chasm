@@ -83,7 +83,7 @@ void Game::init()
     ImageManager* manager = ImageManager::instance();
     manager->addResourceDir("../textures");
 
-    m_player = new Player("../textures/stone.png");
+    m_player = new Player("../textures/player.png");
 
     tick();
     shutdown();
@@ -97,7 +97,6 @@ void Game::tick()
     float Left = 0.f;
     float Top  = 0.f;
 
-
     m_player->SetX(200.f);
     m_player->SetY(100.f);
     m_player->SetPosition(200.f, 100.f);
@@ -108,6 +107,10 @@ void Game::tick()
 
     m_player->Move(10, 5);
     m_player->Rotate(90);
+
+    if (!m_player->GetImage()) {
+        abort_game("no image");
+    }
 
     sf::String text;
     text.SetFont(*m_font);

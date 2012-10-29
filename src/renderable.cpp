@@ -26,7 +26,6 @@ Renderable::Renderable(const char* texture)
 
 void Renderable::SetTexture(const char* texture)
 {
-    sf::Image image = m_imageManager->loadImage(texture);
 
-    sf::Sprite::SetImage(image);
+    sf::Sprite::SetImage(m_imageManager->loadImage(texture));
 }

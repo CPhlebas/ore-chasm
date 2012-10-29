@@ -63,7 +63,7 @@ const sf::Image& ImageManager::loadImage( const std::string& filename )
         if( image.LoadFromFile( filename ) )
         {
                 images[filename] = image;
-                std::cout << "DEBUG_MESSAGE: " << filename << " loading image.\n";
+                std::cout << "DEBUG_MESSAGE: " << filename << " loading new image.\n";
                 return images[filename];
         }
 
