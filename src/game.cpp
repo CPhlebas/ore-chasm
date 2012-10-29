@@ -63,16 +63,16 @@ void Game::init()
     // sf::WindowSettings Settings = App.GetSettings();
 
     sf::WindowSettings settings;
-    settings.DepthBits = 24; // Request a 24 bits depth buffer
-    settings.StencilBits = 8;  // Request a 8 bits stencil buffer
+    settings.depthBits = 24; // Request a 24 bits depth buffer
+    settings.stencilBits = 8;  // Request a 8 bits stencil buffer
 //    settings.AntialiasingLevel = 2;  // Request 2 levels of antialiasing
 
     m_app = new sf::RenderWindow(sf::VideoMode(SCREEN_W, SCREEN_H), "Buildarrhea", sf::Style::Resize, settings); //sf::Style::Fullscreen
-    m_app->UseVerticalSync(false);
-    m_app->SetFramerateLimit(0);
+    m_app->useVerticalSync(false);
+    m_app->setFramerateLimit(0);
 
     m_view = new sf::View(sf::FloatRect(0, 0, SCREEN_W, SCREEN_H));
-    m_app->SetView(*m_view);
+    m_app->setView(*m_view);
 
     m_font = new sf::Font();
     if (!m_font->LoadFromFile("../font/DejaVuSerif.ttf", 12))
@@ -91,39 +91,39 @@ void Game::init()
 
 void Game::tick()
 {
-    sf::Event Event;
-    const sf::Input& Input = m_app->GetInput();
+    sf::Event event;
+    const sf::Input& Input = m_app->getInput();
 
     float Left = 0.f;
     float Top  = 0.f;
 
-    m_player->SetX(200.f);
-    m_player->SetY(100.f);
-    m_player->SetPosition(200.f, 100.f);
-    m_player->SetRotation(30.f);
-    m_player->SetCenter(0, 0);
-    m_player->SetScale(10.0f, 10.0f);
-    m_player->SetBlendMode(sf::Blend::Multiply);
+    m_player->setX(200.f);
+    m_player->setY(100.f);
+    m_player->setPosition(200.f, 100.f);
+    m_player->setRotation(30.f);
+    m_player->setCenter(0, 0);
+    m_player->setScale(10.0f, 10.0f);
+    m_player->setBlendMode(sf::Blend::Multiply);
 
-    m_player->Move(10, 5);
-    m_player->Rotate(90);
+    m_player->move(10, 5);
+    m_player->rotate(90);
 
-    if (!m_player->GetImage()) {
+    if (!m_player->getImage()) {
         abort_game("no image");
     }
 
     sf::String text;
-    text.SetFont(*m_font);
-    text.SetSize(12.0);
-    text.SetColor(sf::Color::Yellow);
+    text.setFont(*m_font);
+    text.setSize(12.0);
+    text.setColor(sf::Color::Yellow);
 
     std::stringstream ss;
     std::string str;
 
     //  "../textures/stone.png"
-    while (m_app->IsOpened())
+    while (m_app->isOpened())
     {
-        float elapsedTime = m_app->GetFrameTime();
+        float elapsedTime = m_app->getFrameTime();
         float fps = 1.f / elapsedTime;
 
         ss.str("");
@@ -131,13 +131,13 @@ void Game::tick()
         str = ss.str();
         text.SetText(str);
 
-        while (m_app->GetEvent(Event))
+        while (m_app->getEvent(event))
         {
 
-            bool LeftKeyDown = Input.IsKeyDown(sf::Key::Left);
-            bool RightButtonDown = Input.IsMouseButtonDown(sf::Mouse::Right);
-            unsigned int MouseX = Input.GetMouseX();
-            unsigned int MouseY = Input.GetMouseY();
+            bool LeftKeyDown = Input.isKeyDown(sf::Key::Left);
+            bool RightButtonDown = Input.isMouseButtonDown(sf::Mouse::Right);
+            unsigned int MouseX = Input.getMouseX();
+            unsigned int MouseY = Input.getMouseY();
 
             // Move the sprite
             // if (m_app->GetInput().IsKeyDown(sf::Key::Left))  sprite.Move(-1000 * elapsedTime, 0);
@@ -145,30 +145,30 @@ void Game::tick()
             // if (m_app->GetInput().IsKeyDown(sf::Key::Up))    sprite.Move(0, -1000 * elapsedTime);
             // if (m_app->GetInput().IsKeyDown(sf::Key::Down))  sprite.Move(0,  1000 * elapsedTime);
 
-            if (m_app->GetInput().IsKeyDown(sf::Key::Left))  m_view->Move(-1000 * elapsedTime, 0);
-            if (m_app->GetInput().IsKeyDown(sf::Key::Right)) m_view->Move( 1000 * elapsedTime, 0);
-            if (m_app->GetInput().IsKeyDown(sf::Key::Up))    m_view->Move(0, -1000 * elapsedTime);
-            if (m_app->GetInput().IsKeyDown(sf::Key::Down))  m_view->Move(0,  1000 * elapsedTime);
+            if (m_app->getInput().isKeyDown(sf::Key::Left))  m_view->move(-1000 * elapsedTime, 0);
+            if (m_app->getInput().isKeyDown(sf::Key::Right)) m_view->move( 1000 * elapsedTime, 0);
+            if (m_app->getInput().isKeyDown(sf::Key::Up))    m_view->move(0, -1000 * elapsedTime);
+            if (m_app->getInput().isKeyDown(sf::Key::Down))  m_view->move(0,  1000 * elapsedTime);
 
             // Window closed
-            if (Event.Type == sf::Event::Closed || ((Event.Type == sf::Event::KeyPressed) && (Event.Key.Code == sf::Key::Escape))) {
+            if (event.type == sf::Event::Closed || ((event.Type == sf::Event::KeyPressed) && (event.Key.Code == sf::Key::Escape))) {
                 shutdown();
             }
         }
 
-        m_app->Clear(sf::Color(200, 0, 0));
-        m_app->Draw(*m_player);
+        m_app->clear(sf::Color(200, 0, 0));
+        m_app->draw(*m_player);
 
-        m_app->SetView(m_app->GetDefaultView());
-        m_app->Draw(text);
-        m_app->SetView(*m_view);
+        m_app->setView(m_app->GetDefaultView());
+        m_app->draw(text);
+        m_app->setView(*m_view);
 
         // always after rendering!
-        m_app->Display();
+        m_app->display();
     }
 }
 
 void Game::shutdown()
 {
-    m_app->Close();
+    m_app->close();
 }
