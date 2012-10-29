@@ -21,7 +21,7 @@
 Renderable::Renderable(const char* texture)
 {
     m_imageManager = ImageManager::instance();
-    SetImage(texture);
+    SetTexture(texture);
 }
 
 void Renderable::SetTexture(const char* texture)
