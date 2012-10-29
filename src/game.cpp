@@ -18,6 +18,9 @@
 #include "game.h"
 
 #include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/Config.hpp>
 
 Game::Game()
 {
@@ -32,7 +35,7 @@ void Game::abort_game(const char* message)
 void Game::init()
 {
     /*
-     * TODO:
+    TODO:
     unsigned int VideoModesCount = sf::VideoMode::GetModesCount();
     for (unsigned int i = 0; i < VideoModesCount; ++i)
     {
@@ -46,12 +49,12 @@ void Game::init()
     sf::VideoMode DesktopMode = sf::VideoMode::GetDesktopMode();
     */
 
-
     //TODO: debug only, on by default
     //    m_.UseVerticalSync(false);
     //    App.SetFramerateLimit(60); // Limit to 60 frames per second
 
-    //                               sf::WindowSettings Settings = App.GetSettings();
+    // sf::WindowSettings Settings = App.GetSettings();
+
     sf::WindowSettings settings;
     settings.DepthBits = 24; // Request a 24 bits depth buffer
     settings.StencilBits = 8;  // Request a 8 bits stencil buffer
@@ -59,7 +62,6 @@ void Game::init()
 
     m_app =sf::Window(sf::VideoMode(SCREEN_W, SCREEN_H), "Buildarrhea", sf::Style::Resize, settings); //sf::Style::Fullscreen
 
-    image = al_load_bitmap("../textures/stone.png");
 
     done = false;
     tick();
@@ -74,6 +76,7 @@ void Game::tick()
     float Left = 0.f;
     float Top  = 0.f;
 
+    //  "../textures/stone.png"
     while (m_app.IsOpened())
     {
         float fps = 1.f / m_app.GetFrameTime();
@@ -92,6 +95,7 @@ void Game::tick()
                 shutdown();
             }
         }
+        m_app.Clear(sf::Color(200, 0, 0));
 
         // always after rendering!
         m_app.Display();

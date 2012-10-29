@@ -22,7 +22,7 @@
 #include <stdlib.h>
 
 namespace sf {
-    class Window;
+    class RenderWindow;
 }
 
 class Game
@@ -42,7 +42,7 @@ class Game
     const int SCREEN_H = 900;
 
 private:
-    sf::Window m_app;
+    sf::RenderWindow m_app;
 };
 
 #endif
