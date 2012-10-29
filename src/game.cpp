@@ -29,6 +29,7 @@ Game::Game()
 void Game::abort_game(const char* message)
 {
     printf("%s \n", message);
+    shutdown();
     exit(1);
 }
 
@@ -76,10 +77,33 @@ void Game::tick()
     float Left = 0.f;
     float Top  = 0.f;
 
+    sf::Image image;
+    if (!image.LoadFromFile("../textures/stone.png")) {
+        abort_game("unable to load texture");
+    }
+
+    sf::Sprite sprite;
+    sprite.SetColor(sf::Color(0, 255, 255, 128));
+    sprite.SetX(200.f);
+    sprite.SetY(100.f);
+    sprite.SetPosition(200.f, 100.f);
+    sprite.SetRotation(30.f);
+    sprite.SetCenter(0, 0);
+    sprite.SetScaleX(2.f);
+    sprite.SetScaleY(0.5f);
+    sprite.SetScale(2.f, 0.5f);
+    sprite.SetBlendMode(sf::Blend::Multiply);
+    sprite.SetImage(image);
+
+    sprite.Move(10, 5);
+    sprite.Rotate(90);
+    sprite.Scale(1.5f, 1.5f);
+
     //  "../textures/stone.png"
     while (m_app.IsOpened())
     {
-        float fps = 1.f / m_app.GetFrameTime();
+        float elapsedTime = m_app.GetFrameTime();
+        float fps = 1.f / elapsedTime;
         printf("Framerate: %s \n", fps);
 
         while (m_app.GetEvent(Event))
@@ -90,12 +114,20 @@ void Game::tick()
             unsigned int MouseX = Input.GetMouseX();
             unsigned int MouseY = Input.GetMouseY();
 
+            // Move the sprite
+            if (m_app.GetInput().IsKeyDown(sf::Key::Left))  sprite.Move(-100 * elapsedTime, 0);
+            if (m_app.GetInput().IsKeyDown(sf::Key::Right)) sprite.Move( 100 * elapsedTime, 0);
+            if (m_app.GetInput().IsKeyDown(sf::Key::Up))    sprite.Move(0, -100 * elapsedTime);
+            if (m_app.GetInput().IsKeyDown(sf::Key::Down))  sprite.Move(0,  100 * elapsedTime);
+
             // Window closed
             if (Event.Type == sf::Event::Closed || ((Event.Type == sf::Event::KeyPressed) && (Event.Key.Code == sf::Key::Escape))) {
                 shutdown();
             }
         }
+
         m_app.Clear(sf::Color(200, 0, 0));
+        m_app.Draw(sprite);
 
         // always after rendering!
         m_app.Display();
