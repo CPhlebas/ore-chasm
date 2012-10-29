@@ -1,5 +1,7 @@
 TODO :)
 
+Uses SFML from git (2.0, unreleased) since it is buttloads better.
+
 Periodically sync with releases from: http://sfgui.sfml-dev.de/download
 and
 
