@@ -88,5 +88,6 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/src/)
 
 # Install target
 install(DIRECTORY textures/ DESTINATION "textures") #FILES_MATCHING PATTERN "*")
+install(DIRECTORY font/ DESTINATION "font") #FILES_MATCHING PATTERN "*")
 
 install(TARGETS ${EXECUTABLE_NAME} DESTINATION bin)

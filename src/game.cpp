@@ -17,6 +17,12 @@
 
 #include "game.h"
 
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <stdio.h>
+#include <stdlib.h>
+
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
@@ -64,6 +70,15 @@ void Game::init()
     m_app->UseVerticalSync(false);
     m_app->SetFramerateLimit(0);
 
+    m_view = new sf::View(sf::FloatRect(0, 0, SCREEN_W, SCREEN_H));
+    m_app->SetView(*m_view);
+
+    m_font = new sf::Font();
+    if (!m_font->LoadFromFile("../font/LiberationMono-Regular.ttf", 50))
+    {
+        abort_game("unable to load font");
+    }
+
     tick();
     shutdown();
 }
@@ -95,12 +110,24 @@ void Game::tick()
     sprite.Move(10, 5);
     sprite.Rotate(90);
 
+    sf::String text;
+    text.SetFont(*m_font);
+    text.SetSize(20.0);
+    text.SetColor(sf::Color::Yellow);
+
+    std::stringstream ss;
+    std::string str;
+
     //  "../textures/stone.png"
     while (m_app->IsOpened())
     {
         float elapsedTime = m_app->GetFrameTime();
         float fps = 1.f / elapsedTime;
-        printf("Framerate: %f \n", fps);
+
+        ss.str("");
+        ss << "Framerate: " << fps;
+        str = ss.str();
+        text.SetText(str);
 
         while (m_app->GetEvent(Event))
         {
@@ -111,10 +138,15 @@ void Game::tick()
             unsigned int MouseY = Input.GetMouseY();
 
             // Move the sprite
-            if (m_app->GetInput().IsKeyDown(sf::Key::Left))  sprite.Move(-1000 * elapsedTime, 0);
-            if (m_app->GetInput().IsKeyDown(sf::Key::Right)) sprite.Move( 1000 * elapsedTime, 0);
-            if (m_app->GetInput().IsKeyDown(sf::Key::Up))    sprite.Move(0, -1000 * elapsedTime);
-            if (m_app->GetInput().IsKeyDown(sf::Key::Down))  sprite.Move(0,  1000 * elapsedTime);
+            // if (m_app->GetInput().IsKeyDown(sf::Key::Left))  sprite.Move(-1000 * elapsedTime, 0);
+            // if (m_app->GetInput().IsKeyDown(sf::Key::Right)) sprite.Move( 1000 * elapsedTime, 0);
+            // if (m_app->GetInput().IsKeyDown(sf::Key::Up))    sprite.Move(0, -1000 * elapsedTime);
+            // if (m_app->GetInput().IsKeyDown(sf::Key::Down))  sprite.Move(0,  1000 * elapsedTime);
+
+            if (m_app->GetInput().IsKeyDown(sf::Key::Left))  m_view->Move(-1000 * elapsedTime, 0);
+            if (m_app->GetInput().IsKeyDown(sf::Key::Right)) m_view->Move( 1000 * elapsedTime, 0);
+            if (m_app->GetInput().IsKeyDown(sf::Key::Up))    m_view->Move(0, -1000 * elapsedTime);
+            if (m_app->GetInput().IsKeyDown(sf::Key::Down))  m_view->Move(0,  1000 * elapsedTime);
 
             // Window closed
             if (Event.Type == sf::Event::Closed || ((Event.Type == sf::Event::KeyPressed) && (Event.Key.Code == sf::Key::Escape))) {
@@ -124,6 +156,8 @@ void Game::tick()
 
         m_app->Clear(sf::Color(200, 0, 0));
         m_app->Draw(sprite);
+
+        m_app->Draw(text);
 
         // always after rendering!
         m_app->Display();
