@@ -53,7 +53,7 @@ add_executable(${EXECUTABLE_NAME} ${SRC})
 # Detect and add SFML
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 
-find_package(SFML 1.6 REQUIRED system window graphics network audio)
+find_package(SFML 1.6 REQUIRED system window graphics audio) #network
 
 
 if(SFML_FOUND)

@@ -21,9 +21,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-namespace sf {
-    class RenderWindow;
-}
+#include <SFML/Graphics/RenderWindow.hpp>
+
 
 class Game
 {
@@ -42,7 +41,7 @@ class Game
     const int SCREEN_H = 900;
 
 private:
-    sf::RenderWindow m_app;
+    sf::RenderWindow *m_app;
 };
 
 #endif

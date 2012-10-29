@@ -61,8 +61,7 @@ void Game::init()
     settings.StencilBits = 8;  // Request a 8 bits stencil buffer
     settings.AntialiasingLevel = 2;  // Request 2 levels of antialiasing
 
-    m_app =sf::Window(sf::VideoMode(SCREEN_W, SCREEN_H), "Buildarrhea", sf::Style::Resize, settings); //sf::Style::Fullscreen
-
+    m_app = new sf::RenderWindow(sf::VideoMode(SCREEN_W, SCREEN_H), "Buildarrhea", sf::Style::Resize, settings); //sf::Style::Fullscreen
 
     done = false;
     tick();
@@ -72,7 +71,7 @@ void Game::init()
 void Game::tick()
 {
     sf::Event Event;
-    const sf::Input& Input = m_app.GetInput();
+    const sf::Input& Input = m_app->GetInput();
 
     float Left = 0.f;
     float Top  = 0.f;
@@ -100,13 +99,13 @@ void Game::tick()
     sprite.Scale(1.5f, 1.5f);
 
     //  "../textures/stone.png"
-    while (m_app.IsOpened())
+    while (m_app->IsOpened())
     {
-        float elapsedTime = m_app.GetFrameTime();
+        float elapsedTime = m_app->GetFrameTime();
         float fps = 1.f / elapsedTime;
         printf("Framerate: %s \n", fps);
 
-        while (m_app.GetEvent(Event))
+        while (m_app->GetEvent(Event))
         {
 
             bool LeftKeyDown = Input.IsKeyDown(sf::Key::Left);
@@ -115,10 +114,10 @@ void Game::tick()
             unsigned int MouseY = Input.GetMouseY();
 
             // Move the sprite
-            if (m_app.GetInput().IsKeyDown(sf::Key::Left))  sprite.Move(-100 * elapsedTime, 0);
-            if (m_app.GetInput().IsKeyDown(sf::Key::Right)) sprite.Move( 100 * elapsedTime, 0);
-            if (m_app.GetInput().IsKeyDown(sf::Key::Up))    sprite.Move(0, -100 * elapsedTime);
-            if (m_app.GetInput().IsKeyDown(sf::Key::Down))  sprite.Move(0,  100 * elapsedTime);
+            if (m_app->GetInput().IsKeyDown(sf::Key::Left))  sprite.Move(-100 * elapsedTime, 0);
+            if (m_app->GetInput().IsKeyDown(sf::Key::Right)) sprite.Move( 100 * elapsedTime, 0);
+            if (m_app->GetInput().IsKeyDown(sf::Key::Up))    sprite.Move(0, -100 * elapsedTime);
+            if (m_app->GetInput().IsKeyDown(sf::Key::Down))  sprite.Move(0,  100 * elapsedTime);
 
             // Window closed
             if (Event.Type == sf::Event::Closed || ((Event.Type == sf::Event::KeyPressed) && (Event.Key.Code == sf::Key::Escape))) {
@@ -126,15 +125,15 @@ void Game::tick()
             }
         }
 
-        m_app.Clear(sf::Color(200, 0, 0));
-        m_app.Draw(sprite);
+        m_app->Clear(sf::Color(200, 0, 0));
+        m_app->Draw(sprite);
 
         // always after rendering!
-        m_app.Display();
+        m_app->Display();
     }
 }
 
 void Game::shutdown()
 {
-    m_app.Close();
+    m_app->Close();
 }
