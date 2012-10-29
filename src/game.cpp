@@ -46,14 +46,14 @@ void Game::init()
     sf::VideoMode DesktopMode = sf::VideoMode::GetDesktopMode();
     */
 
+
+    //TODO: debug only, on by default
+    //    m_.UseVerticalSync(false);
+    //    App.SetFramerateLimit(60); // Limit to 60 frames per second
+
     m_app =sf::Window(sf::VideoMode(SCREEN_W, SCREEN_H), "Buildarrhea"); //sf::Style::Fullscreen
 
-    // cap tickrate to FPS
-    timer = al_create_timer(1.0 / FPS);
-
-
     image = al_load_bitmap("../textures/stone.png");
-
 
     done = false;
     tick();
@@ -65,8 +65,14 @@ void Game::tick()
     sf::Event Event;
     const sf::Input& Input = m_app.GetInput();
 
+    float Left = 0.f;
+    float Top  = 0.f;
+
     while (m_app.IsOpened())
     {
+        float fps = 1.f / m_app.GetFrameTime();
+        printf("Framerate: %s \n", fps);
+
         while (m_app.GetEvent(Event))
         {
 
