@@ -51,7 +51,13 @@ void Game::init()
     //    m_.UseVerticalSync(false);
     //    App.SetFramerateLimit(60); // Limit to 60 frames per second
 
-    m_app =sf::Window(sf::VideoMode(SCREEN_W, SCREEN_H), "Buildarrhea"); //sf::Style::Fullscreen
+    //                               sf::WindowSettings Settings = App.GetSettings();
+    sf::WindowSettings settings;
+    settings.DepthBits = 24; // Request a 24 bits depth buffer
+    settings.StencilBits = 8;  // Request a 8 bits stencil buffer
+    settings.AntialiasingLevel = 2;  // Request 2 levels of antialiasing
+
+    m_app =sf::Window(sf::VideoMode(SCREEN_W, SCREEN_H), "Buildarrhea", sf::Style::Resize, settings); //sf::Style::Fullscreen
 
     image = al_load_bitmap("../textures/stone.png");
 
