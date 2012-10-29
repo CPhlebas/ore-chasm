@@ -39,6 +39,9 @@ set(EXECUTABLE_NAME "buildarrhea")
 set(SRC
 src/main.cpp
 src/game.cpp
+src/imagemanager.cpp
+src/player.cpp
+src/world.cpp
 src/renderer.cpp
 )
 

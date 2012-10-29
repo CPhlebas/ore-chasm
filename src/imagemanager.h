@@ -15,22 +15,28 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#ifndef PLAYER_H
-#define PLAYER_H
+#ifndef IMAGE_MANAGER_H
+#define IMAGE_MANAGER_H
 
-class Player
+#include <stdlib.h>
+#include <SFML/Graphics.hpp>
+
+class ImageManager
 {
 public:
-    Player();
-    void update();
-    void render();
+    ImageManager();
+    static ImageManager* instance();
+
+    const sf::Image& loadImage(const std::string& filename);
+    void deleteImage(const sf::Image& image);
+    void deleteImage(const std::string& filename);
+    void addResourceDir(const std::string& directory);
+    void removeResourceDir(const std::string& directory);
 
 private:
-    float x = 500.0;
-    float y = 500.0;
+    ~ImageManager();
 
-    int health = 100;
+    std::map<std::string, sf::Image> images;
+    std::vector<std::string> resourceDirs;
 };
-
-
 #endif

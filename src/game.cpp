@@ -16,6 +16,7 @@
  *****************************************************************************/
 
 #include "game.h"
+#include "imagemanager.h"
 
 #include <iostream>
 #include <sstream>
@@ -79,6 +80,9 @@ void Game::init()
         abort_game("unable to load font");
     }
 
+    ImageManager* manager = ImageManager::instance();
+    manager->addResourceDir("../textures");
+
     tick();
     shutdown();
 }
@@ -91,10 +95,9 @@ void Game::tick()
     float Left = 0.f;
     float Top  = 0.f;
 
-    sf::Image image;
-    if (!image.LoadFromFile("../textures/stone.png")) {
-        abort_game("unable to load texture");
-    }
+    ImageManager* manager = ImageManager::instance();
+
+    sf::Image image = manager->loadImage("../textures/stone.png");
 
     sf::Sprite sprite;
     sprite.SetX(200.f);
