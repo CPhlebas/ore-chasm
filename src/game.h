@@ -21,9 +21,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <allegro5/allegro5.h>
-#include "allegro5/allegro_image.h"
-#include "allegro5/allegro_native_dialog.h"
 
 class Game
 {
@@ -41,10 +38,7 @@ class Game
     const int SCREEN_W = 1600;
     const int SCREEN_H = 900;
 
-    ALLEGRO_EVENT_QUEUE* event_queue = 0;
-    ALLEGRO_TIMER* timer = 0;
-    ALLEGRO_DISPLAY* display = 0;
-    ALLEGRO_BITMAP *image = 0;
+
 };
 
 #endif

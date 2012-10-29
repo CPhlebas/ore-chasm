@@ -18,9 +18,6 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include <allegro5/allegro5.h>
-#include "allegro5/allegro_image.h"
-
 class Player
 {
 public:
