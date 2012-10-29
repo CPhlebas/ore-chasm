@@ -18,9 +18,11 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include "renderable.h"
+
 #include <SFML/Graphics.hpp>
 
-class Player : public sf::Sprite
+class Player : public Renderable
 {
 public:
     /**
@@ -30,12 +32,7 @@ public:
      */
     Player(const char* texture);
 
-    void update();
-
 private:
-    float x = 500.0;
-    float y = 500.0;
-
     int health = 100;
 };
 

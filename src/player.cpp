@@ -25,7 +25,3 @@ Player::Player(const char* texture)
 
     this->SetImage(image);
 }
-
-void Player::update()
-{
-}

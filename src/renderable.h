@@ -18,6 +18,8 @@
 #ifndef RENDERABLE_H
 #define RENDERABLE_H
 
+#include "imagemanager.h"
+
 #include <SFML/Graphics.hpp>
 
 class Renderable : public sf::Sprite
@@ -29,9 +31,16 @@ public:
      */
     Renderable(const char* texture);
 
-    void SetImage(const sf::Image& image);
+    /**
+     * Pass a string into @p texture and it will automatically ask the ImageManager
+     * for an already-loaded version, if possible. If not, it will load it.
+     *
+     * Internally, calls sf::Sprite::setImage with the texture it obtained.
+     */
+    void SetTexture(const char* texture);
 
 private:
+    ImageManager* m_imageManager = nullptr;
 };
 
 #endif

@@ -20,14 +20,13 @@
 
 Renderable::Renderable(const char* texture)
 {
-    ImageManager* manager = ImageManager::instance();
-    sf::Image image = manager->loadImage("../textures/stone.png");
-
-    SetImage(image);
+    m_imageManager = ImageManager::instance();
+    SetImage(texture);
 }
 
-void Renderable::SetImage(const sf::Image& image)
+void Renderable::SetTexture(const char* texture)
 {
+    sf::Image image = m_imageManager->loadImage(texture);
+
     sf::Sprite::SetImage(image);
 }
-
