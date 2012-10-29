@@ -62,7 +62,7 @@ void Game::init()
 
     // sf::WindowSettings Settings = App.GetSettings();
 
-    sf::WindowSettings settings;
+    sf::ContextSettings settings;
 
     settings.depthBits = 24;
     settings.stencilBits = 8;
@@ -70,22 +70,23 @@ void Game::init()
     settings.majorVersion = 3;
     settings.minorVersion = 0;
 
-    sf::ContextSettings settings = window.getSettings();
+
+    m_app = new sf::RenderWindow(sf::VideoMode(SCREEN_W, SCREEN_H), "Buildarrhea", sf::Style::Resize, settings); //sf::Style::Fullscreen
+    m_app->useVerticalSync(false);
+    m_app->setFramerateLimit(0);
+
+    settings = m_app.getSettings();
 
     std::cout << "depth bits:" << settings.depthBits << std::endl;
     std::cout << "stencil bits:" << settings.stencilBits << std::endl;
     std::cout << "antialiasing level:" << settings.antialiasingLevel << std::endl;
     std::cout << "version:" << settings.majorVersion << "." << settings.minorVersion << std::endl;
 
-    m_app = new sf::RenderWindow(sf::VideoMode(SCREEN_W, SCREEN_H), "Buildarrhea", sf::Style::Resize, settings); //sf::Style::Fullscreen
-    m_app->useVerticalSync(false);
-    m_app->setFramerateLimit(0);
-
     m_view = new sf::View(sf::FloatRect(0, 0, SCREEN_W, SCREEN_H));
     m_app->setView(*m_view);
 
     m_font = new sf::Font();
-    if (!m_font->LoadFromFile("../font/DejaVuSerif.ttf", 12))
+    if (!m_font->loadFromFile("../font/DejaVuSerif.ttf", 12))
     {
         abort_game("unable to load font");
     }
@@ -118,7 +119,7 @@ void Game::tick()
 //    m_player->rotate(90);
 //
 
-    sf::String text;
+    sf::Text text;
     text.setFont(*m_font);
     text.setSize(12.0);
     text.setColor(sf::Color::Yellow);
@@ -127,7 +128,7 @@ void Game::tick()
     std::string str;
 
     //  "../textures/stone.png"
-    while (m_app->isOpened())
+    while (m_app->isOpen())
     {
         float elapsedTime = m_app->getFrameTime();
         float fps = 1.f / elapsedTime;
@@ -135,9 +136,9 @@ void Game::tick()
         ss.str("");
         ss << "Framerate: " << fps;
         str = ss.str();
-        text.SetText(str);
+        text.setText(str);
 
-        while (m_app->getEvent(event))
+        while (m_app->pollEvent(event))
         {
 
 //            bool LeftKeyDown = Input.isKeyDown(sf::Key::Left);
@@ -168,7 +169,7 @@ void Game::tick()
             //sf::event::GainedFocus
 
             // Window closed
-            if (event.type == sf::Event::Closed || ((event.Type == sf::Event::KeyPressed) && (event.Key.Code == sf::Key::Escape))) {
+            if (event.type == sf::Event::Closed || ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Key::Escape))) {
                 shutdown();
             }
         }

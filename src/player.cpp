@@ -20,5 +20,5 @@
 
 Player::Player(const char* texture) : Renderable(texture)
 {
-    this->stTexture("../textures/player.png");
+    this->setTexture("../textures/player.png");
 }
