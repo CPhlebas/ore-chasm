@@ -73,7 +73,8 @@ void Game::init()
 
     m_app = new sf::RenderWindow(sf::VideoMode(SCREEN_W, SCREEN_H), "Buildarrhea", sf::Style::Resize, settings); //sf::Style::Fullscreen
     m_app->setVerticalSyncEnabled(false);
-    m_app->setFramerateLimit(0);
+    m_app->setFramerateLimit(60);
+    // totally useless for a game.
     m_app->setKeyRepeatEnabled(false);
 
     settings = m_app->getSettings();
@@ -155,25 +156,25 @@ void Game::tick()
         }
 
         ss.str("");
-        ss << "Framerate: " << fps << " Min: " << minFps << " Max: " << maxFps;
+        ss << "Framerate: " << fps << " Min: " << minFps << " Max: " << maxFps << " elapsedTime: " << elapsedTime;
         str = ss.str();
         text.setString(str);
 
 
         if (moveLeft) {
-            m_view->move(-1000 * elapsedTime, 0);
+            m_view->move(-500 * elapsedTime, 0);
         }
 
         if (moveRight) {
-            m_view->move(1000 * elapsedTime, 0);
+            m_view->move(500 * elapsedTime, 0);
         }
 
         if (moveUp) {
-            m_view->move(0, -1000 * elapsedTime);
+            m_view->move(0, -500 * elapsedTime);
         }
 
         if (moveDown) {
-            m_view->move(0,  1000 * elapsedTime);
+            m_view->move(0,  500 * elapsedTime);
         }
 
         while (m_app->pollEvent(event))
