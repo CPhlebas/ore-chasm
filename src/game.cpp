@@ -279,7 +279,7 @@ void Game::tick()
 //        theConsole.Printf("TEST 1");
 //        reshape(1600,100);
         //set up the scene
- //       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   //      glLoadIdentity();
 /////        glTranslatef(20000,0.2f,0.0f);
         m_console->draw();

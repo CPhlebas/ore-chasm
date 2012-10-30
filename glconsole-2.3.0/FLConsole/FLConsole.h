@@ -1054,9 +1054,9 @@ inline void FLConsoleInstance::draw()
         glMatrixMode(GL_PROJECTION);						
         glPopMatrix();
         glPopAttrib();
-        m_window->pushGLStates();
+//        m_window->pushGLStates();
         m_window->draw(*m_text1);
-        m_window->popGLStates();
+ //       m_window->popGLStates();
     }
 }
 
@@ -1110,7 +1110,6 @@ inline void FLConsoleInstance::_RenderText()
 
         //start drawing from bottom of console up...
         int lineLoc = m_Viewport.height-1 - nConsoleHeight + m_nConsoleVerticalMargin;
-
         drawDebugRect(0, lineLoc, "lineLoc");
 
 
