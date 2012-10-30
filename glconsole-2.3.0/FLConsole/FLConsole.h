@@ -1307,6 +1307,7 @@ inline int FLConsoleInstance::handle(sf::Event *event)
     } else if (event->key.code == sf::Keyboard::Right) {
         CursorRight();
     } else if (event->key.code == sf::Keyboard::PageUp) {
+        printf("SCROLLING UP!\n");
         ScrollUpPage();
     } else if (event->key.code == sf::Keyboard::PageDown) {
         ScrollDownPage();

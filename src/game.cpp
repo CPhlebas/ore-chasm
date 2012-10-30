@@ -145,7 +145,7 @@ void Game::tick()
     int minFps = 0;
     int maxFps = 0;
 
-    const int MAX_BENCH = 3000;
+    const int MAX_BENCH = 300;
     int benchTime = MAX_BENCH;
 
     int xDir = 0;
@@ -161,6 +161,7 @@ void Game::tick()
 
         // recheck the max, good amount of time passed
         if (benchTime <= 0) {
+            m_console->Printf("bench time elapsed");
             maxFps = fps;
             minFps = maxFps;
             benchTime = MAX_BENCH;
@@ -281,7 +282,6 @@ void Game::tick()
  //       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   //      glLoadIdentity();
 /////        glTranslatef(20000,0.2f,0.0f);
-        m_console->Printf(str.c_str());
         m_console->draw();
 
         m_app->pushGLStates();
