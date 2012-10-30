@@ -541,7 +541,8 @@ inline void FLConsoleInstance::_CheckInit()
 // NB: coordinates start from bottom left
 inline void FLConsoleInstance::glPrintf(int x, int y, const std::string& sMsg, ... )
 {
-    glPrintf( x, y, sMsg.c_str() );
+    //FIXME: I THINK NOT NEEDED ANYMORE..., since we're all on 1 text object with multiple \n's
+//    glPrintf( x, y, sMsg.c_str() );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1078,8 +1079,6 @@ inline bool FLConsoleInstance::_IsCursorOn()
 inline void FLConsoleInstance::_RenderText()
 {
     int nConsoleHeight = _GetConsoleHeight();
-    printf("GETTING CONSOLEHEIGHT\n");
-    printf("CONSOLE HEIGHT: %d\n", nConsoleHeight);
 
     if( nConsoleHeight - m_nConsoleVerticalMargin < 0 ) {
         return;
@@ -1125,6 +1124,7 @@ inline void FLConsoleInstance::_RenderText()
 
 
         lineLoc += m_nCharHeight + m_nConsoleLineSpacing;
+        std::string fullString;
 
         int count = 0;
         for(  int i = 1 ; i < lines; i++ ) {	
@@ -1181,7 +1181,7 @@ inline void FLConsoleInstance::_RenderText()
 //                                fulltext.substr(j*chars_per_line+start, chars_per_line) );
                         std::string sub = fulltext.substr(j * chars_per_line + start, chars_per_line);
                         sub.append("\n");
-                        m_text1->setString(sub);
+                        fullString.append(sub);
                     }
                 }
             }
@@ -1190,6 +1190,9 @@ inline void FLConsoleInstance::_RenderText()
 
             lineLoc += m_nCharHeight + m_nConsoleLineSpacing;
         }
+
+        printf("SUBSTRING: %s", fullString.c_str());
+        m_text1->setString(fullString);
     }
     glDisable(GL_SCISSOR_TEST);
 }
