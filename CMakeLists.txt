@@ -9,8 +9,10 @@ endif()
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_definitions(-DDEBUG)
 
+
     # because cmake has this annoying fucking bug that took me a while to figure out how i can use clang: http://www.cmake.org/pipermail/cmake/2011-February/042629.html
-    set(CMAKE_CXX_COMPILER "clang++")
+    # HELP ME! CVARS DOESN"T BUILD WITH CLANG..SAD FACE, so for now, use..gcrapcrap :(
+    set(CMAKE_CXX_COMPILER "g++")
 
     set(CMAKE_CXX_FLAGS "-std=c++11 -Wall -Wno-unused-variable -Wno-unused-function -funroll-loops -fexpensive-optimizations -Woverloaded-virtual -g3 -ggdb")
     set(CMAKE_C_FLAGS "-Wall -Wno-unused-variable -Wno-unused-function -funroll-loops -fexpensive-optimizations -g3 -ggdb")
@@ -34,7 +36,7 @@ if (NOT CVARS_FOUND)
     message(FATAL_ERROR "Could not find CVARS (for quake console).")
 endif()
 
-include_directories( ${CMAKE_SOURCE_DIR} ${GLUT_INCLUDE_DIR} )
+include_directories( ${CMAKE_SOURCE_DIR} ${GLUT_INCLUDE_DIR} ${CVARS_INCLUDE_DIR})
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 
@@ -86,7 +88,7 @@ find_package(SFML 2.0 REQUIRED system window graphics audio) #network
 if (NOT SFML_FOUND)
     message(FATAL_ERROR "Could not find SFML.")
 endif()
-
+                                                                    INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR} ${GLUT_INCLUDE_DIR} )
 include_directories(${SFML_INCLUDE_DIR} ${CVARS_INCLUDE_DIR})
 target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES} ${CHIPMUNK_LIBRARIES} ${CVARS_LIBRARIES} ${GLUT_LIBRARIES} ${GLU_LIBRARIES} ${OPENGL_LIBRARIES})
 
