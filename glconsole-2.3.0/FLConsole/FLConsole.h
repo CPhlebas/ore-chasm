@@ -175,6 +175,7 @@ class FLConsoleInstance
         int           _FindRecursionLevel( std::string sCommand );
         bool          _LoadExecuteHistory( std::string sFileName = "", bool bExecute=false );
         std::string   _GetHistory();
+        void drawDebugRect(float x, float y, const char* msg);
 
     private:
         /// Member cvars accessible from console.
@@ -1075,6 +1076,24 @@ inline bool FLConsoleInstance::_IsCursorOn()
     }
 }
 
+inline void FLConsoleInstance::drawDebugRect(float x, float y, const char* msg)
+{
+    m_window->popGLStates();
+    sf::RectangleShape rectangle;
+    rectangle.setSize(sf::Vector2f(1600, 1));
+    rectangle.setFillColor(sf::Color::Red);
+    rectangle.setPosition(x, y);
+    m_window->draw(rectangle);
+
+    sf::Text text;
+    text.setFont(*m_font);
+    text.setCharacterSize(12);
+    text.setString(msg);
+    text.setPosition(100, y);
+    m_window->draw(text);
+    m_window->pushGLStates();
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 inline void FLConsoleInstance::_RenderText()
 {
@@ -1091,6 +1110,9 @@ inline void FLConsoleInstance::_RenderText()
 
         //start drawing from bottom of console up...
         int lineLoc = m_Viewport.height-1 - nConsoleHeight + m_nConsoleVerticalMargin;
+
+        drawDebugRect(0, lineLoc, "lineLoc");
+
 
         //draw command line first
         char cBlink = _IsCursorOn() ? '_' : ' ';
