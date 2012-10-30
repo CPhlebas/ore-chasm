@@ -15,6 +15,7 @@
 #include <GLConsole/GLColor.h>
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
 
 #include <limits.h>
 #include <stdio.h>
@@ -76,7 +77,7 @@ class FLConsoleInstance
     friend void FLConsoleCheckInit( FLConsoleInstance* pConsole ); 
 
     public:
-         FLConsoleInstance();
+         FLConsoleInstance(sf::RenderWindow *window);
         ~FLConsoleInstance();
 
         // call this after OpenGL is up 
@@ -132,6 +133,7 @@ class FLConsoleInstance
 
         /// Fltk draw.
         void draw();
+
 
     private:
 
@@ -202,6 +204,8 @@ class FLConsoleInstance
         GLColor&       m_HelpColor;
         GLColor&       m_ConsoleColor;
 
+
+        sf::RenderWindow *m_window;
 
 //        Fl_Widget*    m_pParentWidget; // the window in which the console is active.
 
@@ -332,13 +336,14 @@ inline std::string& RemoveSpaces( std::string &str )
 class FLConsole
 {
     public:
-        FLConsole();
+        FLConsole(sf::RenderWindow* _window);
 //        Fl_Widget*  parent();
         int         handle( int e );
         void        draw();
         void ToggleConsole();
     private:
-        FLConsoleInstance*  m_pFLConsoleInstance; 
+        FLConsoleInstance*  m_pFLConsoleInstance;
+        sf::RenderWindow *window;
 };
 
 inline void FLConsole::ToggleConsole()
@@ -346,13 +351,12 @@ inline void FLConsole::ToggleConsole()
     m_pFLConsoleInstance->ToggleConsole();
 }
 
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Constructor.
-inline FLConsole::FLConsole()
+inline FLConsole::FLConsole(sf::RenderWindow *window)
 {
     if( GetConsole() == NULL ){
-        m_pFLConsoleInstance = new FLConsoleInstance();
+        m_pFLConsoleInstance = new FLConsoleInstance(window);
         SetConsole( m_pFLConsoleInstance );
     }
     m_pFLConsoleInstance = GetConsole();
@@ -388,7 +392,8 @@ inline void FLConsole::draw()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Constructor.
-inline FLConsoleInstance::FLConsoleInstance() :
+inline FLConsoleInstance::FLConsoleInstance(sf::RenderWindow *window) :
+
     // Init our member cvars  (can't init the names in the class decleration) 
     m_fConsoleBlinkRate( CVarUtils::CreateCVar<float>(    "console.BlinkRate", 4.0 ) ), // cursor blinks per sec
     m_fConsoleAnimTime( CVarUtils::CreateCVar<float>(     "console.AnimTime", 0.1 ) ),     // time the console animates
@@ -409,8 +414,8 @@ inline FLConsoleInstance::FLConsoleInstance() :
     m_HelpColor( CVarUtils::CreateCVar<GLColor>(          "console.colors.HelpColor", GLColor( 110, 130, 200 ) ) ),
     m_ConsoleColor( CVarUtils::CreateCVar<GLColor>(       "console.colors.ConsoleColor", GLColor( 25, 60, 130, 250 ) ) )
 {
+    m_window = window;
     SetConsole( this );
-
  //   m_pParentWidget = NULL;
     m_Viewport.width = 0;
     m_bConsoleOpen = false;

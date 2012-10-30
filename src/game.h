@@ -43,7 +43,7 @@ class Game
     const int SCREEN_H = 900;
 
 private:
-    FLConsole   m_Console;
+    FLConsole *m_console = nullptr;
     sf::RenderWindow *m_app = nullptr;
     sf::View *m_view = nullptr;
     sf::Font *m_font = nullptr;
