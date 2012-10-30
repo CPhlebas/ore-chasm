@@ -1054,9 +1054,9 @@ inline void FLConsoleInstance::draw()
         glMatrixMode(GL_PROJECTION);						
         glPopMatrix();
         glPopAttrib();
-//        m_window->pushGLStates();
+        m_window->pushGLStates();
         m_window->draw(*m_text1);
- //       m_window->popGLStates();
+        m_window->popGLStates();
     }
 }
 
