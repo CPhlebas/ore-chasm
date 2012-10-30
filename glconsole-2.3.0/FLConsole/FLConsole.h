@@ -455,7 +455,7 @@ inline void FLConsoleInstance::Init()
 
     m_text1 = new sf::Text();
     m_text1->setString("HELLO?");
-    m_text1->setPosition(500., 500.);
+    m_text1->setPosition(0., 0.);
     m_text1->setFont(*m_font);
 
     m_Viewport.width = 1600;
@@ -573,7 +573,7 @@ inline void FLConsoleInstance::glPrintf(int x, int y, const char* sMsg, ... )
 
 //FIXME:    gl_font( FL_COURIER, m_nCharHeight );
     glRasterPos2f( x, y );
-    m_text1->setString(pBuffer);
+//    m_text1->setString(pBuffer);
 //    gl_draw( pBuffer, nResult );
     delete[] pBuffer;
 }
@@ -1000,8 +1000,6 @@ inline void FLConsoleInstance::draw()
     _CheckInit();
     if( m_bConsoleOpen || m_bIsChanging ) {
 
-
-        printf("ATTEMPTING CONSOLE RENDER, it should render here...\n");
         glPushAttrib(GL_ENABLE_BIT | GL_DEPTH_BUFFER_BIT | GL_SCISSOR_BIT | GL_TRANSFORM_BIT );
 
         glDisable(GL_LIGHTING);
@@ -1054,10 +1052,10 @@ inline void FLConsoleInstance::draw()
         glMatrixMode(GL_PROJECTION);						
         glPopMatrix();
         glPopAttrib();
-    }
         m_window->pushGLStates();
         m_window->draw(*m_text1);
         m_window->popGLStates();
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1104,18 +1102,26 @@ inline void FLConsoleInstance::_RenderText()
         //draw command line first
         char cBlink = _IsCursorOn() ? '_' : ' ';
         std::string em( m_sCurrentCommandBeg.length(), ' ');
+        std::string combinedInitialPrinting;
 
-        // print up till the cursor
-        glPrintf( m_nConsoleLeftMargin, lineLoc - m_nScrollPixels, 
-                "> " + m_sCurrentCommandBeg );
+        combinedInitialPrinting.append("> " + m_sCurrentCommandBeg);
+        combinedInitialPrinting.append("> " + em + cBlink);
+        combinedInitialPrinting.append("> " + em + m_sCurrentCommandEnd);
 
-        // print at the cursor
         glPrintf( m_nConsoleLeftMargin, lineLoc - m_nScrollPixels, 
-                "> " + em + cBlink );
+                combinedInitialPrinting.c_str());
 
-        // print after the cursor
-        glPrintf( m_nConsoleLeftMargin, lineLoc - m_nScrollPixels, 
-                "> " + em + m_sCurrentCommandEnd );
+       // // print up till the cursor
+       // glPrintf( m_nConsoleLeftMargin, lineLoc - m_nScrollPixels, 
+       //         "> " + m_sCurrentCommandBeg );
+       //
+       // // print at the cursor
+       // glPrintf( m_nConsoleLeftMargin, lineLoc - m_nScrollPixels, 
+       //         "> " + em + cBlink );
+       //
+       // // print after the cursor
+       // glPrintf( m_nConsoleLeftMargin, lineLoc - m_nScrollPixels, 
+       //         "> " + em + m_sCurrentCommandEnd );
 
 
         lineLoc += m_nCharHeight + m_nConsoleLineSpacing;
@@ -1160,6 +1166,7 @@ inline void FLConsoleInstance::_RenderText()
                 }
 
                 int iterations = (fulltext.length() / chars_per_line) + 1;
+                // fulltext.length() example: 55
                 for(int j = iterations -1; j >= 0 ; j-- ) {
                     //print one less line now that I have wrapped to another line
                     if( j < iterations - 1) 
@@ -1170,8 +1177,11 @@ inline void FLConsoleInstance::_RenderText()
                     count++;
                     int start = fulltext.substr(j*chars_per_line, chars_per_line).find_first_not_of( ' ' );
                     if( start >= 0  ) { 
-                        glPrintf( m_nConsoleLeftMargin, lineLoc - m_nScrollPixels,
-                                fulltext.substr(j*chars_per_line+start, chars_per_line) );
+//                        glPrintf( m_nConsoleLeftMargin, lineLoc - m_nScrollPixels,
+//                                fulltext.substr(j*chars_per_line+start, chars_per_line) );
+                        std::string sub = fulltext.substr(j * chars_per_line + start, chars_per_line);
+                        sub.append("\n");
+                        m_text1->setString(sub);
                     }
                 }
             }
