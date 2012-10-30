@@ -64,8 +64,8 @@ void Game::init()
 
     sf::ContextSettings settings;
 
-//    settings.depthBits = 24;
-//    settings.stencilBits = 8;
+    settings.depthBits = 24;
+    settings.stencilBits = 8;
 //    settings.antialiasingLevel = 4;
 //    settings.majorVersion = 3;
 //    settings.minorVersion = 0;
@@ -73,7 +73,7 @@ void Game::init()
 
     m_app = new sf::RenderWindow(sf::VideoMode(SCREEN_W, SCREEN_H), "Buildarrhea", sf::Style::Resize, settings); //sf::Style::Fullscreen
     m_app->setVerticalSyncEnabled(false);
-    m_app->setFramerateLimit(60);
+//    m_app->setFramerateLimit(60);
     // totally useless for a game.
     m_app->setKeyRepeatEnabled(false);
 
@@ -159,7 +159,6 @@ void Game::tick()
         ss << "Framerate: " << fps << " Min: " << minFps << " Max: " << maxFps << " elapsedTime: " << elapsedTime;
         str = ss.str();
         text.setString(str);
-
 
         if (moveLeft) {
             m_view->move(-500 * elapsedTime, 0);
