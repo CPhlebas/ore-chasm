@@ -169,6 +169,8 @@ void Game::tick()
                 break;
 
             case sf::Event::MouseMoved:
+                // std::cout << "new mouse x: " << event.mouseMove.x << std::endl;
+                // std::cout << "new mouse y: " << event.mouseMove.y << std::endl;
                 break;
 
             case sf::Event::GainedFocus:
@@ -187,18 +189,10 @@ void Game::tick()
                 break;
             }
 
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))  m_view->move(-1000 * elapsedTime, 0);
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) m_view->move( 1000 * elapsedTime, 0);
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))    m_view->move(0, -1000 * elapsedTime);
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))  m_view->move(0,  1000 * elapsedTime);
-
-            if (event.type == sf::Event::MouseMoved)
-            {
-                std::cout << "new mouse x: " << event.mouseMove.x << std::endl;
-                std::cout << "new mouse y: " << event.mouseMove.y << std::endl;
-            }
-
-
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))  m_view->move(-1000 * elapsedTime, 0);
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) m_view->move( 1000 * elapsedTime, 0);
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))    m_view->move(0, -1000 * elapsedTime);
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))  m_view->move(0,  1000 * elapsedTime);
 
             //sf::event::LostFocus
             //sf::event::GainedFocus
