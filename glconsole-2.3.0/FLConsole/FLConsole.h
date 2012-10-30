@@ -15,6 +15,7 @@
 #include <GLConsole/GLColor.h>
 
 #include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 
 #include <limits.h>
@@ -100,10 +101,6 @@ class FLConsoleInstance
  
         void PrintAllCVars();
 
-        /// Return the Fl_Widget we belong to
-//        Fl_Widget*     parent(); 
-
-
         // Help.
         bool Help(std::vector<std::string> *vArgs);
 
@@ -123,17 +120,14 @@ class FLConsoleInstance
         void ScriptRecordPause();
         void ScriptShow();
 
-
         /// clears all of the console's history.
         void HistoryClear();
-
 
         /// Handle Fltk events, e.g. Add a character to the command line.
         int            handle( int e );
 
         /// Fltk draw.
         void draw();
-
 
     private:
 
@@ -205,6 +199,8 @@ class FLConsoleInstance
         GLColor&       m_ConsoleColor;
 
 
+        sf::Text *m_text1;
+        sf::Font *m_font;
         sf::RenderWindow *m_window;
 
 //        Fl_Widget*    m_pParentWidget; // the window in which the console is active.
@@ -442,6 +438,15 @@ inline void FLConsoleInstance::Init()
     }
     printf("FLConsoleInstance::Init, initializing...\n");
     bInitialized = true;
+
+    m_font = new sf::Font();
+    bool loaded = m_font->loadFromFile("../../font/DejaVuSerif.ttf");
+    if (!loaded) {
+        printf("FAILURE, FONT NOT LOADED FOR CONSOLE\n");
+        exit(0);
+    }
+
+    m_text1 = new sf::Text();
 
     m_Viewport.width = 1600;
     m_Viewport.height = 900;
