@@ -447,6 +447,9 @@ inline void FLConsoleInstance::Init()
     }
 
     m_text1 = new sf::Text();
+    m_text1->setString("HELLO?");
+    m_text1->setPosition(500., 500.);
+    m_text1->setFont(*m_font);
 
     m_Viewport.width = 1600;
     m_Viewport.height = 900;
@@ -988,6 +991,8 @@ inline void FLConsoleInstance::draw()
 {
     _CheckInit();
     if( m_bConsoleOpen || m_bIsChanging ) {
+
+
         printf("ATTEMPTING CONSOLE RENDER, it should render here...\n");
         glPushAttrib(GL_ENABLE_BIT | GL_DEPTH_BUFFER_BIT | GL_SCISSOR_BIT | GL_TRANSFORM_BIT );
 
@@ -1042,6 +1047,9 @@ inline void FLConsoleInstance::draw()
         glPopMatrix();
         glPopAttrib();
     }
+        m_window->pushGLStates();
+        m_window->draw(*m_text1);
+        m_window->popGLStates();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
