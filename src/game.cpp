@@ -74,6 +74,7 @@ void Game::init()
     m_app = new sf::RenderWindow(sf::VideoMode(SCREEN_W, SCREEN_H), "Buildarrhea", sf::Style::Resize, settings); //sf::Style::Fullscreen
     m_app->setVerticalSyncEnabled(false);
     m_app->setFramerateLimit(0);
+    m_app->setKeyRepeatEnabled(false);
 
     settings = m_app->getSettings();
 
@@ -127,6 +128,11 @@ void Game::tick()
     const int MAX_BENCH = 3000;
     int benchTime = MAX_BENCH;
 
+    bool moveLeft = false;
+    bool moveRight = false;
+    bool moveUp = false;
+    bool moveDown = false;
+
     while (m_app->isOpen())
     {
         float elapsedTime = clock.restart().asSeconds();
@@ -153,14 +159,30 @@ void Game::tick()
         str = ss.str();
         text.setString(str);
 
+
+        if (moveLeft) {
+            m_view->move(-1000 * elapsedTime, 0);
+        }
+
+        if (moveRight) {
+            m_view->move(1000 * elapsedTime, 0);
+        }
+
+        if (moveUp) {
+            m_view->move(0, -1000 * elapsedTime);
+        }
+
+        if (moveDown) {
+            m_view->move(0,  1000 * elapsedTime);
+        }
+
         while (m_app->pollEvent(event))
         {
 
-//            bool LeftKeyDown = Input.isKeyDown(sf::Key::Left);
-//            bool RightButtonDown = Input.isMouseButtonDown(sf::Mouse::Right);
-//            unsigned int MouseX = Input.getMouseX();
-//            unsigned int MouseY = Input.getMouseY();
-//
+            // bool LeftKeyDown = Input.isKeyDown(sf::Key::Left);
+            // bool RightButtonDown = Input.isMouseButtonDown(sf::Mouse::Right);
+            // unsigned int MouseX = Input.getMouseX();
+            // unsigned int MouseY = Input.getMouseY();
 
             switch (event.type)
             {
@@ -172,24 +194,43 @@ void Game::tick()
                 // key pressed
             case sf::Event::KeyPressed:
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-                    m_view->move(-1000 * elapsedTime, 0);
+                    moveLeft = true;
                 }
 
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-                    m_view->move(1000 * elapsedTime, 0);
+                    moveRight = true;
                 }
 
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-                    m_view->move(0, -1000 * elapsedTime);
+                    moveUp = true;
                 }
 
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-                    m_view->move(0,  1000 * elapsedTime);
+                    moveDown = true;
                 }
 
                 if (event.key.code == sf::Keyboard::Escape) {
                     shutdown();
                 }
+                break;
+
+            case sf::Event::KeyReleased:
+                if (!sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+                    moveLeft = false;
+                }
+
+                if (!sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+                    moveRight = false;
+                }
+
+                if (!sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+                    moveUp = false;
+                }
+
+                if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+                    moveDown = false;
+                }
+
                 break;
 
             case sf::Event::MouseMoved:
