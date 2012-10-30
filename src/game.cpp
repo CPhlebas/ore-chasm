@@ -280,6 +280,7 @@ void Game::tick()
  //       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   //      glLoadIdentity();
 /////        glTranslatef(20000,0.2f,0.0f);
+        m_Console.OpenConsole();
         m_Console.draw();
 
         m_app->pushGLStates();

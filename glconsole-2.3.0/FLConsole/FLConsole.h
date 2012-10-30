@@ -334,9 +334,15 @@ class FLConsole
 //        Fl_Widget*  parent();
         int         handle( int e );
         void        draw();
+        void OpenConsole();
     private:
         FLConsoleInstance*  m_pFLConsoleInstance; 
 };
+
+inline void FLConsole::OpenConsole()
+{
+    m_pFLConsoleInstance->OpenConsole();
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
