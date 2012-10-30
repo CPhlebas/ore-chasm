@@ -34,17 +34,16 @@
 
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include <GL/glut.h>
+//#include <GL/glut.h>
 //include this header for CVars and GLConsole
-#include <GLConsole/GLConsole.h>
+//#include <GLConsole/GLConsole.h>
+#include <FLConsole/FLConsole.h>
 
 //A CVar version of std::vector
 #include <CVars/CVarVectorIO.h>
 
 //A CVar version of std::map
 #include <CVars/CVarMapIO.h>
-
-GLConsole theConsole;
 
 Game::Game()
 {
@@ -116,27 +115,9 @@ void Game::init()
 
     m_player = new Player("../textures/player.png");
 
-    theConsole.Init();
-    theConsole.OpenConsole();
 
     tick();
     shutdown();
-}
-
-
-void reshape (int w, int h)
-{
-    glViewport     ( 0, 0, w, h );
-    glMatrixMode   ( GL_PROJECTION );
-    glLoadIdentity ( );
-    
-    if ( h == 0 )
-        gluPerspective ( 80, ( float ) w, 1.0, 5000.0 );
-    else
-        gluPerspective ( 80, ( float ) w / ( float ) h, 1.0, 5000.0 );
-    
-    glMatrixMode   ( GL_MODELVIEW );
-    glLoadIdentity ( );
 }
 
 void Game::tick()
@@ -232,7 +213,7 @@ void Game::tick()
 
                 if (event.key.code == sf::Keyboard::Tab) {
                     std::cout << "TAB HIT, TOGGLING CONSOLE" << std::endl;
-                    theConsole.ToggleConsole();
+                   // theConsole.ToggleConsole();
                 }
 
                 if (event.key.code == sf::Keyboard::Escape) {
@@ -284,69 +265,22 @@ void Game::tick()
 //               shutdown();
             //          }
         }
-        glShadeModel(GL_SMOOTH);
-        glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
-        glClearDepth(1.0f);
-        glEnable(GL_DEPTH_TEST);
-        glDepthFunc(GL_LEQUAL);
-        glEnable ( GL_COLOR_MATERIAL );
-        glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-//
-//        //register functions
-//        glutReshapeFunc (reshape);
-//        glutDisplayFunc (display);
-//        glutKeyboardFunc (keyfunc);
-//        glutSpecialFunc (special);
-//        glutIdleFunc(idle);
+
 
         //non sfml
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        float triangleSize = 1.0;
-        try {
-            //triangleSize is set to the default value of the CVar "triangle.size
-            //      Use this syntax to make the CVar    CVar name,    Default value,   Help text,
-            triangleSize = CVarUtils::CreateCVar<float>( "triangle.size", 1.0f, "Triangle size value" );
-        }
-        catch( CVarUtils::CVarException e ) {
-            switch( e ) {
-                case CVarUtils::CVarAlreadyCreated:
-                    //it already exists, so just assign the latest value
-                    triangleSize = CVarUtils::GetCVar<float>( "triangle.size" );
-                    break;
-                default:
-                    printf( "Unknown exception" );
-                    break;
-            }
-        }
+
 //        theConsole.Printf("TEST 1");
         std::vector<std::string> vect;
         std::string str1;
  //       theConsole.Help(&vect);
 //        reshape(1600,100);
         //set up the scene
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glLoadIdentity();
+ //       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  //      glLoadIdentity();
 /////        glTranslatef(20000,0.2f,0.0f);
-        
-        //draw the triangle
-        glBegin(GL_TRIANGLES); {
-            glColor3f(1.0f,0.0f,0.0f);
-            glVertex3f( 0.0f, triangleSize, 0.0f);
-            glColor3f(0.0f,triangleSize,0.0f);
-            glVertex3f(-triangleSize,-triangleSize, 0.0f);
-            glColor3f(0.0f,0.0f,triangleSize);
-            glVertex3f( triangleSize,-triangleSize, 0.0f);
-        }
-        glEnd();
-        theConsole.SetLogColor(0,0,255);
-        theConsole.SetHelpColor(0,0,255);
-        theConsole.SetCommandColor(0,0,255);
-        //draw the console. always call it last so it is drawn on top of everything
-        theConsole.RenderConsole();
-        
-
-        
+        m_Console.draw();
 
         m_app->pushGLStates();
         /*

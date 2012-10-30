@@ -18,11 +18,12 @@
 #include <stdio.h>
 #include <stdarg.h>
 
+#include <GL/gl.h>
 
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Gl_Window.H>
-#include <FL/gl.h>
+//#include <FL/Fl.H>
+//#include <FL/Fl_Window.H>
+//#include <FL/Fl_Gl_Window.H>
+//#include <FL/gl.h>
 
 #include <algorithm>
 #include <cstring>
@@ -97,7 +98,7 @@ class FLConsoleInstance
         void PrintAllCVars();
 
         /// Return the Fl_Widget we belong to
-        Fl_Widget*     parent(); 
+//        Fl_Widget*     parent(); 
 
 
         // Help.
@@ -200,7 +201,7 @@ class FLConsoleInstance
         GLColor&       m_ConsoleColor;
 
 
-        Fl_Widget*    m_pParentWidget; // the window in which the console is active.
+//        Fl_Widget*    m_pParentWidget; // the window in which the console is active.
 
         bool          m_bExecutingHistory; //Are we executing a script or not.
         bool          m_bSavingScript; // Are we saving a script.
@@ -330,7 +331,7 @@ class FLConsole
 {
     public:
         FLConsole();
-        Fl_Widget*  parent();
+//        Fl_Widget*  parent();
         int         handle( int e );
         void        draw();
     private:
@@ -351,10 +352,10 @@ inline FLConsole::FLConsole()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Fltk handle function.
-inline Fl_Widget* FLConsole::parent()
-{
-    return m_pFLConsoleInstance ? m_pFLConsoleInstance->parent() : NULL;
-}
+//inline Fl_Widget* FLConsole::parent()
+//{
+//    return m_pFLConsoleInstance ? m_pFLConsoleInstance->parent() : NULL;
+//}
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -402,7 +403,7 @@ inline FLConsoleInstance::FLConsoleInstance() :
 {
     SetConsole( this );
 
-    m_pParentWidget = NULL;
+ //   m_pParentWidget = NULL;
     m_Viewport.width = 0;
     m_bConsoleOpen = false;
     m_bSavingScript = false;
@@ -536,9 +537,9 @@ inline void FLConsoleInstance::glPrintf(int x, int y, const char* sMsg, ... )
     }
     va_end( ap );
 
-    gl_font( FL_COURIER, m_nCharHeight );
+//FIXME:    gl_font( FL_COURIER, m_nCharHeight );
     glRasterPos2f( x, y );
-    gl_draw( pBuffer, nResult );
+//    gl_draw( pBuffer, nResult );
     delete[] pBuffer;
 }
 
@@ -571,7 +572,7 @@ inline bool FLConsoleInstance::IsChanging()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 inline void FLConsoleInstance::OpenConsole() 
 { 
-    m_pParentWidget = Fl::focus();
+ //   m_pParentWidget = Fl::focus();
     m_bConsoleOpen = true; 
     m_bIsChanging = true;
     m_Timer.Stamp(); 
@@ -580,7 +581,7 @@ inline void FLConsoleInstance::OpenConsole()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 inline void FLConsoleInstance::CloseConsole() 
 { 
-    m_pParentWidget = NULL;
+//    m_pParentWidget = NULL;
     m_bConsoleOpen = false;
     m_bIsChanging = true;
     m_Timer.Stamp(); 
@@ -1241,6 +1242,8 @@ inline void FLConsoleInstance::ScrollDownPage()
 inline int FLConsoleInstance::handle( int e )
 {
     _CheckInit();
+/*
+  FIXME USE SFML, obviously...
 
     if( e != FL_KEYDOWN && e != FL_KEYUP ){ // only handle presses
         return 0;
@@ -1334,15 +1337,16 @@ inline int FLConsoleInstance::handle( int e )
 //                        sInput, Fl::event_length(), key );
             }
     }
+    */
     return 1;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-inline Fl_Widget* FLConsoleInstance::parent()
-{
-    return m_pParentWidget;
-} 
-
+//inline Fl_Widget* FLConsoleInstance::parent()
+//{
+//    return m_pParentWidget;
+//} 
+//
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 inline void FLConsoleInstance::ClearCurrentCommand() 
 {
