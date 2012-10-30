@@ -1085,12 +1085,6 @@ inline void FLConsoleInstance::_RenderText()
     }
 
     //set up a scissor region to draw the text in
-    glScissor( 1 ,m_Viewport.height - _GetConsoleHeight() + 1, //bottom coord
-            m_Viewport.width, //width
-            nConsoleHeight - m_nConsoleVerticalMargin ); //top coord
-    glEnable( GL_SCISSOR_TEST ); {
-        glColor4f(m_CommandColor.r, m_CommandColor.g, m_CommandColor.b, m_CommandColor.a );
-
         int lines = (nConsoleHeight / m_nCharHeight);
         int scrollLines = (m_nScrollPixels / m_nCharHeight);
         lines += scrollLines;
@@ -1200,8 +1194,6 @@ inline void FLConsoleInstance::_RenderText()
 
         printf("SUBSTRING: %s", fullString.c_str());
         m_text1->setString(fullString);
-    }
-    glDisable(GL_SCISSOR_TEST);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
