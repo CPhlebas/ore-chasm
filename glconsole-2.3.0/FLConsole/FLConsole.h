@@ -1126,6 +1126,7 @@ inline void FLConsoleInstance::_RenderText()
         lineLoc += m_nCharHeight + m_nConsoleLineSpacing;
         std::string fullString;
 
+        m_text1->setPosition(0, lineLoc - m_nScrollPixels);
         int count = 0;
         for(  int i = 1 ; i < lines; i++ ) {	
             if( count >= m_nConsoleMaxLines)
@@ -1162,6 +1163,8 @@ inline void FLConsoleInstance::_RenderText()
                 int chars_per_line = (int)(1.65*m_Viewport.width / m_nCharHeight);
                 if( chars_per_line == 0 ) {
                     // What should we do if the window has width == 0 ?
+                    printf("ERROR, WINDOW CONSOLE HAS 0 WIDTH\n");
+                    exit(1);
                     return;
                 }
 
