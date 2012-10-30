@@ -131,7 +131,7 @@ void Game::tick()
     {
         float elapsedTime = clock.restart().asSeconds();
         benchTime -= 1;
-        fps = fps = int(1.f / elapsedTime);
+        fps = int(1.f / elapsedTime);
 
         // recheck the max, good amount of time passed
         if (benchTime <= 0) {
@@ -171,19 +171,19 @@ void Game::tick()
 
                 // key pressed
             case sf::Event::KeyPressed:
-                if (event.key.code == sf::Keyboard::Right)  {
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
                     m_view->move(-1000 * elapsedTime, 0);
                 }
 
-                if (event.key.code == sf::Keyboard::Left) {
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
                     m_view->move(1000 * elapsedTime, 0);
                 }
 
-                if (event.key.code == sf::Keyboard::Down) {
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
                     m_view->move(0, -1000 * elapsedTime);
                 }
 
-                if (event.key.code == sf::Keyboard::Up) {
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
                     m_view->move(0,  1000 * elapsedTime);
                 }
 
