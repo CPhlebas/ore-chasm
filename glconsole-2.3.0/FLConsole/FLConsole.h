@@ -337,6 +337,7 @@ class FLConsole
         int         handle( int e );
         void        draw();
         void ToggleConsole();
+        void Printf(const char* msg);
     private:
         FLConsoleInstance*  m_pFLConsoleInstance;
         sf::RenderWindow *window;
@@ -346,6 +347,12 @@ inline void FLConsole::ToggleConsole()
 {
     m_pFLConsoleInstance->ToggleConsole();
 }
+
+inline void FLConsole::Printf(const char* msg)
+{
+    m_pFLConsoleInstance->Printf(msg);
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Constructor.

@@ -215,6 +215,7 @@ void Game::tick()
 
                 if (event.key.code == sf::Keyboard::Tab) {
                     std::cout << "TAB HIT, TOGGLING CONSOLE" << std::endl;
+                    m_console->ToggleConsole();
                    // theConsole.ToggleConsole();
                 }
 
@@ -274,14 +275,12 @@ void Game::tick()
 
 
 //        theConsole.Printf("TEST 1");
-        std::vector<std::string> vect;
-        std::string str1;
- //       theConsole.Help(&vect);
 //        reshape(1600,100);
         //set up the scene
  //       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   //      glLoadIdentity();
 /////        glTranslatef(20000,0.2f,0.0f);
+        m_console->Printf(str.c_str());
         m_console->draw();
 
         m_app->pushGLStates();
