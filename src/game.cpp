@@ -129,14 +129,36 @@ void Game::tick()
 
     sf::Clock clock;
 
-    //  "../textures/stone.png"
+    int fps = 0;
+    int minFps = 0;
+    int maxFps = 0;
+
+    const int MAX_BENCH = 3000;
+    int benchTime = MAX_BENCH;
+
     while (m_app->isOpen())
     {
         float elapsedTime = clock.restart().asSeconds();
-        float fps = 1.f / elapsedTime;
+        benchTime -= 1;
+        fps = fps = int(1.f / elapsedTime);
+
+        // recheck the max, good amount of time passed
+        if (benchTime <= 0) {
+            maxFps = fps;
+            minFps = maxFps;
+            benchTime = MAX_BENCH;
+        }
+
+        if (fps < minFps) {
+            minFps = fps;
+        }
+
+        if (fps > maxFps) {
+            maxFps = fps;
+        }
 
         ss.str("");
-        ss << "Framerate: " << fps;
+        ss << "Framerate: " << fps << " Min: " << minFps << " Max: " << maxFps;
         str = ss.str();
         text.setString(str);
 
