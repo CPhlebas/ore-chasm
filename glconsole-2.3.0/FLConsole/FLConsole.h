@@ -124,7 +124,7 @@ class FLConsoleInstance
         void HistoryClear();
 
         /// Handle Fltk events, e.g. Add a character to the command line.
-        int            handle( int e );
+        int            handle(sf::Event *event);
 
         /// Fltk draw.
         void draw();
@@ -334,7 +334,7 @@ class FLConsole
     public:
         FLConsole(sf::RenderWindow* _window);
 //        Fl_Widget*  parent();
-        int         handle( int e );
+        int         handle(sf::Event *event);
         void        draw();
         void ToggleConsole();
         void Printf(const char* msg);
@@ -375,9 +375,9 @@ inline FLConsole::FLConsole(sf::RenderWindow *window)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Fltk handle function.
-inline int FLConsole::handle( int e )
+inline int FLConsole::handle(sf::Event *event)
 {
-    return m_pFLConsoleInstance->handle(e);
+    return m_pFLConsoleInstance->handle(event);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1298,9 +1298,36 @@ inline void FLConsoleInstance::ScrollDownPage()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Process key presses.
-inline int FLConsoleInstance::handle( int e )
+inline int FLConsoleInstance::handle(sf::Event *event)
 {
     _CheckInit();
+
+    if (event->key.code == sf::Keyboard::Left) {
+        CursorLeft();
+    } else if (event->key.code == sf::Keyboard::Right) {
+        CursorRight();
+    } else if (event->key.code == sf::Keyboard::PageUp) {
+        ScrollUpPage();
+    } else if (event->key.code == sf::Keyboard::PageDown) {
+        ScrollDownPage();
+    } else if (event->key.code == sf::Keyboard::Left) {
+        CursorLeft();
+    } else if (event->key.code == sf::Keyboard::Left) {
+        CursorLeft();
+    } else if (event->key.code == sf::Keyboard::Left) {
+        _ProcessCurrentCommand();
+        m_sCurrentCommandBeg = "";
+        m_sCurrentCommandEnd = "";
+        m_nCommandNum = 0; //reset history
+        m_nScrollPixels = 0; //reset scrolling
+    } else if (event->key.code == sf::Keyboard::A) {
+        //FIXME HACK: obviouusly allow more than 1 char inpuit ;)
+         m_sCurrentCommandBeg += "a"; // just add the key to the string
+        m_nCommandNum = 0; //reset history
+        m_nScrollPixels = 0; //reset scrolling
+
+    }
+
 /*
   FIXME USE SFML, obviously...
 

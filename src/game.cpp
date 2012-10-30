@@ -196,6 +196,7 @@ void Game::tick()
 
                 // key pressed
             case sf::Event::KeyPressed:
+                m_console->handle(&event);
                 if (event.key.code == sf::Keyboard::Escape) {
                     shutdown();
                 }
