@@ -214,7 +214,6 @@ void Game::tick()
                 }
                 break;
 
-
             case sf::Event::MouseMoved:
                 // std::cout << "new mouse x: " << event.mouseMove.x << std::endl;
                 // std::cout << "new mouse y: " << event.mouseMove.y << std::endl;

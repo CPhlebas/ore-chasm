@@ -25,6 +25,17 @@ endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
 set(buildarrhea_VERSION_MAJOR 0)
 set(buildarrhea_VERSION_MINOR 1)
 
+find_package( GLUT REQUIRED )
+find_package( GLU REQUIRED )
+find_package( OpenGL REQUIRED )
+find_package(CVARS REQUIRED)
+
+if (NOT CVARS_FOUND)
+    message(FATAL_ERROR "Could not find CVARS (for quake console).")
+endif()
+
+include_directories( ${CMAKE_SOURCE_DIR} ${GLUT_INCLUDE_DIR} )
+
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 
 configure_file(
@@ -76,8 +87,8 @@ if (NOT SFML_FOUND)
     message(FATAL_ERROR "Could not find SFML.")
 endif()
 
-include_directories(${SFML_INCLUDE_DIR})
-target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES} ${CHIPMUNK_LIBRARIES} )
+include_directories(${SFML_INCLUDE_DIR} ${CVARS_INCLUDE_DIR})
+target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES} ${CHIPMUNK_LIBRARIES} ${CVARS_LIBRARIES} ${GLUT_LIBRARIES} ${GLU_LIBRARIES} ${OPENGL_LIBRARIES})
 
 
 # CPack packaging
