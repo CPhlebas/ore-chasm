@@ -177,7 +177,6 @@ void Game::tick()
 
                 // key pressed
             case sf::Event::KeyPressed:
-
                 if (event.key.code == sf::Keyboard::Escape) {
                     shutdown();
                 }
@@ -198,8 +197,6 @@ void Game::tick()
                 if (event.key.code == sf::Keyboard::Escape) {
                     shutdown();
                 }
-
-
                 break;
 
             case sf::Event::KeyReleased:
@@ -215,7 +212,6 @@ void Game::tick()
                 if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
                     yDir -= 1;
                 }
-
                 break;
 
 
@@ -239,7 +235,6 @@ void Game::tick()
             default:
                 break;
             }
-
 
             //sf::event::LostFocus
             //sf::event::GainedFocus
