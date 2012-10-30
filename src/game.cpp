@@ -83,6 +83,7 @@ void Game::init()
     std::cout << "version:" << settings.majorVersion << "." << settings.minorVersion << std::endl;
 
     m_view = new sf::View(sf::FloatRect(0, 0, SCREEN_W, SCREEN_H));
+    //TODO    m_view->SetCenter();
     m_app->setView(*m_view);
 
     m_font = new sf::Font();
@@ -107,17 +108,7 @@ void Game::tick()
     float Left = 0.f;
     float Top  = 0.f;
 
-//    m_player->setX(200.f);
-//    m_player->setY(100.f);
-//    m_player->setPosition(200.f, 100.f);
-//    m_player->setRotation(30.f);
-//    m_player->setCenter(0, 0);
-//    m_player->setScale(10.0f, 10.0f);
-//    m_player->setBlendMode(sf::Blend::Multiply);
-//
-//    m_player->move(10, 5);
-//    m_player->rotate(90);
-//
+    m_player->setPosition(m_view->getCenter());
 
     sf::Text text;
     text.setFont(*m_font);
@@ -182,11 +173,17 @@ void Game::tick()
             case sf::Event::KeyPressed:
                 if (event.key.code == sf::Keyboard::Right)  {
                     m_view->move(-1000 * elapsedTime, 0);
-                } else if (event.key.code == sf::Keyboard::Left) {
+                }
+
+                if (event.key.code == sf::Keyboard::Left) {
                     m_view->move(1000 * elapsedTime, 0);
-                } else if (event.key.code == sf::Keyboard::Down) {
+                }
+
+                if (event.key.code == sf::Keyboard::Down) {
                     m_view->move(0, -1000 * elapsedTime);
-                } else if (event.key.code == sf::Keyboard::Up) {
+                }
+
+                if (event.key.code == sf::Keyboard::Up) {
                     m_view->move(0,  1000 * elapsedTime);
                 }
 

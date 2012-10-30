@@ -21,4 +21,5 @@
 Player::Player(const char* texture) : Renderable(texture)
 {
     this->setTexture("../textures/player.png");
+//TODO:    setCenter();
 }
