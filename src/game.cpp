@@ -129,14 +129,14 @@ void Game::tick()
     const int MAX_BENCH = 3000;
     int benchTime = MAX_BENCH;
 
-    bool moveLeft = false;
-    bool moveRight = false;
-    bool moveUp = false;
-    bool moveDown = false;
+    int xDir = 0;
+    int yDir = 0;
+
+    float elapsedTime = 0;
 
     while (m_app->isOpen())
     {
-        float elapsedTime = clock.restart().asSeconds();
+        elapsedTime = clock.restart().asSeconds();
         benchTime -= 1;
         fps = int(1.f / elapsedTime);
 
@@ -160,22 +160,6 @@ void Game::tick()
         str = ss.str();
         text.setString(str);
 
-        if (moveLeft) {
-            m_view->move(-500 * elapsedTime, 0);
-        }
-
-        if (moveRight) {
-            m_view->move(500 * elapsedTime, 0);
-        }
-
-        if (moveUp) {
-            m_view->move(0, -500 * elapsedTime);
-        }
-
-        if (moveDown) {
-            m_view->move(0,  500 * elapsedTime);
-        }
-
         while (m_app->pollEvent(event))
         {
 
@@ -193,45 +177,47 @@ void Game::tick()
 
                 // key pressed
             case sf::Event::KeyPressed:
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-                    moveLeft = true;
+
+                if (event.key.code == sf::Keyboard::Escape) {
+                    shutdown();
                 }
 
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-                    moveRight = true;
+                if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
+                    xDir -= 1;
                 }
-
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-                    moveUp = true;
+                if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
+                    xDir += 1;
                 }
-
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-                    moveDown = true;
+                if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down) {
+                    yDir -= 1;
+                }
+                if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
+                    yDir += 1;
                 }
 
                 if (event.key.code == sf::Keyboard::Escape) {
                     shutdown();
                 }
+
+
                 break;
 
             case sf::Event::KeyReleased:
-                if (!sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-                    moveLeft = false;
+                if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
+                    xDir += 1;
                 }
-
-                if (!sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-                    moveRight = false;
+                if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
+                    xDir -= 1;
                 }
-
-                if (!sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-                    moveUp = false;
+                if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down) {
+                    yDir += 1;
                 }
-
-                if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-                    moveDown = false;
+                if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
+                    yDir -= 1;
                 }
 
                 break;
+
 
             case sf::Event::MouseMoved:
                 // std::cout << "new mouse x: " << event.mouseMove.x << std::endl;
@@ -263,6 +249,8 @@ void Game::tick()
 //               shutdown();
             //          }
         }
+
+        m_view->move(500 * xDir * elapsedTime, 500* yDir * elapsedTime);
 
         m_app->clear(sf::Color(200, 0, 0));
         m_app->draw(*m_player);
