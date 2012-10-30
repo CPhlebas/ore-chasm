@@ -72,10 +72,10 @@ void Game::init()
 
 
     m_app = new sf::RenderWindow(sf::VideoMode(SCREEN_W, SCREEN_H), "Buildarrhea", sf::Style::Resize, settings); //sf::Style::Fullscreen
-    m_app->useVerticalSync(false);
+    m_app->setVerticalSyncEnabled(false);
     m_app->setFramerateLimit(0);
 
-    settings = m_app.getSettings();
+    settings = m_app->getSettings();
 
     std::cout << "depth bits:" << settings.depthBits << std::endl;
     std::cout << "stencil bits:" << settings.stencilBits << std::endl;
@@ -86,7 +86,7 @@ void Game::init()
     m_app->setView(*m_view);
 
     m_font = new sf::Font();
-    if (!m_font->loadFromFile("../font/DejaVuSerif.ttf", 12))
+    if (!m_font->loadFromFile("../font/DejaVuSerif.ttf"))
     {
         abort_game("unable to load font");
     }
@@ -121,22 +121,24 @@ void Game::tick()
 
     sf::Text text;
     text.setFont(*m_font);
-    text.setSize(12.0);
+    text.setCharacterSize(12.0);
     text.setColor(sf::Color::Yellow);
 
     std::stringstream ss;
     std::string str;
 
+    sf::Clock clock;
+
     //  "../textures/stone.png"
     while (m_app->isOpen())
     {
-        float elapsedTime = m_app->getFrameTime();
+        float elapsedTime = clock.restart().asMilliseconds();
         float fps = 1.f / elapsedTime;
 
         ss.str("");
         ss << "Framerate: " << fps;
         str = ss.str();
-        text.setText(str);
+        text.setString(str);
 
         while (m_app->pollEvent(event))
         {
@@ -151,6 +153,39 @@ void Game::tick()
             // if (m_app->GetInput().IsKeyDown(sf::Key::Right)) sprite.Move( 1000 * elapsedTime, 0);
             // if (m_app->GetInput().IsKeyDown(sf::Key::Up))    sprite.Move(0, -1000 * elapsedTime);
             // if (m_app->GetInput().IsKeyDown(sf::Key::Down))  sprite.Move(0,  1000 * elapsedTime);
+
+            switch (event.type)
+            {
+                // window closed
+            case sf::Event::Closed:
+                shutdown();
+                break;
+
+                // key pressed
+            case sf::Event::KeyPressed:
+                if (event.key.code == sf::Keyboard::Escape) {
+                    shutdown();
+                }
+                break;
+
+            case sf::Event::MouseMoved:
+                break;
+
+            case sf::Event::GainedFocus:
+                break;
+
+            case sf::Event::LostFocus:
+                break;
+
+            case sf::Event::MouseButtonPressed:
+                break;
+
+            case sf::Event::MouseButtonReleased:
+                break;
+
+            default:
+                break;
+            }
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))  m_view->move(-1000 * elapsedTime, 0);
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) m_view->move( 1000 * elapsedTime, 0);
@@ -169,15 +204,15 @@ void Game::tick()
             //sf::event::GainedFocus
 
             // Window closed
-            if (event.type == sf::Event::Closed || ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Key::Escape))) {
-                shutdown();
-            }
+//            if (event.type == sf::Event::Closed || ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Key::Escape))) {
+//               shutdown();
+            //          }
         }
 
         m_app->clear(sf::Color(200, 0, 0));
         m_app->draw(*m_player);
 
-        m_app->setView(m_app->GetDefaultView());
+        m_app->setView(m_app->getDefaultView());
         m_app->draw(text);
         m_app->setView(*m_view);
 
