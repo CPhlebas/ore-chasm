@@ -1139,7 +1139,9 @@ inline void FLConsoleInstance::_RenderText()
                 }
 
                 std::deque<ConsoleLine>::iterator it = m_sConsoleText.begin() + i - 1;
+                //NOTE: this is actual backwards history..newest on top, bottom is oldest. We don't want to display just that..need to reverse it
                 std::string fulltext = (*it).m_sText;
+                printf("FULLTEXT:%s", fulltext.c_str());
 
                 //set the appropriate color
                 switch((*it).m_nOptions)
@@ -1168,8 +1170,9 @@ inline void FLConsoleInstance::_RenderText()
                     return;
                 }
 
-                int iterations = (fulltext.length() / chars_per_line) + 1;
                 // fulltext.length() example: 55
+                int iterations = (fulltext.length() / chars_per_line) + 1;
+
                 for(int j = iterations -1; j >= 0 ; j-- ) {
                     //print one less line now that I have wrapped to another line
                     if( j < iterations - 1) 
@@ -1184,7 +1187,8 @@ inline void FLConsoleInstance::_RenderText()
 //                                fulltext.substr(j*chars_per_line+start, chars_per_line) );
                         std::string sub = fulltext.substr(j * chars_per_line + start, chars_per_line);
                         sub.append("\n");
-                        fullString.append(sub);
+                        // prepend! so we can reverse it and give it a natural history flow
+                        fullString.insert(0, sub);
                     }
                 }
             }
