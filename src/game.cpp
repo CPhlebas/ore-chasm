@@ -64,11 +64,11 @@ void Game::init()
 
     sf::ContextSettings settings;
 
-    settings.depthBits = 24;
-    settings.stencilBits = 8;
-    settings.antialiasingLevel = 4;
-    settings.majorVersion = 3;
-    settings.minorVersion = 0;
+//    settings.depthBits = 24;
+//    settings.stencilBits = 8;
+//    settings.antialiasingLevel = 4;
+//    settings.majorVersion = 3;
+//    settings.minorVersion = 0;
 
 
     m_app = new sf::RenderWindow(sf::VideoMode(SCREEN_W, SCREEN_H), "Buildarrhea", sf::Style::Resize, settings); //sf::Style::Fullscreen
@@ -132,7 +132,7 @@ void Game::tick()
     //  "../textures/stone.png"
     while (m_app->isOpen())
     {
-        float elapsedTime = clock.restart().asMilliseconds();
+        float elapsedTime = clock.restart().asSeconds();
         float fps = 1.f / elapsedTime;
 
         ss.str("");
