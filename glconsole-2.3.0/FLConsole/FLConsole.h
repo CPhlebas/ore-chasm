@@ -334,14 +334,14 @@ class FLConsole
 //        Fl_Widget*  parent();
         int         handle( int e );
         void        draw();
-        void OpenConsole();
+        void ToggleConsole();
     private:
         FLConsoleInstance*  m_pFLConsoleInstance; 
 };
 
-inline void FLConsole::OpenConsole()
+inline void FLConsole::ToggleConsole()
 {
-    m_pFLConsoleInstance->OpenConsole();
+    m_pFLConsoleInstance->ToggleConsole();
 }
 
 
@@ -432,8 +432,12 @@ inline void FLConsoleInstance::Init()
     static bool bInitialized = false;
     if( bInitialized ){
         return;
-    } 
+    }
+    printf("FLConsoleInstance::Init, initializing...\n");
     bInitialized = true;
+
+    m_Viewport.width = 1600;
+    m_Viewport.height = 900;
 
     m_bExecutingHistory = false;
     m_bSavingScript = false;
@@ -450,6 +454,8 @@ inline void FLConsoleInstance::Init()
     // setup member CVars
     m_Timer.Stamp();
     m_BlinkTimer.Stamp();
+
+
 
     // if the width and height ptrs aren't supplied then just extract the info
     // from GL
@@ -969,7 +975,8 @@ inline bool FLConsoleInstance::_LoadExecuteHistory( std::string sFileName, bool 
 inline void FLConsoleInstance::draw()
 {
     _CheckInit();
-    if( m_bConsoleOpen || m_bIsChanging ) {	
+    if( m_bConsoleOpen || m_bIsChanging ) {
+        printf("ATTEMPTING CONSOLE RENDER, it should render here...\n");
         glPushAttrib(GL_ENABLE_BIT | GL_DEPTH_BUFFER_BIT | GL_SCISSOR_BIT | GL_TRANSFORM_BIT );
 
         glDisable(GL_LIGHTING);
@@ -1045,6 +1052,8 @@ inline bool FLConsoleInstance::_IsCursorOn()
 inline void FLConsoleInstance::_RenderText()
 {
     int nConsoleHeight = _GetConsoleHeight();
+    printf("GETTING CONSOLEHEIGHT\n");
+    printf("CONSOLE HEIGHT: %d\n", nConsoleHeight);
 
     if( nConsoleHeight - m_nConsoleVerticalMargin < 0 ) {
         return;
