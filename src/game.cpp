@@ -231,6 +231,7 @@ void Game::tick()
                 }
 
                 if (event.key.code == sf::Keyboard::Tab) {
+                    std::cout << "TAB HIT, TOGGLING CONSOLE" << std::endl;
                     theConsole.ToggleConsole();
                 }
 
@@ -301,8 +302,6 @@ void Game::tick()
         //non sfml
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-
         float triangleSize = 1.0;
         try {
             //triangleSize is set to the default value of the CVar "triangle.size
@@ -320,12 +319,15 @@ void Game::tick()
                     break;
             }
         }
-        
-        reshape(1600,100);
+//        theConsole.Printf("TEST 1");
+        std::vector<std::string> vect;
+        std::string str1;
+ //       theConsole.Help(&vect);
+//        reshape(1600,100);
         //set up the scene
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glLoadIdentity();
-        glTranslatef(0,0.0f,-2.0f);
+/////        glTranslatef(20000,0.2f,0.0f);
         
         //draw the triangle
         glBegin(GL_TRIANGLES); {
@@ -337,7 +339,9 @@ void Game::tick()
             glVertex3f( triangleSize,-triangleSize, 0.0f);
         }
         glEnd();
-        
+        theConsole.SetLogColor(0,0,255);
+        theConsole.SetHelpColor(0,0,255);
+        theConsole.SetCommandColor(0,0,255);
         //draw the console. always call it last so it is drawn on top of everything
         theConsole.RenderConsole();
         

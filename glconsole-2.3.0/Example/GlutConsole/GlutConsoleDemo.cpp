@@ -28,13 +28,13 @@
 #endif
 
 //include this header for CVars and GLConsole
-#include <GLConsole/GLConsole.h>
+#include <../GLConsole/GLConsole.h>
 
 //A CVar version of std::vector
-#include <CVars/CVarVectorIO.h>
+#include <../CVars/CVarVectorIO.h>
 
 //A CVar version of std::map
-#include <CVars/CVarMapIO.h>
+#include <../CVars/CVarMapIO.h>
 
 
 // Single global instance so glut can get access
@@ -243,7 +243,7 @@ void idle()
 #ifdef WIN32
 	Sleep( 1 );
 #else
-    usleep( (int)1e4 );
+   // usleep( (int)1e4 );
 #endif
     glutPostRedisplay(); // we have 
 }
