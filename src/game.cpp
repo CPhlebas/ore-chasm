@@ -148,11 +148,6 @@ void Game::tick()
 //            unsigned int MouseX = Input.getMouseX();
 //            unsigned int MouseY = Input.getMouseY();
 //
-            // Move the sprite
-            // if (m_app->GetInput().IsKeyDown(sf::Key::Left))  sprite.Move(-1000 * elapsedTime, 0);
-            // if (m_app->GetInput().IsKeyDown(sf::Key::Right)) sprite.Move( 1000 * elapsedTime, 0);
-            // if (m_app->GetInput().IsKeyDown(sf::Key::Up))    sprite.Move(0, -1000 * elapsedTime);
-            // if (m_app->GetInput().IsKeyDown(sf::Key::Down))  sprite.Move(0,  1000 * elapsedTime);
 
             switch (event.type)
             {
@@ -163,6 +158,16 @@ void Game::tick()
 
                 // key pressed
             case sf::Event::KeyPressed:
+                if (event.key.code == sf::Keyboard::Right)  {
+                    m_view->move(-1000 * elapsedTime, 0);
+                } else if (event.key.code == sf::Keyboard::Left) {
+                    m_view->move(1000 * elapsedTime, 0);
+                } else if (event.key.code == sf::Keyboard::Down) {
+                    m_view->move(0, -1000 * elapsedTime);
+                } else if (event.key.code == sf::Keyboard::Up) {
+                    m_view->move(0,  1000 * elapsedTime);
+                }
+
                 if (event.key.code == sf::Keyboard::Escape) {
                     shutdown();
                 }
@@ -189,10 +194,6 @@ void Game::tick()
                 break;
             }
 
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))  m_view->move(-1000 * elapsedTime, 0);
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) m_view->move( 1000 * elapsedTime, 0);
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))    m_view->move(0, -1000 * elapsedTime);
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))  m_view->move(0,  1000 * elapsedTime);
 
             //sf::event::LostFocus
             //sf::event::GainedFocus

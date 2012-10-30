@@ -29,8 +29,8 @@ ImageManager::ImageManager() : textures(), resourceDirs()
 
 ImageManager::~ImageManager()
 {
-        textures.clear();
-        resourceDirs.clear();
+    textures.clear();
+    resourceDirs.clear();
 }
 
 ImageManager* ImageManager::instance()
@@ -44,94 +44,94 @@ ImageManager* ImageManager::instance()
 
 const sf::Texture& ImageManager::loadTexture( const std::string& filename )
 {
-        // Check, whether the image already exists
-        for( std::map<std::string, sf::Texture>::const_iterator it = textures.begin();
-                 it != textures.end();
-                 ++it)
+    // Check, whether the image already exists
+    for( std::map<std::string, sf::Texture>::const_iterator it = textures.begin();
+            it != textures.end();
+            ++it)
+    {
+        if( filename == it->first )
         {
-                if( filename == it->first )
-                {
-                        std::cout << "DEBUG_MESSAGE: " << filename << " using existing texture.\n";
-                        return it->second;
-                }
+            std::cout << "DEBUG_MESSAGE: " << filename << " using existing texture.\n";
+            return it->second;
         }
+    }
 
-        // The image doesen't exists. Create it and save it.
-        sf::Texture texture;
+    // The image doesen't exists. Create it and save it.
+    sf::Texture texture;
 
-        // Search project's main directory
-        if( texture.loadFromFile( filename ) )
-        {
-                textures[filename] = texture;
-                std::cout << "DEBUG_MESSAGE: " << filename << " loading new texture.\n";
-                return textures[filename];
-        }
-
-        // If the image has still not been found, search all registered directories
-        for( std::vector<std::string>::iterator it = resourceDirs.begin();
-                 it != resourceDirs.end();
-                 ++it )
-        {
-                if( texture.loadFromFile( (*it) + filename ) )
-                {
-                        textures[filename] = texture;
-                        std::cout << "DEBUG_MESSAGE: " << filename << " loading texture.\n";
-                        return textures[filename];
-                }
-
-        }
-
-        std::cout << "GAME_ERROR: Texture was not found. It is filled with an empty texture.\n";
+    // Search project's main directory
+    if( texture.loadFromFile( filename ) )
+    {
         textures[filename] = texture;
+        std::cout << "DEBUG_MESSAGE: " << filename << " loading new texture.\n";
         return textures[filename];
+    }
+
+    // If the image has still not been found, search all registered directories
+    for( std::vector<std::string>::iterator it = resourceDirs.begin();
+            it != resourceDirs.end();
+            ++it )
+    {
+        if( texture.loadFromFile( (*it) + filename ) )
+        {
+            textures[filename] = texture;
+            std::cout << "DEBUG_MESSAGE: " << filename << " loading texture.\n";
+            return textures[filename];
+        }
+
+    }
+
+    std::cout << "GAME_ERROR: Texture was not found. It is filled with an empty texture.\n";
+    textures[filename] = texture;
+    return textures[filename];
 }
 
 void ImageManager::deleteTexture( const sf::Texture& texture )
 {
-        for( std::map<std::string, sf::Texture>::const_iterator it = textures.begin();
-                 it != textures.end();
-                 ++it)
+    for( std::map<std::string, sf::Texture>::const_iterator it = textures.begin();
+            it != textures.end();
+            ++it)
+    {
+        if( &texture == &it->second )
         {
-                if( &texture == &it->second )
-                {
-                        textures.erase( it );
-                        return;
-                }
+            textures.erase( it );
+            return;
         }
+    }
 }
 
 void ImageManager::deleteTexture( const std::string& filename )
 {
-        std::map<std::string, sf::Texture>::const_iterator it = textures.find( filename );
-        if( it != textures.end() )
-                textures.erase( it );
+    std::map<std::string, sf::Texture>::const_iterator it = textures.find( filename );
+    if( it != textures.end() )
+        textures.erase( it );
 }
 
 void ImageManager::addResourceDir( const std::string& directory )
 {
-        // Check whether the path already exists
-        for( std::vector<std::string>::const_iterator it  = resourceDirs.begin();
-                 it != resourceDirs.end();
-                ++it )
-        {
-                // The path exists. So it isn't necessary to add id once more.
-                if( directory == (*it) )
-                        return;
-        }
+    // Check whether the path already exists
+    for( std::vector<std::string>::const_iterator it  = resourceDirs.begin();
+            it != resourceDirs.end();
+            ++it )
+    {
+        // The path exists. So it isn't necessary to add id once more.
+        if( directory == (*it) )
+            return;
+    }
 
-        // insert the directory
-        resourceDirs.push_back( directory );
+    // insert the directory
+    resourceDirs.push_back( directory );
 }
 
 void ImageManager::removeResourceDir( const std::string& directory )
 {
-        for( std::vector<std::string>::iterator it  = resourceDirs.begin();
-                 it != resourceDirs.end(); )
-        {
-                // The path exists. So it isn't necessary to add id once more.
-                if( directory == (*it) )
-                        it = resourceDirs.erase( it);
-                else
-                        ++it;
-        }
+    for( std::vector<std::string>::iterator it  = resourceDirs.begin();
+            it != resourceDirs.end(); )
+    {
+        // The path exists. So it isn't necessary to add id once more.
+        if( directory == (*it) )
+            it = resourceDirs.erase( it);
+        else
+            ++it;
+    }
 }
