@@ -566,6 +566,7 @@ inline void FLConsoleInstance::glPrintf(int x, int y, const char* sMsg, ... )
 
 //FIXME:    gl_font( FL_COURIER, m_nCharHeight );
     glRasterPos2f( x, y );
+    m_text1->setString(pBuffer);
 //    gl_draw( pBuffer, nResult );
     delete[] pBuffer;
 }
