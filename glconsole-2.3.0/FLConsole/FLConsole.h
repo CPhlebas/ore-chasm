@@ -14,6 +14,8 @@
 
 #include <GLConsole/GLColor.h>
 
+#include <SFML/Graphics.hpp>
+
 #include <limits.h>
 #include <stdio.h>
 #include <stdarg.h>
