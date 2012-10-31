@@ -1155,6 +1155,7 @@ inline void FLConsoleInstance::_RenderText()
 
                 std::deque<ConsoleLine>::iterator it = m_sConsoleText.begin() + i - 1;
                 //NOTE: this is actual backwards history..newest on top, bottom is oldest. We don't want to display just that..need to reverse it
+                //# of chars for this line
                 std::string fulltext = (*it).m_sText;
                 printf("FULLTEXT:%s\n", fulltext.c_str());
 
@@ -1187,6 +1188,7 @@ inline void FLConsoleInstance::_RenderText()
 
                 // fulltext.length() example: 55
                 int iterations = (fulltext.length() / chars_per_line) + 1;
+                printf("VECTOR SIZE: %d\n", m_sConsoleText.size());
                 printf("FULLTEXTLENGTH COUNT: %d iterations to do (actual line count): %d\n", fulltext.length(), iterations);
 
                 for(int j = iterations -1; j >= 0 ; j-- ) {
@@ -1212,6 +1214,14 @@ inline void FLConsoleInstance::_RenderText()
                 break;
 
             lineLoc += m_nCharHeight + m_nConsoleLineSpacing;
+
+            int consoleHeight = _GetConsoleHeight();
+            printf("M_NHEIGHT: %d, charheight: %d, linespacing: %d\n", consoleHeight, m_nCharHeight, m_nConsoleLineSpacing);
+            if (i *m_nCharHeight * m_nConsoleLineSpacing * 2 > consoleHeight) {
+                printf("WARNING: Height exceeded, scroll up attempt\n");
+                lineLoc -= 2 * (m_nCharHeight + m_nConsoleLineSpacing);
+                m_text1->setPosition(0, lineLoc - m_nScrollPixels);
+            }
         }
 
         printf("SUBSTRING: %s\n", fullString.c_str());
