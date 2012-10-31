@@ -1031,7 +1031,9 @@ inline void GLConsole::RenderConsole()
         }
         glEnd();
         //draw text
-        _RenderText();
+        if (!IsChanging()) {
+            _RenderText();
+        }
 
         //restore old matrices and properties...	
         glPopMatrix();										
@@ -1059,7 +1061,6 @@ inline bool GLConsole::_IsCursorOn()
 
 inline void GLConsole::drawText(int x, int y, const char* text)
 {
-    if (!IsChanging()) {
     const int consoleHeight = _GetConsoleHeight();
     const int numberOfLines = consoleHeight / (m_nConsoleLineSpacing + m_nTextHeight);
 
@@ -1083,16 +1084,16 @@ inline void GLConsole::drawText(int x, int y, const char* text)
             currentText->setString(text);
             return;
         } else if (it == m_textItems.end()) {
-            printf("GLConsole::drawText FOUND, y: %d, currentposition: %f\n", y, currentPosition);
+            printf("GLConsole::drawText FOUND (compromise; end of vector), y: %d, currentposition: %f\n", y, currentPosition);
             currentText->setString(text);
             return;
         }
     }
     printf("ERROR: GLConsole::drawText, sf::Text item not found in vector. consider given position invalid -- message swallowed.\n");
-    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// called only when not animating, so we don't fuck up the text positions and forget it
 inline void GLConsole::_RenderText()
 {
     int consoleHeight = _GetConsoleHeight();
