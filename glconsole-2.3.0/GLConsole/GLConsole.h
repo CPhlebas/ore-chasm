@@ -1141,9 +1141,17 @@ inline void GLConsole::_RenderText()
             em = em+" ";
         }
 
+        std::string fullCommandLine;
+
+        fullCommandLine.append("> ");
+        fullCommandLine.append(em);
+        fullCommandLine.append(&blink);
+        fullCommandLine.append(m_sCurrentCommandBeg);
+        fullCommandLine.append(m_sCurrentCommandEnd);
+
         //draw cursor at bottom
         printf("CURSOR, y pos: %d\n", consoleHeight);
-        drawText(0, consoleHeight, "cursor");
+        drawText(0, consoleHeight, fullCommandLine.c_str());
  //       m_pGLFont->glPrintf( m_nConsoleLeftMargin, lineLoc - m_nScrollPixels, 
  //               "> " + em + blink );
  //       m_pGLFont->glPrintf( m_nConsoleLeftMargin, lineLoc - m_nScrollPixels, 
