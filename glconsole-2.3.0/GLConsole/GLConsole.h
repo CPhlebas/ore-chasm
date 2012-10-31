@@ -1101,8 +1101,8 @@ inline void GLConsole::_RenderText()
     }
 
     //actual number of lines that can fit in the current console height.
-    const int numberOfLines = consoleHeight / (m_nConsoleLineSpacing + m_nTextHeight);
     const int lineHeight = (m_nConsoleLineSpacing + m_nTextHeight);
+    const int numberOfLines = consoleHeight / lineHeight;
     //std::vector<sf::Text*>::iterator it = m_textItems.begin();
     //for( it = m_textItems.begin() ; it != m_textItems.end() ; it++ ) {
         //    sf::Text *currentText = *it;
@@ -1120,7 +1120,8 @@ inline void GLConsole::_RenderText()
         lines += scrollLines;
 
         //start drawing from bottom of console up...
-        int lineLoc = m_Viewport.height-1 - consoleHeight + m_nConsoleVerticalMargin;
+        int lineLoc = 0;//consoleHeight;
+        //m_Viewport.height-1 - consoleHeight + m_nConsoleVerticalMargin;
 
         //draw command line first
         char blink = ' ';
