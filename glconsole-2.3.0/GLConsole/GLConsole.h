@@ -17,6 +17,8 @@
 #include <GLConsole/GLColor.h>
 
 #include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
+#include <SFML/Window.hpp>
 
 #include <deque>
 #include <string>
@@ -182,7 +184,7 @@ class GLConsole
         void PrintAllCVars();
 
         /// Add a character to the command line.
-        void KeyboardFunc( unsigned char key );
+        void handleEvent(sf::Event *event);
 
         /// Clear the current command.
         void ClearCurrentCommand();
@@ -1401,79 +1403,75 @@ inline void GLConsole::SpecialFunc( int key )
 /**
  * Process key presses
  */
-inline void GLConsole::KeyboardFunc( unsigned char key)
+inline void GLConsole::handleEvent(sf::Event *event)
 {
     if(!IsOpen())
         return;
 
     _CheckInit();
 
-    int nGlutModifiers = glutGetModifiers();
     //   int ikey = key;
     //   std::cerr << "kf: key: " << key << ", " << ikey << " mod: " << nGlutModifiers << std::endl;
-
-    switch(nGlutModifiers)
-    {
-        case GLUT_ACTIVE_CTRL:
-            //Yay for GLUT. when control is active the key codes change for some but not all keys, and appears not to be documented.
-            //a-z and A-Z are now 1-26 and not 97-122 and 65-90
-            switch( key ) {
-                case ('a' - 96):
-                    CursorToBeginningOfLine();
-                    break;
-                case ('e' - 96):
-                    CursorToEndOfLine();
-                    break;
-                default:
-                    break;
-            }
-            break;
-
-        case GLUT_ACTIVE_ALT:
-
-            break;
-
-        case GLUT_ACTIVE_SHIFT:
+//        if(event->type == sf::Event::TextEntered) {
+        m_sCurrentCommandBeg += event->text.unicode;
+        m_nCommandNum = 0; //reset history
+        m_nScrollPixels = 0; //reset scrolling
+ //   }
+/*
+    switch(event->key.code) {
+//        case ('a' - 96):
+//            CursorToBeginningOfLine();
+//            break;
+//        case ('e' - 96):
+//            CursorToEndOfLine();
+//            break;
         default:
-            switch(key)
-            {
-                case '\r':
-                    //user pressed "enter"
-                    _ProcessCurrentCommand();
-                    m_sCurrentCommandBeg = "";
-                    m_sCurrentCommandEnd = "";
-                    m_nCommandNum = 0; //reset history
-                    m_nScrollPixels = 0; //reset scrolling
-                    break;
-
-                case '\t':
-                    //tab complete
-                    _TabComplete();
-                    break;
-
-                case '\b':
-                    // backspace
-                    if( m_sCurrentCommandBeg.size() > 0 ) {
-                        m_sCurrentCommandBeg = m_sCurrentCommandBeg.substr(0, m_sCurrentCommandBeg.size() - 1);
-                    }
-                    break;
-
-                case CVAR_DEL_KEY:
-                    // delete
-                    if( m_sCurrentCommandEnd.size() > 0 ) {
-                        m_sCurrentCommandEnd = m_sCurrentCommandEnd.substr(1, m_sCurrentCommandEnd.size() );
-                    }
-                    break;
-#if 0
-            } else if( chr == ' ' && m_sCurrentCommandEnd.size() > 0 ) { // space clear the right bit of the cursor
-                m_sCurrentCommandEnd = "";
-#endif
-                default:
-                m_sCurrentCommandBeg += key;
-                m_nCommandNum = 0; //reset history
-                m_nScrollPixels = 0; //reset scrolling
-            }
+//            m_sCurrentCommandBeg += key;
+            m_nCommandNum = 0; //reset history
+            m_nScrollPixels = 0; //reset scrolling
+            break;
     }
+*/
+//
+//        case GLUT_ACTIVE_ALT:
+//
+//            break;
+//
+//        case GLUT_ACTIVE_SHIFT:
+//        default:
+//            switch(key)
+//            {
+//                case '\r':
+//                    //user pressed "enter"
+//                    _ProcessCurrentCommand();
+//                    m_sCurrentCommandBeg = "";
+//                    m_sCurrentCommandEnd = "";
+//                    m_nCommandNum = 0; //reset history
+//                    m_nScrollPixels = 0; //reset scrolling
+//                    break;
+//
+//                case '\t':
+//                    //tab complete
+//                    _TabComplete();
+//                    break;
+//
+//                case '\b':
+//                    // backspace
+//                    if( m_sCurrentCommandBeg.size() > 0 ) {
+//                        m_sCurrentCommandBeg = m_sCurrentCommandBeg.substr(0, m_sCurrentCommandBeg.size() - 1);
+//                    }
+//                    break;
+//
+//                case CVAR_DEL_KEY:
+//                    // delete
+//                    if( m_sCurrentCommandEnd.size() > 0 ) {
+//                        m_sCurrentCommandEnd = m_sCurrentCommandEnd.substr(1, m_sCurrentCommandEnd.size() );
+//                    }
+//                    break;
+//#if 0
+//            } else if( chr == ' ' && m_sCurrentCommandEnd.size() > 0 ) { // space clear the right bit of the cursor
+//                m_sCurrentCommandEnd = "";
+//#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
