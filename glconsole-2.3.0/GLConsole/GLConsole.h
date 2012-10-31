@@ -492,7 +492,8 @@ inline void GLConsole::Init()
     const int numberOfLines = consoleHeight / (m_nConsoleLineSpacing + m_nTextHeight);
     printf("numberofLines to load sf::Texts for..: %d\n", numberOfLines);
 
-    int lineLoc = m_Viewport.height-1 - consoleHeight + m_nConsoleVerticalMargin;
+    int lineLoc = 0;
+    printf("lineloc to load sf::Texts for..: %d\n", lineLoc);
     for (int i = 0; i < numberOfLines; ++i) {
         sf::Text *text = new sf::Text();
         text->setFont(*m_font);
@@ -500,6 +501,7 @@ inline void GLConsole::Init()
         //start at bottom, as RenderText does it too
         //m_Viewport.height-1 - consoleHeight + m_nConsoleVerticalMargin
         text->setPosition(m_nConsoleLeftMargin, lineLoc);
+        printf("placing a new sf::Text at: %d\n", lineLoc);
         lineLoc += m_nConsoleLineSpacing + m_nTextHeight;
                           //i * (m_nTextHeight + m_nConsoleLineSpacing));
         m_textItems.push_back(text);
@@ -1061,12 +1063,26 @@ inline void GLConsole::drawText(int x, int y, const char* text)
     const int numberOfLines = consoleHeight / (m_nConsoleLineSpacing + m_nTextHeight);
 
     printf("GLConsole::drawText, y given: %d. Message: %s\n", y, text);
+
     std::vector<sf::Text*>::iterator it = m_textItems.begin();
+
     for( it = m_textItems.begin() ; it != m_textItems.end() ; it++ ) {
         sf::Text *currentText = *it;
+        assert(currentText);
         float currentPosition = currentText->getPosition().y;
-        if (currentPosition >= y - (m_nConsoleLineSpacing + m_nTextHeight) && currentPosition <= y + (m_nConsoleLineSpacing + m_nTextHeight)) {
+
+            printf("GLConsole::drawText SEARCHING,currentposition: %f\n", currentPosition);
+//        if (currentPosition >= y - (m_nConsoleLineSpacing + m_nTextHeight) && currentPosition <= y + (m_nConsoleLineSpacing + m_nTextHeight)) {
+        if (currentPosition > y) {
+            printf("GLConsole::drawText FOUND, y: %d, currentposition: %f\n", y, currentPosition);
+            //we want the previous one, since that was the closest item;
+            it--;
+            currentText = *it;
             // found the text item he's talking about! set the message he wanted
+            currentText->setString(text);
+            return;
+        } else if (it == m_textItems.end()) {
+            printf("GLConsole::drawText FOUND, y: %d, currentposition: %f\n", y, currentPosition);
             currentText->setString(text);
             return;
         }
@@ -1190,6 +1206,7 @@ inline void GLConsole::_RenderText()
             lineLoc += m_nTextHeight + m_nConsoleLineSpacing;
         }
 
+    m_window->pushGLStates();
     //render all of the text items..
     //printf("Rendering all %d items in text vector\n", m_textItems.size());
     std::vector<sf::Text*>::iterator it = m_textItems.begin();
@@ -1197,6 +1214,7 @@ inline void GLConsole::_RenderText()
         sf::Text *currentText = *it;
         m_window->draw(*currentText);
     }
+    m_window->popGLStates();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
