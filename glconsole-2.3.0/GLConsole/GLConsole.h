@@ -1143,11 +1143,11 @@ inline void GLConsole::_RenderText()
 
         std::string fullCommandLine;
 
-        fullCommandLine.append("> ");
-        fullCommandLine.append(em);
-        fullCommandLine.append(&blink);
-        fullCommandLine.append(m_sCurrentCommandBeg);
-        fullCommandLine.append(m_sCurrentCommandEnd);
+        fullCommandLine += "> ";
+        fullCommandLine +=em;
+        fullCommandLine +=&blink;
+        fullCommandLine +=m_sCurrentCommandBeg;
+        fullCommandLine +=m_sCurrentCommandEnd;
 
         //draw cursor at bottom
         printf("CURSOR, y pos: %d\n", consoleHeight);
