@@ -1058,11 +1058,14 @@ inline void GLConsole::drawText(int x, int y, const char* text)
     std::vector<sf::Text*>::iterator it = m_textItems.begin();
     for( it = m_textItems.begin() ; it != m_textItems.end() ; it++ ) {
         sf::Text *currentText = *it;
-//        if 
-        currentText->setString(text);
+        if (currentText->getPosition().y == y) {
+            // found the text item he's talking about! set the message he wanted
+            currentText->setString(text);
+            return;
+        }
     }
+    printf("ERROR: GLConsole::drawText, sf::Text item not found in vector. consider given position invalid -- message swallowed.\n");
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 inline void GLConsole::_RenderText()
@@ -1070,12 +1073,13 @@ inline void GLConsole::_RenderText()
     int consoleHeight = _GetConsoleHeight();
 
     if( consoleHeight - m_nConsoleVerticalMargin < 0 ) {
+        printf("console height <= 0, nop.\n");
         return;
     }
-    drawText(0, 0, "");
+
     //actual number of lines that can fit in the current console height.
     const int numberOfLines = consoleHeight / (m_nConsoleLineSpacing + m_nTextHeight);
-
+    const int lineHeight = (m_nConsoleLineSpacing + m_nTextHeight);
     //std::vector<sf::Text*>::iterator it = m_textItems.begin();
     //for( it = m_textItems.begin() ; it != m_textItems.end() ; it++ ) {
         //    sf::Text *currentText = *it;
@@ -1102,17 +1106,17 @@ inline void GLConsole::_RenderText()
             blink = '_';
         }
  //       glColor3f(m_commandColor.r, m_commandColor.g, m_commandColor.b);
-        m_pGLFont->glPrintf( m_nConsoleLeftMargin, lineLoc - m_nScrollPixels, 
-                "> " + m_sCurrentCommandBeg );
+//        m_pGLFont->glPrintf( m_nConsoleLeftMargin, lineLoc - m_nScrollPixels, 
+//                "> " + m_sCurrentCommandBeg );
         int size = m_sCurrentCommandBeg.length();
         std::string em = "";
         for(int i=0;i<size;i++) {
             em = em+" ";
         }
-        m_pGLFont->glPrintf( m_nConsoleLeftMargin, lineLoc - m_nScrollPixels, 
-                "> " + em + blink );
-        m_pGLFont->glPrintf( m_nConsoleLeftMargin, lineLoc - m_nScrollPixels, 
-                "> " + em + m_sCurrentCommandEnd );
+ //       m_pGLFont->glPrintf( m_nConsoleLeftMargin, lineLoc - m_nScrollPixels, 
+ //               "> " + em + blink );
+ //       m_pGLFont->glPrintf( m_nConsoleLeftMargin, lineLoc - m_nScrollPixels, 
+ //               "> " + em + m_sCurrentCommandEnd );
 
         lineLoc += m_nTextHeight + m_nConsoleLineSpacing;
 
@@ -1165,9 +1169,11 @@ inline void GLConsole::_RenderText()
                     }
                     count++;
                     int start = fulltext.substr(j*chars_per_line, chars_per_line).find_first_not_of( ' ' );
-                    if( start >= 0  ) { 
-                        m_pGLFont->glPrintf(m_nConsoleLeftMargin, lineLoc - m_nScrollPixels,
-                                fulltext.substr(j*chars_per_line+start, chars_per_line) );
+                    if( start >= 0  ) {
+                        printf("Setting a console text line string, %s\n", fulltext.substr(j*chars_per_line+start, chars_per_line).c_str());
+                        drawText(0, j * lineHeight, fulltext.substr(j*chars_per_line+start, chars_per_line).c_str());
+ //                       m_pGLFont->glPrintf(m_nConsoleLeftMargin, lineLoc - m_nScrollPixels,
+ //                               fulltext.substr(j*chars_per_line+start, chars_per_line) );
                     }
                 }
             }

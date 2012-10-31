@@ -161,6 +161,7 @@ void Game::tick()
 
         // recheck the max, good amount of time passed
         if (benchTime <= 0) {
+            printf("PRINTING TO CONSOLE\n");
             m_console->Printf("bench time elapsed");
             maxFps = fps;
             minFps = maxFps;
