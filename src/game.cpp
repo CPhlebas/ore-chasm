@@ -296,11 +296,14 @@ void Game::tick()
 
         m_app->setView(*m_view);
 
-        // always after rendering!
-
-        m_console->RenderConsole();
-        m_app->display();
         m_app->popGLStates();
+
+        m_app->setView(m_app->getDefaultView());
+        m_console->RenderConsole();
+        m_app->setView(*m_view);
+
+        // always after rendering!
+        m_app->display();
 
     }
 }
