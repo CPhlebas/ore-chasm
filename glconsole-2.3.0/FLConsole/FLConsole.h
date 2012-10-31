@@ -1109,9 +1109,9 @@ inline void FLConsoleInstance::_RenderText()
         lines += scrollLines;
 
         //start drawing from bottom of console up...
-        int lineLoc = m_Viewport.height-1 - nConsoleHeight + m_nConsoleVerticalMargin;
+        int lineLoc = 0; //m_Viewport.height-1 - nConsoleHeight + m_nConsoleVerticalMargin;
+        printf("SCROLLPIXELS: %d\n", m_nScrollPixels);
         drawDebugRect(0, lineLoc, "lineLoc");
-
 
         //draw command line first
         char cBlink = _IsCursorOn() ? '_' : ' ';
@@ -1122,8 +1122,8 @@ inline void FLConsoleInstance::_RenderText()
         combinedInitialPrinting.append("> " + em + cBlink);
         combinedInitialPrinting.append("> " + em + m_sCurrentCommandEnd);
 
-        glPrintf( m_nConsoleLeftMargin, lineLoc - m_nScrollPixels, 
-                combinedInitialPrinting.c_str());
+//        glPrintf( m_nConsoleLeftMargin, lineLoc - m_nScrollPixels, 
+//                combinedInitialPrinting.c_str());
 
        // // print up till the cursor
        // glPrintf( m_nConsoleLeftMargin, lineLoc - m_nScrollPixels, 
@@ -1156,7 +1156,7 @@ inline void FLConsoleInstance::_RenderText()
                 std::deque<ConsoleLine>::iterator it = m_sConsoleText.begin() + i - 1;
                 //NOTE: this is actual backwards history..newest on top, bottom is oldest. We don't want to display just that..need to reverse it
                 std::string fulltext = (*it).m_sText;
-                printf("FULLTEXT:%s", fulltext.c_str());
+                printf("FULLTEXT:%s\n", fulltext.c_str());
 
                 //set the appropriate color
                 switch((*it).m_nOptions)
@@ -1187,6 +1187,7 @@ inline void FLConsoleInstance::_RenderText()
 
                 // fulltext.length() example: 55
                 int iterations = (fulltext.length() / chars_per_line) + 1;
+                printf("FULLTEXTLENGTH COUNT: %d iterations to do (actual line count): %d\n", fulltext.length(), iterations);
 
                 for(int j = iterations -1; j >= 0 ; j-- ) {
                     //print one less line now that I have wrapped to another line
@@ -1213,7 +1214,7 @@ inline void FLConsoleInstance::_RenderText()
             lineLoc += m_nCharHeight + m_nConsoleLineSpacing;
         }
 
-        printf("SUBSTRING: %s", fullString.c_str());
+        printf("SUBSTRING: %s\n", fullString.c_str());
         m_text1->setString(fullString);
 }
 
