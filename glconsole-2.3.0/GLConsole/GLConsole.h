@@ -1083,7 +1083,7 @@ inline void GLConsole::drawText(int x, int y, const char* text)
             // found the text item he's talking about! set the message he wanted
             currentText->setString(text);
             return;
-        } else if (it == m_textItems.end()) {
+        } else if ((it + 1) == m_textItems.end()) {
             printf("GLConsole::drawText FOUND (compromise; end of vector), y: %d, currentposition: %f\n", y, currentPosition);
             currentText->setString(text);
             return;
@@ -1143,7 +1143,7 @@ inline void GLConsole::_RenderText()
 
         //draw cursor at bottom
         printf("CURSOR, y pos: %d\n", consoleHeight);
-        drawText(0, consoleHeight - lineHeight*2, "cursor");
+        drawText(0, consoleHeight, "cursor");
  //       m_pGLFont->glPrintf( m_nConsoleLeftMargin, lineLoc - m_nScrollPixels, 
  //               "> " + em + blink );
  //       m_pGLFont->glPrintf( m_nConsoleLeftMargin, lineLoc - m_nScrollPixels, 
