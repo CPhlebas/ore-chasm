@@ -290,6 +290,7 @@ class GLConsole
         int           m_nCommandNum;
         GLFont*       m_pGLFont;
 
+        sf::Font *m_font;
         sf::RenderWindow *m_window;
  
         // Text colors
@@ -320,6 +321,8 @@ class GLConsole
         std::string m_sCurrentCommandEnd;      //current command being typed
         std::deque<ConsoleLine> m_consoleText; // all the console text
         std::deque<ConsoleLine> m_ScriptText; // all the console text
+
+        std::vector<sf::Text*> m_textItems;
 };
 
 
@@ -478,6 +481,31 @@ inline void GLConsole::Init()
 //        std::cout << "Info: Initial script file, " << m_sInitialScriptFileName << ", not found." << std::endl;
         ifs.clear(std::ios::failbit);
     }
+
+    m_font = new sf::Font();
+    bool loaded = m_font->loadFromFile("../../font/DejaVuSerif.ttf");
+    assert(loaded);
+
+    // initialize all the sf::Text's that we will need, in the vector. there are say...50 lines of text that can be displayed, so 50 sf::Texts.
+    //the text scrolls line by line, but the sf::Texts are static in position.
+    const int consoleHeight = _GetConsoleHeight();
+    const int numberOfLines = consoleHeight / (m_nConsoleLineSpacing + m_nTextHeight);
+    printf("numberofLines to load sf::Texts for..: %d\n", numberOfLines);
+
+    for (int i = 0; i < numberOfLines; ++i) {
+        sf::Text *text = new sf::Text();
+        text->setFont(*m_font);
+        text->setCharacterSize(12);
+        text->setPosition(m_nConsoleLeftMargin, i * (m_nTextHeight + m_nConsoleLineSpacing));
+        m_textItems.push_back(text);
+    }
+
+    //std::vector<sf::Text*>::iterator it = m_textItems.begin();
+    //for( it = m_textItems.begin() ; it != m_textItems.end() ; it++ ) {
+    //    sf::Text *currentText = *it;
+    //    currentText = new sf::Text();
+    //    currentText->setFont(*m_font);
+    //}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
