@@ -1123,7 +1123,7 @@ inline void GLConsole::_RenderText()
         lines += scrollLines;
 
         //start drawing from bottom of console up...
-        int lineLoc = consoleHeight;
+        int lineLoc = consoleHeight - (lineHeight * 2);
         //m_Viewport.height-1 - consoleHeight + m_nConsoleVerticalMargin;
 
         //draw command line first
