@@ -270,7 +270,7 @@ class GLConsole
 
         std::string _GetHistory();
 
-        void drawText(int x, int y, const char** text);
+        void drawText(int x, int y, const char* text);
 
     private:
         bool          m_bExecutingHistory; //Are we executing a script or not.
@@ -1050,10 +1050,19 @@ inline bool GLConsole::_IsCursorOn()
     }
 }
 
-inline void GLConsole::drawText(int x, int y, const char** text)
+inline void GLConsole::drawText(int x, int y, const char* text)
 {
+    const int consoleHeight = _GetConsoleHeight();
+    const int numberOfLines = consoleHeight / (m_nConsoleLineSpacing + m_nTextHeight);
 
+    std::vector<sf::Text*>::iterator it = m_textItems.begin();
+    for( it = m_textItems.begin() ; it != m_textItems.end() ; it++ ) {
+        sf::Text *currentText = *it;
+//        if 
+        currentText->setString(text);
+    }
 }
+
 
 ////////////////////////////////////////////////////////////////////////////////
 inline void GLConsole::_RenderText()
@@ -1063,12 +1072,22 @@ inline void GLConsole::_RenderText()
     if( consoleHeight - m_nConsoleVerticalMargin < 0 ) {
         return;
     }
+    drawText(0, 0, "");
+    //actual number of lines that can fit in the current console height.
+    const int numberOfLines = consoleHeight / (m_nConsoleLineSpacing + m_nTextHeight);
+
+    //std::vector<sf::Text*>::iterator it = m_textItems.begin();
+    //for( it = m_textItems.begin() ; it != m_textItems.end() ; it++ ) {
+        //    sf::Text *currentText = *it;
+    //    currentText = new sf::Text();
+    //    currentText->setFont(*m_font);
+    //}
 
     //set up a scissor region to draw the text in
-    glScissor( 1 ,m_Viewport.height - _GetConsoleHeight() + 1, //bottom coord
-            m_Viewport.width, //width
-            consoleHeight - m_nConsoleVerticalMargin ); //top coord
-    glEnable( GL_SCISSOR_TEST ); {
+//    glScissor( 1 ,m_Viewport.height - _GetConsoleHeight() + 1, //bottom coord
+//            m_Viewport.width, //width
+//            consoleHeight - m_nConsoleVerticalMargin ); //top coord
+//    glEnable( GL_SCISSOR_TEST ); {
         int lines = (consoleHeight / m_nTextHeight);
         int scrollLines = (m_nScrollPixels / m_nTextHeight);
         lines += scrollLines;
@@ -1082,7 +1101,7 @@ inline void GLConsole::_RenderText()
         if( _IsCursorOn() ) {
             blink = '_';
         }
-        glColor3f(m_commandColor.r, m_commandColor.g, m_commandColor.b);
+ //       glColor3f(m_commandColor.r, m_commandColor.g, m_commandColor.b);
         m_pGLFont->glPrintf( m_nConsoleLeftMargin, lineLoc - m_nScrollPixels, 
                 "> " + m_sCurrentCommandBeg );
         int size = m_sCurrentCommandBeg.length();
@@ -1157,8 +1176,13 @@ inline void GLConsole::_RenderText()
 
             lineLoc += m_nTextHeight + m_nConsoleLineSpacing;
         }
+
+    //render all of the text items..
+    std::vector<sf::Text*>::iterator it = m_textItems.begin();
+    for( it = m_textItems.begin() ; it != m_textItems.end() ; it++ ) {
+        sf::Text *currentText = *it;
+        m_window->draw(*currentText);
     }
-    glDisable(GL_SCISSOR_TEST);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
