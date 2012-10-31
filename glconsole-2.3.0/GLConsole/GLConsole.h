@@ -1143,7 +1143,7 @@ inline void GLConsole::_RenderText()
 
         //draw cursor at bottom
         printf("CURSOR, y pos: %d\n", consoleHeight);
-        drawText(0, consoleHeight, "cursor");
+        drawText(0, consoleHeight - lineHeight*2, "cursor");
  //       m_pGLFont->glPrintf( m_nConsoleLeftMargin, lineLoc - m_nScrollPixels, 
  //               "> " + em + blink );
  //       m_pGLFont->glPrintf( m_nConsoleLeftMargin, lineLoc - m_nScrollPixels, 
