@@ -1059,6 +1059,7 @@ inline bool GLConsole::_IsCursorOn()
 
 inline void GLConsole::drawText(int x, int y, const char* text)
 {
+    if (!IsChanging()) {
     const int consoleHeight = _GetConsoleHeight();
     const int numberOfLines = consoleHeight / (m_nConsoleLineSpacing + m_nTextHeight);
 
@@ -1088,6 +1089,7 @@ inline void GLConsole::drawText(int x, int y, const char* text)
         }
     }
     printf("ERROR: GLConsole::drawText, sf::Text item not found in vector. consider given position invalid -- message swallowed.\n");
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1115,7 +1117,7 @@ inline void GLConsole::_RenderText()
 //            m_Viewport.width, //width
 //            consoleHeight - m_nConsoleVerticalMargin ); //top coord
 //    glEnable( GL_SCISSOR_TEST ); {
-        int lines = (consoleHeight / m_nTextHeight);
+        int lines = (consoleHeight / lineHeight) - (m_nTextHeight + m_nConsoleLineSpacing);
         int scrollLines = (m_nScrollPixels / m_nTextHeight);
         lines += scrollLines;
 
@@ -1137,12 +1139,16 @@ inline void GLConsole::_RenderText()
         for(int i=0;i<size;i++) {
             em = em+" ";
         }
+
+        //draw cursor at bottom
+        printf("CURSOR, y pos: %d\n", consoleHeight);
+        drawText(0, consoleHeight, "cursor");
  //       m_pGLFont->glPrintf( m_nConsoleLeftMargin, lineLoc - m_nScrollPixels, 
  //               "> " + em + blink );
  //       m_pGLFont->glPrintf( m_nConsoleLeftMargin, lineLoc - m_nScrollPixels, 
  //               "> " + em + m_sCurrentCommandEnd );
 
-        lineLoc += m_nTextHeight + m_nConsoleLineSpacing;
+//        lineLoc += m_nTextHeight + m_nConsoleLineSpacing;
 
         int count = 0;
         for(  int i = 1 ; i < lines; i++ ) {	
