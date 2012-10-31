@@ -36,8 +36,7 @@
 #include <GL/glu.h>
 //#include <GL/glut.h>
 //include this header for CVars and GLConsole
-//#include <GLConsole/GLConsole.h>
-#include <FLConsole/FLConsole.h>
+#include <GLConsole/GLConsole.h>
 
 //A CVar version of std::vector
 #include <CVars/CVarVectorIO.h>
@@ -115,7 +114,8 @@ void Game::init()
 
     m_player = new Player("../textures/player.png");
 
-    m_console = new FLConsole(m_app);
+    m_console = new GLConsole(m_app);
+    m_console->Init();
     m_console->ToggleConsole();
 
     tick();
@@ -197,7 +197,7 @@ void Game::tick()
 
                 // key pressed
             case sf::Event::KeyPressed:
-                m_console->handle(&event);
+//FIXME:                m_console->handle(&event);
                 if (event.key.code == sf::Keyboard::Escape) {
                     shutdown();
                 }
@@ -218,7 +218,6 @@ void Game::tick()
                 if (event.key.code == sf::Keyboard::Tab) {
                     std::cout << "TAB HIT, TOGGLING CONSOLE" << std::endl;
                     m_console->ToggleConsole();
-                   // theConsole.ToggleConsole();
                 }
 
                 if (event.key.code == sf::Keyboard::Escape) {
@@ -298,7 +297,7 @@ void Game::tick()
 
         // always after rendering!
 
-        m_console->draw();
+        m_console->RenderConsole();
         m_app->display();
         m_app->popGLStates();
 

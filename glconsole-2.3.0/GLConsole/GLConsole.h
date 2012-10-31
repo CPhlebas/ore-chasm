@@ -16,6 +16,8 @@
 #include <GLConsole/GLFont.h>
 #include <GLConsole/GLColor.h>
 
+#include <SFML/Graphics.hpp>
+
 #include <deque>
 #include <string>
 
@@ -143,7 +145,7 @@ class GLConsole
     friend void GLConsoleCheckInit( GLConsole* pConsole ); 
 
     public:
-         GLConsole();
+        GLConsole(sf::RenderWindow *window);
         ~GLConsole();
 
         // call this after OpenGL is up 
@@ -285,6 +287,8 @@ class GLConsole
         int           m_nScrollPixels;  //the number of pixels the text has been scrolled "up"
         int           m_nCommandNum;
         GLFont*       m_pGLFont;
+
+        sf::RenderWindow *m_window;
  
         // Text colors
         GLColor&      m_logColor;
@@ -361,7 +365,7 @@ class GLConsole
 /**
  * Constructor
  */
-inline GLConsole::GLConsole() :
+inline GLConsole::GLConsole(sf::RenderWindow *window) :
     // Init our member cvars  (can't init the names in the class decleration) 
     m_fConsoleBlinkRate( CVarUtils::CreateCVar<float>(    "console.BlinkRate", 4.0 ) ), // cursor blinks per sec
     m_fConsoleAnimTime( CVarUtils::CreateCVar<float>(     "console.AnimTime", 0.1 ) ),     // time the console animates
@@ -382,7 +386,7 @@ inline GLConsole::GLConsole() :
     m_helpColor( CVarUtils::CreateCVar<GLColor>(          "console.colors.HelpColor", GLColor( 110, 130, 200 ) ) ),
     m_consoleColor( CVarUtils::CreateCVar<GLColor>(       "console.colors.ConsoleColor", GLColor( 25, 60, 130, 120 ) ) )
 {
-
+    m_window = window;
     SetConsole( this );
 
     //pConsole = this;

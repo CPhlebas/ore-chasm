@@ -26,7 +26,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Font.hpp>
 
-#include <FLConsole/FLConsole.h>
+#include <GLConsole/GLConsole.h>
 
 class Game
 {
@@ -43,7 +43,7 @@ class Game
     const int SCREEN_H = 900;
 
 private:
-    FLConsole *m_console = nullptr;
+    GLConsole *m_console = nullptr;
     sf::RenderWindow *m_app = nullptr;
     sf::View *m_view = nullptr;
     sf::Font *m_font = nullptr;
