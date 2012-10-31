@@ -1123,7 +1123,7 @@ inline void GLConsole::_RenderText()
         lines += scrollLines;
 
         //start drawing from bottom of console up...
-        int lineLoc = 0;//consoleHeight;
+        int lineLoc = consoleHeight;
         //m_Viewport.height-1 - consoleHeight + m_nConsoleVerticalMargin;
 
         //draw command line first
@@ -1196,7 +1196,7 @@ inline void GLConsole::_RenderText()
                     if( j < iterations - 1) 
                     {
                         lines--;
-                        lineLoc += m_nTextHeight + m_nConsoleLineSpacing;
+                        lineLoc -= m_nTextHeight + m_nConsoleLineSpacing;
                     }
                     count++;
                     int start = fulltext.substr(j*chars_per_line, chars_per_line).find_first_not_of( ' ' );
@@ -1211,7 +1211,7 @@ inline void GLConsole::_RenderText()
             else
                 break;
 
-            lineLoc += m_nTextHeight + m_nConsoleLineSpacing;
+            lineLoc -= m_nTextHeight + m_nConsoleLineSpacing;
         }
 
     m_window->pushGLStates();
