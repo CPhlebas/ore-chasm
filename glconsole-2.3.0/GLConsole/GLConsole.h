@@ -270,6 +270,8 @@ class GLConsole
 
         std::string _GetHistory();
 
+        void drawText(int x, int y, const char** text);
+
     private:
         bool          m_bExecutingHistory; //Are we executing a script or not.
         bool          m_bSavingScript; // Are we saving a script
@@ -421,10 +423,14 @@ inline void GLConsole::Init()
     m_nScrollPixels = 0;
     m_nCommandNum = 0;
 
+    //FIXME: USE RES, REQUIRES PASSING FROM GAME.CPP
+    m_Viewport.width = 1600;
+    m_Viewport.height = 900;
+
     // setup member CVars
     m_Timer.Stamp();
     m_BlinkTimer.Stamp();
-    m_pGLFont = new GLFont();
+    m_pGLFont = new GLFont(m_window);
 
     // if the width and height ptrs aren't supplied then just extract the info
     // from GL
@@ -1016,6 +1022,11 @@ inline bool GLConsole::_IsCursorOn()
     }
 }
 
+inline void GLConsole::drawText(int x, int y, const char** text)
+{
+
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 inline void GLConsole::_RenderText()
 {
@@ -1108,7 +1119,7 @@ inline void GLConsole::_RenderText()
                     count++;
                     int start = fulltext.substr(j*chars_per_line, chars_per_line).find_first_not_of( ' ' );
                     if( start >= 0  ) { 
-                        m_pGLFont->glPrintfFast(m_nConsoleLeftMargin, lineLoc - m_nScrollPixels,
+                        m_pGLFont->glPrintf(m_nConsoleLeftMargin, lineLoc - m_nScrollPixels,
                                 fulltext.substr(j*chars_per_line+start, chars_per_line) );
                     }
                 }
