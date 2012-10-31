@@ -198,23 +198,25 @@ void Game::tick()
 
                 // key pressed
             case sf::Event::KeyPressed:
-                m_console->handleEvent(&event);
-//FIXME:                m_console->handle(&event);
-                if (event.key.code == sf::Keyboard::Escape) {
-                    shutdown();
-                }
+                if (!m_console->IsOpen()) {
+                    if (event.key.code == sf::Keyboard::Escape) {
+                        shutdown();
+                    }
 
-                if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
-                    xDir -= 1;
-                }
-                if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
-                    xDir += 1;
-                }
-                if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down) {
-                    yDir -= 1;
-                }
-                if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
-                    yDir += 1;
+                    if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
+                        xDir -= 1;
+                    }
+                    if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
+                        xDir += 1;
+                    }
+                    if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down) {
+                        yDir -= 1;
+                    }
+                    if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
+                        yDir += 1;
+                    }
+                } else {
+                    m_console->handleEvent(&event);
                 }
 
                 if (event.key.code == sf::Keyboard::Tab) {
@@ -228,18 +230,21 @@ void Game::tick()
                 break;
 
             case sf::Event::KeyReleased:
-                m_console->handleEvent(&event);
-                if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
-                    xDir += 1;
-                }
-                if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
-                    xDir -= 1;
-                }
-                if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down) {
-                    yDir += 1;
-                }
-                if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
-                    yDir -= 1;
+                if (!m_console->IsOpen()) {
+                    if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
+                        xDir += 1;
+                    }
+                    if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
+                        xDir -= 1;
+                    }
+                    if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down) {
+                        yDir += 1;
+                    }
+                    if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
+                        yDir -= 1;
+                    }
+                } else {
+                    m_console->handleEvent(&event);
                 }
                 break;
 

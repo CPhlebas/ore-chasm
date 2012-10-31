@@ -492,10 +492,10 @@ inline void GLConsole::Init()
     //the text scrolls line by line, but the sf::Texts are static in position.
     const int consoleHeight = _GetConsoleHeight();
     const int numberOfLines = consoleHeight / (m_nConsoleLineSpacing + m_nTextHeight);
-    printf("numberofLines to load sf::Texts for..: %d\n", numberOfLines);
+    //printf("numberofLines to load sf::Texts for..: %d\n", numberOfLines);
 
     int lineLoc = 0;
-    printf("lineloc to load sf::Texts for..: %d\n", lineLoc);
+    //printf("lineloc to load sf::Texts for..: %d\n", lineLoc);
     for (int i = 0; i < numberOfLines; ++i) {
         sf::Text *text = new sf::Text();
         text->setFont(*m_font);
@@ -503,7 +503,7 @@ inline void GLConsole::Init()
         //start at bottom, as RenderText does it too
         //m_Viewport.height-1 - consoleHeight + m_nConsoleVerticalMargin
         text->setPosition(m_nConsoleLeftMargin, lineLoc);
-        printf("placing a new sf::Text at: %d\n", lineLoc);
+        //printf("placing a new sf::Text at: %d\n", lineLoc);
         lineLoc += m_nConsoleLineSpacing + m_nTextHeight;
                           //i * (m_nTextHeight + m_nConsoleLineSpacing));
         m_textItems.push_back(text);
@@ -1066,7 +1066,7 @@ inline void GLConsole::drawText(int x, int y, const char* text)
     const int consoleHeight = _GetConsoleHeight();
     const int numberOfLines = consoleHeight / (m_nConsoleLineSpacing + m_nTextHeight);
 
-    printf("GLConsole::drawText, y given: %d. Message: %s\n", y, text);
+    //printf("GLConsole::drawText, y given: %d. Message: %s\n", y, text);
 
     std::vector<sf::Text*>::iterator it = m_textItems.begin();
 
@@ -1075,10 +1075,10 @@ inline void GLConsole::drawText(int x, int y, const char* text)
         assert(currentText);
         float currentPosition = currentText->getPosition().y;
 
-            printf("GLConsole::drawText SEARCHING,currentposition: %f\n", currentPosition);
+            //printf("GLConsole::drawText SEARCHING,currentposition: %f\n", currentPosition);
 //        if (currentPosition >= y - (m_nConsoleLineSpacing + m_nTextHeight) && currentPosition <= y + (m_nConsoleLineSpacing + m_nTextHeight)) {
         if (currentPosition > y) {
-            printf("GLConsole::drawText FOUND, y: %d, currentposition: %f\n", y, currentPosition);
+            //printf("GLConsole::drawText FOUND, y: %d, currentposition: %f\n", y, currentPosition);
             //we want the previous one, since that was the closest item;
             it--;
             currentText = *it;
@@ -1086,12 +1086,12 @@ inline void GLConsole::drawText(int x, int y, const char* text)
             currentText->setString(text);
             return;
         } else if ((it + 1) == m_textItems.end()) {
-            printf("GLConsole::drawText FOUND (compromise; end of vector), y: %d, currentposition: %f\n", y, currentPosition);
+            //printf("GLConsole::drawText FOUND (compromise; end of vector), y: %d, currentposition: %f\n", y, currentPosition);
             currentText->setString(text);
             return;
         }
     }
-    printf("ERROR: GLConsole::drawText, sf::Text item not found in vector. consider given position invalid -- message swallowed.\n");
+    //printf("ERROR: GLConsole::drawText, sf::Text item not found in vector. consider given position invalid -- message swallowed.\n");
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1152,7 +1152,7 @@ inline void GLConsole::_RenderText()
         fullCommandLine +=m_sCurrentCommandEnd;
 
         //draw cursor at bottom
-        printf("CURSOR, y pos: %d\n", consoleHeight);
+        //printf("CURSOR, y pos: %d\n", consoleHeight);
         drawText(0, consoleHeight, fullCommandLine.c_str());
  //       m_pGLFont->glPrintf( m_nConsoleLeftMargin, lineLoc - m_nScrollPixels, 
  //               "> " + em + blink );
@@ -1211,7 +1211,7 @@ inline void GLConsole::_RenderText()
                     count++;
                     int start = fulltext.substr(j*chars_per_line, chars_per_line).find_first_not_of( ' ' );
                     if( start >= 0  ) {
-                        printf("Setting a console text line string, %s\n", fulltext.substr(j*chars_per_line+start, chars_per_line).c_str());
+                        //printf("Setting a console text line string, %s\n", fulltext.substr(j*chars_per_line+start, chars_per_line).c_str());
                         drawText(0, lineLoc - m_nScrollPixels, fulltext.substr(j*chars_per_line+start, chars_per_line).c_str());
  //                       m_pGLFont->glPrintf(m_nConsoleLeftMargin, lineLoc - m_nScrollPixels,
  //                               fulltext.substr(j*chars_per_line+start, chars_per_line) );
@@ -1413,9 +1413,22 @@ inline void GLConsole::handleEvent(sf::Event *event)
     //   int ikey = key;
     //   std::cerr << "kf: key: " << key << ", " << ikey << " mod: " << nGlutModifiers << std::endl;
 //        if(event->type == sf::Event::TextEntered) {
-        m_sCurrentCommandBeg += event->text.unicode;
-        m_nCommandNum = 0; //reset history
-        m_nScrollPixels = 0; //reset scrolling
+ //       sf::String str = event->text.unicode;
+//        std::cout << str.toAnsiString() << std::endl;
+//    std::cout << "RAW VAL: " << event->text.unicode << std::endl;
+
+
+//    sf::Utf<32> codepoint = ;
+
+    std::string str = "";
+    sf::Utf32::encodeAnsi(event->text.unicode, std::back_inserter(str), 'e');
+    std::cout << str << std::endl;
+
+//    wchar_t c = static_cast<wchar_t>(event->text.unicode);
+//    std::wcout << c << std::endl;
+//        m_sCurrentCommandBeg += str.toAnsiString();
+//        m_nCommandNum = 0; //reset history
+//        m_nScrollPixels = 0; //reset scrolling
  //   }
 /*
     switch(event->key.code) {
