@@ -496,6 +496,8 @@ inline void GLConsole::Init()
         sf::Text *text = new sf::Text();
         text->setFont(*m_font);
         text->setCharacterSize(12);
+        //start at bottom, as RenderText does it too
+        //m_Viewport.height-1 - consoleHeight + m_nConsoleVerticalMargin
         text->setPosition(m_nConsoleLeftMargin, i * (m_nTextHeight + m_nConsoleLineSpacing));
         m_textItems.push_back(text);
     }
@@ -1055,10 +1057,12 @@ inline void GLConsole::drawText(int x, int y, const char* text)
     const int consoleHeight = _GetConsoleHeight();
     const int numberOfLines = consoleHeight / (m_nConsoleLineSpacing + m_nTextHeight);
 
+    printf("GLConsole::drawText, y given: %d. Message: %s\n", y, text);
     std::vector<sf::Text*>::iterator it = m_textItems.begin();
     for( it = m_textItems.begin() ; it != m_textItems.end() ; it++ ) {
         sf::Text *currentText = *it;
-        if (currentText->getPosition().y == y) {
+        float currentPosition = currentText->getPosition().y;
+        if (currentPosition >= y - m_nConsoleLineSpacing && currentPosition <= y + m_nConsoleLineSpacing) {
             // found the text item he's talking about! set the message he wanted
             currentText->setString(text);
             return;
@@ -1171,7 +1175,7 @@ inline void GLConsole::_RenderText()
                     int start = fulltext.substr(j*chars_per_line, chars_per_line).find_first_not_of( ' ' );
                     if( start >= 0  ) {
                         printf("Setting a console text line string, %s\n", fulltext.substr(j*chars_per_line+start, chars_per_line).c_str());
-                        drawText(0, j * lineHeight, fulltext.substr(j*chars_per_line+start, chars_per_line).c_str());
+                        drawText(0, lineLoc - m_nScrollPixels, fulltext.substr(j*chars_per_line+start, chars_per_line).c_str());
  //                       m_pGLFont->glPrintf(m_nConsoleLeftMargin, lineLoc - m_nScrollPixels,
  //                               fulltext.substr(j*chars_per_line+start, chars_per_line) );
                     }
@@ -1184,6 +1188,7 @@ inline void GLConsole::_RenderText()
         }
 
     //render all of the text items..
+    //printf("Rendering all %d items in text vector\n", m_textItems.size());
     std::vector<sf::Text*>::iterator it = m_textItems.begin();
     for( it = m_textItems.begin() ; it != m_textItems.end() ; it++ ) {
         sf::Text *currentText = *it;
