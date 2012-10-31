@@ -492,13 +492,16 @@ inline void GLConsole::Init()
     const int numberOfLines = consoleHeight / (m_nConsoleLineSpacing + m_nTextHeight);
     printf("numberofLines to load sf::Texts for..: %d\n", numberOfLines);
 
+    int lineLoc = m_Viewport.height-1 - consoleHeight + m_nConsoleVerticalMargin;
     for (int i = 0; i < numberOfLines; ++i) {
         sf::Text *text = new sf::Text();
         text->setFont(*m_font);
         text->setCharacterSize(12);
         //start at bottom, as RenderText does it too
         //m_Viewport.height-1 - consoleHeight + m_nConsoleVerticalMargin
-        text->setPosition(m_nConsoleLeftMargin, i * (m_nTextHeight + m_nConsoleLineSpacing));
+        text->setPosition(m_nConsoleLeftMargin, lineLoc);
+        lineLoc += m_nConsoleLineSpacing + m_nTextHeight;
+                          //i * (m_nTextHeight + m_nConsoleLineSpacing));
         m_textItems.push_back(text);
     }
 
@@ -1062,7 +1065,7 @@ inline void GLConsole::drawText(int x, int y, const char* text)
     for( it = m_textItems.begin() ; it != m_textItems.end() ; it++ ) {
         sf::Text *currentText = *it;
         float currentPosition = currentText->getPosition().y;
-        if (currentPosition >= y - m_nConsoleLineSpacing && currentPosition <= y + m_nConsoleLineSpacing) {
+        if (currentPosition >= y - (m_nConsoleLineSpacing + m_nTextHeight) && currentPosition <= y + (m_nConsoleLineSpacing + m_nTextHeight)) {
             // found the text item he's talking about! set the message he wanted
             currentText->setString(text);
             return;
