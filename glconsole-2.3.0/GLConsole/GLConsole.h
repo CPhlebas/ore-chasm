@@ -1078,16 +1078,14 @@ inline void GLConsole::drawText(int x, int y, const char* text, const GLColor& c
             currentText = *it;
             // found the text item he's talking about! set the message he wanted
             currentText->setString(text);
-            GLColor color1 = m_logColor;
-            sf::Color color(color1.r, color1.b, color1.g, color1.a);
-//            currentText->setColor(color);
+            sf::Color color2(0, 255, 0, 255);
+            currentText->setColor(color2);
             return;
         } else if ((it + 1) == m_textItems.end()) {
             //printf("GLConsole::drawText (COMPROMISE; end of vector), y: %d, currentposition: %f\n", y, currentPosition);
             currentText->setString(text);
-            GLColor color1 = m_logColor;
-            sf::Color color(color1.r, color1.b, color1.g, color1.a);
-//            currentText->setColor(color);
+            sf::Color color2(0, 255, 0, 255);
+            currentText->setColor(color2);
             return;
         }
     }
