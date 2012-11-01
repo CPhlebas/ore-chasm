@@ -1101,18 +1101,7 @@ inline void GLConsole::_RenderText()
     //actual number of lines that can fit in the current console height.
     const int lineHeight = (m_nConsoleLineSpacing + m_nTextHeight);
     const int numberOfLines = consoleHeight / lineHeight;
-    //std::vector<sf::Text*>::iterator it = m_textItems.begin();
-    //for( it = m_textItems.begin() ; it != m_textItems.end() ; it++ ) {
-        //    sf::Text *currentText = *it;
-    //    currentText = new sf::Text();
-    //    currentText->setFont(*m_font);
-    //}
 
-    //set up a scissor region to draw the text in
-//    glScissor( 1 ,m_Viewport.height - _GetConsoleHeight() + 1, //bottom coord
-//            m_Viewport.width, //width
-//            consoleHeight - m_nConsoleVerticalMargin ); //top coord
-//    glEnable( GL_SCISSOR_TEST ); {
         int lines = (consoleHeight / lineHeight) - (m_nTextHeight + m_nConsoleLineSpacing);
         int scrollLines = (m_nScrollPixels / m_nTextHeight);
         lines += scrollLines;
