@@ -1423,8 +1423,10 @@ inline void GLConsole::handleEvent(const sf::Event& event)
         if (event.text.unicode != 0xd) {
             std::string str = "";
             sf::Utf32::encodeAnsi(event.text.unicode, std::back_inserter(str), 'e');
-            std::cout << str << std::endl;
-            m_sCurrentCommandBeg += str;
+            if (str.compare("\t")) {
+                std::cout << str << std::endl;
+                m_sCurrentCommandBeg += str;
+            }
         } else {
             // RETURN KEY HIT (ENTER)
             _ProcessCurrentCommand();
@@ -1434,7 +1436,9 @@ inline void GLConsole::handleEvent(const sf::Event& event)
             m_nScrollPixels = 0; //reset scrolling
         }
     } else if (event.type == sf::Event::KeyPressed) {
-        _TabComplete();
+        if (event.key.code == sf::Keyboard::Tab) {
+            _TabComplete();
+        }
     }
 
 //    wchar_t c = static_cast<wchar_t>(event->text.unicode);
