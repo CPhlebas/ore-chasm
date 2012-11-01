@@ -480,7 +480,7 @@ inline void GLConsole::Init()
     }
     else
     {
-//        std::cout << "Info: Initial script file, " << m_sInitialScriptFileName << ", not found." << std::endl;
+        //std::cout << "Info: Initial script file, " << m_sInitialScriptFileName << ", not found." << std::endl;
         ifs.clear(std::ios::failbit);
     }
 
@@ -508,13 +508,6 @@ inline void GLConsole::Init()
                           //i * (m_nTextHeight + m_nConsoleLineSpacing));
         m_textItems.push_back(text);
     }
-
-    //std::vector<sf::Text*>::iterator it = m_textItems.begin();
-    //for( it = m_textItems.begin() ; it != m_textItems.end() ; it++ ) {
-    //    sf::Text *currentText = *it;
-    //    currentText = new sf::Text();
-    //    currentText->setFont(*m_font);
-    //}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1409,16 +1402,6 @@ inline void GLConsole::handleEvent(const sf::Event& event)
 
     _CheckInit();
 
-    //   int ikey = key;
-    //   std::cerr << "kf: key: " << key << ", " << ikey << " mod: " << nGlutModifiers << std::endl;
-//        if(event->type == sf::Event::TextEntered) {
- //       sf::String str = event->text.unicode;
-//        std::cout << str.toAnsiString() << std::endl;
-//    std::cout << "RAW VAL: " << event->text.unicode << std::endl;
-
-
-//    sf::Utf<32> codepoint = ;
-
     if (event.type == sf::Event::TextEntered) {
         if (event.text.unicode != 0xd) {
             std::string str = "";
@@ -1431,9 +1414,11 @@ inline void GLConsole::handleEvent(const sf::Event& event)
                 }
             } else {
                 if (str.compare("\t")) {
-                    //IF NOT TAB, then regular chars!
+                    //IF NOT TAB, then regular chars input go here!
                     std::cout << str << std::endl;
                     m_sCurrentCommandBeg += str;
+                    m_nCommandNum = 0; //reset history
+                    m_nScrollPixels = 0; //reset scrolling
                 }
             }
 
@@ -1450,13 +1435,6 @@ inline void GLConsole::handleEvent(const sf::Event& event)
             _TabComplete();
         }
     }
-
-//    wchar_t c = static_cast<wchar_t>(event->text.unicode);
-//    std::wcout << c << std::endl;
-//        m_sCurrentCommandBeg += str.toAnsiString();
-//        m_nCommandNum = 0; //reset history
-//        m_nScrollPixels = 0; //reset scrolling
- //   }
 /*
     switch(event->key.code) {
 //        case ('a' - 96):
@@ -1945,6 +1923,7 @@ inline bool GLConsole::Help(std::vector<std::string> *vArgs)
             PrintHelp("Entering just the function name will give a description.");
             PrintHelp("History: Up and Down arrow keys move through history.");
             PrintHelp("Tab Completion: TAB does tab completion and makes suggestions.");
+            PrintHelp("Built-in namespaces: console.* script.*");
             PrintHelp("----------------- HELP -----------------");
             PrintHelp("");
         }
