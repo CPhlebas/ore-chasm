@@ -1423,10 +1423,20 @@ inline void GLConsole::handleEvent(const sf::Event& event)
         if (event.text.unicode != 0xd) {
             std::string str = "";
             sf::Utf32::encodeAnsi(event.text.unicode, std::back_inserter(str), 'e');
-            if (str.compare("\t")) {
-                std::cout << str << std::endl;
-                m_sCurrentCommandBeg += str;
+
+            if (!str.compare("\b")) {
+                //BACKSPACE!
+                if( m_sCurrentCommandBeg.size() > 0 ) {
+                    m_sCurrentCommandBeg = m_sCurrentCommandBeg.substr(0, m_sCurrentCommandBeg.size() - 1);
+                }
+            } else {
+                if (str.compare("\t")) {
+                    //IF NOT TAB, then regular chars!
+                    std::cout << str << std::endl;
+                    m_sCurrentCommandBeg += str;
+                }
             }
+
         } else {
             // RETURN KEY HIT (ENTER)
             _ProcessCurrentCommand();
