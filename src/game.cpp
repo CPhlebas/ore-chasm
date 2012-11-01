@@ -219,7 +219,9 @@ void Game::tick()
                 } else {
                 }
 
-                if (event.key.code == sf::Keyboard::Tab) {
+                // traditional tilde used in every game/console, except without shift ;)
+                //HACK FIXME: currently bound to F3 because tilde/accent isn't exposed?
+                if (event.key.code == sf::Keyboard::F3) {
                     std::cout << "TAB HIT, TOGGLING CONSOLE" << std::endl;
                     m_console->ToggleConsole();
                 }
