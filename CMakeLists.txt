@@ -27,17 +27,21 @@ endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
 set(buildarrhea_VERSION_MAJOR 0)
 set(buildarrhea_VERSION_MINOR 1)
 
+find_package( Box2D REQUIRED)
 find_package( GLUT REQUIRED )
 find_package( GLU REQUIRED )
 find_package( OpenGL REQUIRED )
 find_package(CVARS REQUIRED)
-find_package(BOX2D REQUIRED)
 
 if (NOT CVARS_FOUND)
     message(FATAL_ERROR "Could not find CVARS (for quake console).")
 endif()
 
-include_directories( ${CMAKE_SOURCE_DIR} ${GLUT_INCLUDE_DIR} ${CVARS_INCLUDE_DIR} ${BOX2D_INCLUDE_DIR})
+if (NOT BOX2D_FOUND)
+    message(FATAL_ERROR "Could not find Box2D physics library.")
+endif()
+
+include_directories( ${CMAKE_SOURCE_DIR} ${BOX2D_INCLUDE_DIR} ${GLUT_INCLUDE_DIR} ${CVARS_INCLUDE_DIR} )
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 
@@ -71,8 +75,9 @@ include(FindPkgConfig)
 #add_executable(${EXECUTABLE_NAME} ${SOURCES})
 #target_link_libraries(${EXECUTABLE_NAME} ${yaml-cpp_LIBRARIES})
 #
-
-  #  message(FATAL_ERROR "Could not find library.")
+if (NOT BOX2D_FOUND)
+#  message(FATAL_ERROR "Could not find Box2D library.")
+endif()
 
 add_executable(${EXECUTABLE_NAME} ${SRC})
 
@@ -82,8 +87,8 @@ if (NOT SFML_FOUND)
     message(FATAL_ERROR "Could not find SFML.")
 endif()
                                                                     INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR} ${GLUT_INCLUDE_DIR} )
-include_directories(${SFML_INCLUDE_DIR} ${CVARS_INCLUDE_DIR})
-target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES} ${CVARS_LIBRARIES} ${GLUT_LIBRARIES} ${GLU_LIBRARIES} ${OPENGL_LIBRARIES} ${BOX2D_LIBRARY})
+include_directories(${SFML_INCLUDE_DIR} ${CVARS_INCLUDE_DIR} ${BOX2D_INCLUDE_DIR})
+target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES} ${CVARS_LIBRARIES} ${GLUT_LIBRARIES} ${GLU_LIBRARIES} ${OPENGL_LIBRARIES} ${BOX2D_LIBRARIES})
 
 
 # CPack packaging
