@@ -1424,6 +1424,7 @@ inline void GLConsole::handleEvent(const sf::Event& event)
         std::string str = "";
         sf::Utf32::encodeAnsi(event.text.unicode, std::back_inserter(str), 'e');
         std::cout << str << std::endl;
+        m_sCurrentCommandBeg += str;
     }
 
 //    wchar_t c = static_cast<wchar_t>(event->text.unicode);
