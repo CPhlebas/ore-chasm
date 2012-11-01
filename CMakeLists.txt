@@ -31,12 +31,13 @@ find_package( GLUT REQUIRED )
 find_package( GLU REQUIRED )
 find_package( OpenGL REQUIRED )
 find_package(CVARS REQUIRED)
+find_package(BOX2D REQUIRED)
 
 if (NOT CVARS_FOUND)
     message(FATAL_ERROR "Could not find CVARS (for quake console).")
 endif()
 
-include_directories( ${CMAKE_SOURCE_DIR} ${GLUT_INCLUDE_DIR} ${CVARS_INCLUDE_DIR})
+include_directories( ${CMAKE_SOURCE_DIR} ${GLUT_INCLUDE_DIR} ${CVARS_INCLUDE_DIR} ${BOX2D_INCLUDE_DIR})
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 
@@ -71,15 +72,7 @@ include(FindPkgConfig)
 #target_link_libraries(${EXECUTABLE_NAME} ${yaml-cpp_LIBRARIES})
 #
 
-find_package(Chipmunk 5.3.4 REQUIRED chipmunk)
-if (CHIPMUNK_FOUND)
-    include_directories(${CHIPMUNK_INCLUDE_DIRS})
-    link_directories(${CHIPMUNK_LIBRARIES})
-endif()
-
-if (NOT CHIPMUNK_FOUND)
-    message(FATAL_ERROR "Could not find chipmunk 2D physics library.")
-endif()
+  #  message(FATAL_ERROR "Could not find library.")
 
 add_executable(${EXECUTABLE_NAME} ${SRC})
 
@@ -90,7 +83,7 @@ if (NOT SFML_FOUND)
 endif()
                                                                     INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR} ${GLUT_INCLUDE_DIR} )
 include_directories(${SFML_INCLUDE_DIR} ${CVARS_INCLUDE_DIR})
-target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES} ${CHIPMUNK_LIBRARIES} ${CVARS_LIBRARIES} ${GLUT_LIBRARIES} ${GLU_LIBRARIES} ${OPENGL_LIBRARIES})
+target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES} ${CVARS_LIBRARIES} ${GLUT_LIBRARIES} ${GLU_LIBRARIES} ${OPENGL_LIBRARIES} ${BOX2D_LIBRARY})
 
 
 # CPack packaging
