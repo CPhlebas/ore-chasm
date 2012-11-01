@@ -1433,6 +1433,8 @@ inline void GLConsole::handleEvent(const sf::Event& event)
             m_nCommandNum = 0; //reset history
             m_nScrollPixels = 0; //reset scrolling
         }
+    } else if (event.type == sf::Event::KeyPressed) {
+        _TabComplete();
     }
 
 //    wchar_t c = static_cast<wchar_t>(event->text.unicode);
