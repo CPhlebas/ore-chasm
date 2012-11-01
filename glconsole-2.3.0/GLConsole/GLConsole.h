@@ -1425,6 +1425,13 @@ inline void GLConsole::handleEvent(const sf::Event& event)
             sf::Utf32::encodeAnsi(event.text.unicode, std::back_inserter(str), 'e');
             std::cout << str << std::endl;
             m_sCurrentCommandBeg += str;
+        } else {
+            // RETURN KEY HIT (ENTER)
+            _ProcessCurrentCommand();
+            m_sCurrentCommandBeg = "";
+            m_sCurrentCommandEnd = "";
+            m_nCommandNum = 0; //reset history
+            m_nScrollPixels = 0; //reset scrolling
         }
     }
 
