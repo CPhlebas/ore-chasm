@@ -387,12 +387,12 @@ inline GLConsole::GLConsole(sf::RenderWindow *window) :
     m_sScriptFileName( CVarUtils::CreateCVar<> (          "script.ScriptFileName", std::string( GLCONSOLE_SCRIPT_FILE ) ) ),
     m_sSettingsFileName( CVarUtils::CreateCVar<> (        "console.settings.SettingsFileName", std::string( GLCONSOLE_SETTINGS_FILE ) ) ),
     m_sInitialScriptFileName( CVarUtils::CreateCVar<> (   "console.InitialScriptFileName", std::string( GLCONSOLE_INITIAL_SCRIPT_FILE ) ) ),
-    m_logColor( CVarUtils::CreateCVar<GLColor>(           "console.colors.LogColor", GLColor( 255, 255, 64 ) ) ),
+    m_logColor( CVarUtils::CreateCVar<GLColor>(           "console.colors.LogColor", GLColor( 0, 255, 0) ) ),
     m_commandColor( CVarUtils::CreateCVar<GLColor>(       "console.colors.CommandColor", GLColor( 255, 255, 255 ) ) ),
-    m_functionColor( CVarUtils::CreateCVar<GLColor>(      "console.colors.FunctionColor", GLColor( 64, 255, 64 ) ) ),
-    m_errorColor( CVarUtils::CreateCVar<GLColor>(         "console.colors.ErrorColor", GLColor( 255, 128, 64 ) ) ),
-    m_helpColor( CVarUtils::CreateCVar<GLColor>(          "console.colors.HelpColor", GLColor( 110, 130, 200 ) ) ),
-    m_consoleColor( CVarUtils::CreateCVar<GLColor>(       "console.colors.ConsoleColor", GLColor( 25, 60, 130, 120 ) ) )
+    m_functionColor( CVarUtils::CreateCVar<GLColor>(      "console.colors.FunctionColor", GLColor( 64, 255, 255 ) ) ),
+    m_errorColor( CVarUtils::CreateCVar<GLColor>(         "console.colors.ErrorColor", GLColor( 255, 128, 255 ) ) ),
+    m_helpColor( CVarUtils::CreateCVar<GLColor>(          "console.colors.HelpColor", GLColor( 110, 130, 255 ) ) ),
+    m_consoleColor( CVarUtils::CreateCVar<GLColor>(       "console.colors.ConsoleColor", GLColor(0, 0, 0, 230 ) ) )
 {
     m_window = window;
     SetConsole( this );
@@ -1072,24 +1072,26 @@ inline void GLConsole::drawText(int x, int y, const char* text, const GLColor& c
             //printf("GLConsole::drawText SEARCHING,currentposition: %f\n", currentPosition);
 //        if (currentPosition >= y - (m_nConsoleLineSpacing + m_nTextHeight) && currentPosition <= y + (m_nConsoleLineSpacing + m_nTextHeight)) {
         if (currentPosition > y) {
-            printf("GLConsole::drawText FOUND, y: %d, currentposition: %f\n", y, currentPosition);
+            //printf("GLConsole::drawText FOUND, y: %d, currentposition: %f\n", y, currentPosition);
             //we want the previous one, since that was the closest item;
             it--;
             currentText = *it;
             // found the text item he's talking about! set the message he wanted
             currentText->setString(text);
-            sf::Color color(color.r, color.b, color.g, color.a);
-            currentText->setColor(color);
+            GLColor color1 = m_logColor;
+            sf::Color color(color1.r, color1.b, color1.g, color1.a);
+//            currentText->setColor(color);
             return;
         } else if ((it + 1) == m_textItems.end()) {
-            printf("GLConsole::drawText (COMPROMISE; end of vector), y: %d, currentposition: %f\n", y, currentPosition);
+            //printf("GLConsole::drawText (COMPROMISE; end of vector), y: %d, currentposition: %f\n", y, currentPosition);
             currentText->setString(text);
-            sf::Color color(color.r, color.b, color.g, color.a);
+            GLColor color1 = m_logColor;
+            sf::Color color(color1.r, color1.b, color1.g, color1.a);
 //            currentText->setColor(color);
             return;
         }
     }
-    printf("ERROR: GLConsole::drawText, sf::Text item not found in vector. consider given position invalid -- message swallowed.\n");
+    //printf("ERROR: GLConsole::drawText, sf::Text item not found in vector. consider given position invalid -- message swallowed.\n");
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1099,7 +1101,7 @@ inline void GLConsole::_RenderText()
     int consoleHeight = _GetConsoleHeight();
 
     if( consoleHeight - m_nConsoleVerticalMargin < 0 ) {
-        printf("console height <= 0, nop.\n");
+        //printf("console height <= 0, nop.\n");
         return;
     }
 
