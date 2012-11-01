@@ -272,7 +272,7 @@ class GLConsole
 
         std::string _GetHistory();
 
-        void drawText(int x, int y, const char* text);
+        void drawText(int x, int y, const char* text, const GLColor& color);
 
     private:
         bool          m_bExecutingHistory; //Are we executing a script or not.
@@ -358,6 +358,7 @@ class GLConsole
 
 #include <algorithm>
 #include <cstring>
+#include "GLColor.h"
 
 #include "GLConsole/GLConsole.h"
 #include "CVars/CVar.h"
@@ -1054,7 +1055,7 @@ inline bool GLConsole::_IsCursorOn()
     }
 }
 
-inline void GLConsole::drawText(int x, int y, const char* text)
+inline void GLConsole::drawText(int x, int y, const char* text, const GLColor& color)
 {
     const int consoleHeight = _GetConsoleHeight();
     const int numberOfLines = consoleHeight / (m_nConsoleLineSpacing + m_nTextHeight);
@@ -1071,20 +1072,24 @@ inline void GLConsole::drawText(int x, int y, const char* text)
             //printf("GLConsole::drawText SEARCHING,currentposition: %f\n", currentPosition);
 //        if (currentPosition >= y - (m_nConsoleLineSpacing + m_nTextHeight) && currentPosition <= y + (m_nConsoleLineSpacing + m_nTextHeight)) {
         if (currentPosition > y) {
-            //printf("GLConsole::drawText FOUND, y: %d, currentposition: %f\n", y, currentPosition);
+            printf("GLConsole::drawText FOUND, y: %d, currentposition: %f\n", y, currentPosition);
             //we want the previous one, since that was the closest item;
             it--;
             currentText = *it;
             // found the text item he's talking about! set the message he wanted
             currentText->setString(text);
+            sf::Color color(color.r, color.b, color.g, color.a);
+            currentText->setColor(color);
             return;
         } else if ((it + 1) == m_textItems.end()) {
-            //printf("GLConsole::drawText FOUND (compromise; end of vector), y: %d, currentposition: %f\n", y, currentPosition);
+            printf("GLConsole::drawText (COMPROMISE; end of vector), y: %d, currentposition: %f\n", y, currentPosition);
             currentText->setString(text);
+            sf::Color color(color.r, color.b, color.g, color.a);
+//            currentText->setColor(color);
             return;
         }
     }
-    //printf("ERROR: GLConsole::drawText, sf::Text item not found in vector. consider given position invalid -- message swallowed.\n");
+    printf("ERROR: GLConsole::drawText, sf::Text item not found in vector. consider given position invalid -- message swallowed.\n");
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1132,9 +1137,11 @@ inline void GLConsole::_RenderText()
         fullCommandLine += m_sCurrentCommandEnd;
         fullCommandLine += blink;
 
+        GLColor promptColor(0, 255, 0);
+        //m_commandColor);
         //draw cursor at bottom
         //printf("CURSOR, y pos: %d\n", consoleHeight);
-        drawText(0, consoleHeight, fullCommandLine.c_str());
+        drawText(0, consoleHeight, fullCommandLine.c_str(), promptColor);
  //       m_pGLFont->glPrintf( m_nConsoleLeftMargin, lineLoc - m_nScrollPixels, 
  //               "> " + em + blink );
  //       m_pGLFont->glPrintf( m_nConsoleLeftMargin, lineLoc - m_nScrollPixels, 
@@ -1156,23 +1163,29 @@ inline void GLConsole::_RenderText()
                 std::deque<ConsoleLine>::iterator it = m_consoleText.begin() + i - 1;
                 std::string fulltext = (*it).m_sText;
 
-                //set the appropriate color
-                switch((*it).m_nOptions)
-                {
-                    case LINEPROP_FUNCTION:
-                        glColor3f(m_functionColor.r, m_functionColor.g, m_functionColor.b);
-                        break;
-                    case LINEPROP_ERROR:
-                        glColor3f(m_errorColor.r, m_errorColor.g, m_errorColor.b);
-                        break;
-                    case LINEPROP_HELP:
-                        glColor3f(m_helpColor.r, m_helpColor.g, m_helpColor.b);
-                        break;
-                    default:
-                        //regular log line...
-                        glColor3f(m_logColor.r, m_logColor.g, m_logColor.b);
-                        break;
-                }
+                //FIXME! :(
+//                        GLColor color(255, 255, 255);
+//                        //set the appropriate color
+//                        switch((*it).m_nOptions)
+//                        {
+//                            case LINEPROP_FUNCTION:
+//  //                              color = m_functionColor;
+//                            // glColor3f(m_functionColor.r, m_functionColor.g, m_functionColor.b);
+//                                break;
+//                            case LINEPROP_ERROR:
+// //                               color = m_errorColor;
+//                            // glColor3f(m_errorColor.r, m_errorColor.g, m_errorColor.b);
+//                                break;
+//                            case LINEPROP_HELP:
+////                                color = m_helpColor;
+//                            // glColor3f(m_helpColor.r, m_helpColor.g, m_helpColor.b);
+//                                break;
+//                            default:
+//                                //regular log line...
+//                                color = m_logColor;
+//                            // glColor3f(m_logColor.r, m_logColor.g, m_logColor.b);
+//                                break;
+//                        }
 
                 //wrap text to multiple lines if necessary
                 int chars_per_line = (int)(1.65*m_Viewport.width / m_nTextHeight);
@@ -1193,7 +1206,9 @@ inline void GLConsole::_RenderText()
                     int start = fulltext.substr(j*chars_per_line, chars_per_line).find_first_not_of( ' ' );
                     if( start >= 0  ) {
                         //printf("Setting a console text line string, %s\n", fulltext.substr(j*chars_per_line+start, chars_per_line).c_str());
-                        drawText(0, lineLoc - m_nScrollPixels, fulltext.substr(j*chars_per_line+start, chars_per_line).c_str());
+
+                        GLColor color(0, 255, 0);
+                        drawText(0, lineLoc - m_nScrollPixels, fulltext.substr(j*chars_per_line+start, chars_per_line).c_str(), color);
  //                       m_pGLFont->glPrintf(m_nConsoleLeftMargin, lineLoc - m_nScrollPixels,
  //                               fulltext.substr(j*chars_per_line+start, chars_per_line) );
                     }
