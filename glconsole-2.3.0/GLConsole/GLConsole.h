@@ -184,7 +184,7 @@ class GLConsole
         void PrintAllCVars();
 
         /// Add a character to the command line.
-        void handleEvent(sf::Event *event);
+        void handleEvent(const sf::Event& event);
 
         /// Clear the current command.
         void ClearCurrentCommand();
@@ -1403,7 +1403,7 @@ inline void GLConsole::SpecialFunc( int key )
 /**
  * Process key presses
  */
-inline void GLConsole::handleEvent(sf::Event *event)
+inline void GLConsole::handleEvent(const sf::Event& event)
 {
     if(!IsOpen())
         return;
@@ -1420,9 +1420,11 @@ inline void GLConsole::handleEvent(sf::Event *event)
 
 //    sf::Utf<32> codepoint = ;
 
-    std::string str = "";
-    sf::Utf32::encodeAnsi(event->text.unicode, std::back_inserter(str), 'e');
-    std::cout << str << std::endl;
+    if (event.type == sf::Event::TextEntered) {
+        std::string str = "";
+        sf::Utf32::encodeAnsi(event.text.unicode, std::back_inserter(str), 'e');
+        std::cout << str << std::endl;
+    }
 
 //    wchar_t c = static_cast<wchar_t>(event->text.unicode);
 //    std::wcout << c << std::endl;

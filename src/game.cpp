@@ -189,6 +189,7 @@ void Game::tick()
             // unsigned int MouseX = Input.getMouseX();
             // unsigned int MouseY = Input.getMouseY();
 
+            m_console->handleEvent(event);
             switch (event.type)
             {
                 // window closed
@@ -216,7 +217,6 @@ void Game::tick()
                         yDir += 1;
                     }
                 } else {
-                    m_console->handleEvent(&event);
                 }
 
                 if (event.key.code == sf::Keyboard::Tab) {
@@ -244,7 +244,6 @@ void Game::tick()
                         yDir -= 1;
                     }
                 } else {
-                    m_console->handleEvent(&event);
                 }
                 break;
 
