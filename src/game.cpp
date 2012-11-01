@@ -96,6 +96,7 @@ void Game::init()
 
     settings = m_app->getSettings();
 
+    m_console->Printf("");
     std::cout << "depth bits:" << settings.depthBits << std::endl;
     std::cout << "stencil bits:" << settings.stencilBits << std::endl;
     std::cout << "antialiasing level:" << settings.antialiasingLevel << std::endl;
@@ -125,68 +126,7 @@ void Game::init()
 
 void Game::tick()
 {
-    float PPM = 30.0f;
-
-    sf::RectangleShape box(sf::Vector2f(200, 200));
-    sf::RectangleShape ground(sf::Vector2f(200, 200));
-
-    b2Vec2 gravity(0.0f, 9.8f);
-    b2World *myWorld = new b2World(gravity);
-    
-
-    
-    // box body definition
-    b2BodyDef boxBodyDef;
-    b2Vec2 boxVelocity;
-    boxVelocity.Set(0.0f,10.0f);
-    boxBodyDef.type = b2_dynamicBody;
-    boxBodyDef.position.Set(500,20);
-    boxBodyDef.linearVelocity = boxVelocity;
-    
-    // line body definition
-    b2BodyDef lineBodyDef;
-    lineBodyDef.type = b2_staticBody;
-    lineBodyDef.position.Set(50,550);
-    
-    // create the bodies
-    b2Body *boxBody = myWorld->CreateBody(&boxBodyDef);
-    b2Body *lineBody = myWorld->CreateBody(&lineBodyDef);
-    
-    // create the shapes
-    b2PolygonShape boxShape,lineShape;
-    boxShape.SetAsBox(50.0f/PPM,25.0f/PPM);
-//    lineShape.SetAsB(b2Vec2(50/PPM,550/PPM),b2Vec2(750/PPM,200/PPM));
-    
-    // add fixtures
-    b2FixtureDef boxFixtureDef,lineFixtureDef;
-    boxFixtureDef.shape = &boxShape;
-    lineFixtureDef.shape = &lineShape;
-    boxFixtureDef.density = 1;
-    
-    boxBody->CreateFixture(&boxFixtureDef);
-    lineBody->CreateFixture(&lineFixtureDef);
-
-   float timeStep = 1.0f / 20.0f;
-
-   int velIter = 8;
-   int posIter = 3;
-    
-
-
-
-
-
-
-
-
-
-
-
-
     sf::Event event;
-
-    float Left = 0.f;
-    float Top  = 0.f;
 
     m_player->setPosition(m_view->getCenter());
 
@@ -214,17 +154,6 @@ void Game::tick()
 
     while (m_app->isOpen())
     {
-
-        myWorld->Step(timeStep, velIter, posIter);
-
-        b2Vec2 pos = boxBody->GetPosition();
-        box.setPosition(pos.x, pos.y);
-        box.setPosition(pos.x+100,pos.y);
-        box.setPosition(pos.x+100,pos.y+50);
-        box.setPosition(pos.x,pos.y+50);
-
-
-        
         elapsedTime = clock.restart().asSeconds();
         benchTime -= 1;
         fps = int(1.f / elapsedTime);
@@ -348,27 +277,13 @@ void Game::tick()
 //               shutdown();
             //          }
         }
-
-
-        //non sfml
-//        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
-//        theConsole.Printf("TEST 1");
-//        reshape(1600,100);
-        //set up the scene
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  //      glLoadIdentity();
-/////        glTranslatef(20000,0.2f,0.0f);
 
         m_app->pushGLStates();
-        
         m_view->move(500 * xDir * elapsedTime, 500* yDir * elapsedTime);
 
         m_app->clear(sf::Color(200, 0, 0));
         m_app->draw(*m_player);
-        m_app->draw(box);
-        m_app->draw(ground);
 
         m_app->setView(m_app->getDefaultView());
 
