@@ -24,19 +24,21 @@ endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
 # (you can also set it on the command line: -D CMAKE_BUILD_TYPE=Release)
 
 # Set version information in a config.h file
+set (BOX2D_DIR "${CMAKE_SOURCE_DIR}/cmake_modules")
 set(buildarrhea_VERSION_MAJOR 0)
 set(buildarrhea_VERSION_MINOR 1)
 
-find_package( Box2D REQUIRED)
+find_package( BOX2D REQUIRED)
 find_package( GLUT REQUIRED )
 find_package( GLU REQUIRED )
 find_package( OpenGL REQUIRED )
-find_package(CVARS REQUIRED)
+find_package( CVARS REQUIRED)
 
 if (NOT CVARS_FOUND)
     message(FATAL_ERROR "Could not find CVARS (for quake console).")
 endif()
 
+message("LIBS:" + ${BOX2D_LIBRARIES} + "INCLUDES:" + ${BOX2D_INCLUDE_DIR})
 if (NOT BOX2D_FOUND)
     message(FATAL_ERROR "Could not find Box2D physics library.")
 endif()
@@ -63,6 +65,7 @@ src/world.cpp
 src/renderer.cpp
 src/renderable.cpp
 )
+
 
 #YAML, needed later
 ## pkg-config-based library

@@ -118,25 +118,6 @@ void Game::init()
 
     m_console = new GLConsole(m_app);
     m_console->Init();
-    m_console->ToggleConsole();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     tick();
     shutdown();
