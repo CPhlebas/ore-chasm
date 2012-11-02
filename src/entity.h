@@ -36,8 +36,9 @@ public:
 
     virtual void update();
 
+    //FIXME: unused
     //FIXME: isolate and move further up the chain, and make Renderable privately inherited?
-    void draw(sf::RenderTarget& target, sf::RenderStates states = sf::RenderStates::Default) const;
+//    void draw(sf::RenderTarget& target, sf::RenderStates states = sf::RenderStates::Default) const;
 
     /**
      * Use only to reset the entities position to some other place.

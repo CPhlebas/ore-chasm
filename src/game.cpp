@@ -97,7 +97,6 @@ void Game::init()
 
     settings = m_app->getSettings();
 
-    m_console->Printf("");
     std::cout << "depth bits:" << settings.depthBits << std::endl;
     std::cout << "stencil bits:" << settings.stencilBits << std::endl;
     std::cout << "antialiasing level:" << settings.antialiasingLevel << std::endl;
