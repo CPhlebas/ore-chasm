@@ -33,6 +33,7 @@ void Entity::setVelocity(const sf::Vector2f& velocity)
 
 void Entity::update()
 {
+    m_velocity.y += GRAVITY;
     Renderable::move(m_velocity);
 }
 
