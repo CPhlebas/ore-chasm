@@ -19,7 +19,11 @@
 
 Entity::Entity(const char* texture) : Renderable(texture)
 {
+}
 
+void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+    target.draw(*this, states);
 }
 
 void Entity::setVelocity(const sf::Vector2f& velocity)

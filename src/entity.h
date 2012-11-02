@@ -21,6 +21,7 @@
 #include "renderable.h"
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Graphics/RenderStates.hpp>
 
 const float gravity = -9.8f;
 
@@ -34,6 +35,9 @@ public:
     Entity(const char* texture);
 
     virtual void update();
+
+    //FIXME: isolate and move further up the chain, and make Renderable privately inherited?
+    void draw(sf::RenderTarget& target, sf::RenderStates states = sf::RenderStates::Default) const;
 
     /**
      * Use only to reset the entities position to some other place.
