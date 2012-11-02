@@ -26,7 +26,7 @@ class Renderable : public sf::Sprite
 {
 public:
     /**
-     * Small basica wrapper which inherits an sf::Sprite and automagically
+     * Small basic wrapper which inherits an sf::Sprite and automagically
      * integrates itself with the RenderManager.
      */
     Renderable(const char* texture);

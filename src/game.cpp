@@ -17,6 +17,7 @@
 
 #include "game.h"
 #include "imagemanager.h"
+#include "entity.h"
 
 #include <iostream>
 #include <sstream>
@@ -202,7 +203,6 @@ void Game::tick()
                     if (event.key.code == sf::Keyboard::Escape) {
                         shutdown();
                     }
-
                     if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
                         xDir -= 1;
                     }

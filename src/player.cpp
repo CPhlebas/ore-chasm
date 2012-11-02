@@ -16,10 +16,11 @@
  *****************************************************************************/
 
 #include "player.h"
+
 #include "imagemanager.h"
 
-Player::Player(const char* texture) : Renderable(texture)
+Player::Player(const char* texture) : Entity(texture)
 {
-    this->setTexture("../textures/player.png");
+//    this->setTexture("../textures/player.png");
 //TODO:    setCenter();
 }
