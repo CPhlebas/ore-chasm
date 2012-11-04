@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <assert.h>
 
 #include <pugixml.hpp>
 
@@ -46,6 +47,30 @@ void World::loadMap()
     pugi::xml_parse_result result = doc.load_file("../../level1.tmx");
 
 
-    std::cout << "Load result: " << result.description()
-    << ", mesh name: " << doc.child("mesh").attribute("name").value() << std::endl;
+    //should indicate no error in loading process.
+    assert(result.status == 0);
+    std::cout << "Load result: " << result.description() << std::endl;
+
+    // <map>
+    pugi::xml_node map = doc.first_child();
+    std::cout << "Map loaded. Level info: { ######################## " << std::endl
+    << "height: " << map.attribute("height").as_int() << std::endl
+    << "width: " << map.attribute("width").as_int() << std::endl
+    << "tileWidth: " << map.attribute("tileWidth").as_int() << std::endl
+    << "tileHeight: " << map.attribute("tileHeight").as_int() << std::endl
+    << "} #########################################" << std::endl;
+
+    //iterate through <tileset>'s which define what each tile actually is supposed to be (file name and what not)
+//    pugi::xml_node tileset = map.child();
+ //  std::cout << "TEST: " << tileset.name() << std::endl;
+ // std::cout << "TEST: " << tileset.name() << std::endl;
+    std::cout << "Loading tileset nodes" << std::endl;
+    for (pugi::xml_node tileset = map.child("tileset"); tileset; tileset = map.next_sibling("tileset"))
+    {
+        //we don't actually use tileset, just the <image> inside them.
+        pugi::xml_node image = tileset.first_child();
+        std::cout << "image: " << image.attribute("height") << std::endl;
+    }
+    std::cout << sizeof(int) << std::endl;
+
 }
