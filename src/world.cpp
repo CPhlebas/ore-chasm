@@ -17,7 +17,24 @@
 
 #include "world.h"
 
+#include <pugixml.hpp>
+
 World::World()
+{
+
+}
+
+void World::render()
+{
+
+}
+
+void World::update()
+{
+
+}
+
+void World::loadMap()
 {
 
 }
