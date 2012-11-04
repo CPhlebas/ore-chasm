@@ -26,9 +26,16 @@ message("PATH: " + ${CMAKE_MODULE_PATH})
 set(ore_chasm_VERSION_MAJOR 0)
 set(ore_chasm_VERSION_MINOR 1)
 
+find_package( PugiXML REQUIRED)
 find_package( OpenGL REQUIRED )
 
-include_directories( ${CMAKE_SOURCE_DIR})
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
+
+if (NOT PugiXML_FOUND)
+    message(FATAL_ERROR "Could not find pugixml library.")
+endif()
+
+include_directories( ${CMAKE_SOURCE_DIR} ${PugiXML_INCLUDE_DIR})
 
 configure_file(
   "${PROJECT_SOURCE_DIR}/config.h.in"
@@ -76,7 +83,7 @@ endif()
 
 INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR})
 include_directories(${SFML_INCLUDE_DIR} )
-target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES} ${OPENGL_LIBRARIES})
+target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES} ${OPENGL_LIBRARIES} ${PugiXML_LIBRARY})
 
 
 # CPack packaging
