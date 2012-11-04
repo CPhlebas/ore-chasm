@@ -19,6 +19,7 @@
 #define GAME_H
 
 #include "player.h"
+#include "world.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -43,6 +44,7 @@ class Game
     const int SCREEN_H = 900;
 
 private:
+    World *m_world = nullptr;
     GLConsole *m_console = nullptr;
     sf::RenderWindow *m_app = nullptr;
     sf::View *m_view = nullptr;

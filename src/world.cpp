@@ -17,11 +17,15 @@
 
 #include "world.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+
 #include <pugixml.hpp>
 
 World::World()
 {
-
+    loadMap();
 }
 
 void World::render()
@@ -36,5 +40,12 @@ void World::update()
 
 void World::loadMap()
 {
+    std::cout << "loading map!" << std::endl;
 
+    pugi::xml_document doc;
+    pugi::xml_parse_result result = doc.load_file("../../level1.tmx");
+
+
+    std::cout << "Load result: " << result.description()
+    << ", mesh name: " << doc.child("mesh").attribute("name").value() << std::endl;
 }

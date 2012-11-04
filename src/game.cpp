@@ -120,6 +120,8 @@ void Game::init()
     m_console = new GLConsole(m_app);
     m_console->Init();
 
+    m_world = new World();
+
     tick();
     shutdown();
 }
