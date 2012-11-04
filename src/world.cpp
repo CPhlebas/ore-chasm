@@ -26,11 +26,13 @@
 #include <assert.h>
 #include <math.h>
 #include <SFML/Graphics/Drawable.hpp>
+#include <SFML/Graphics/Image.hpp>
 #include <SFML/System/Clock.hpp>
 
 World::World()
 {
     loadMap();
+    saveMap();
 }
 
 void World::render()
@@ -71,9 +73,25 @@ void World::generateMap()
 
 void World::saveMap()
 {
+    std::cout << "saving map!" << std::endl;
+    sf::Image image;
+    image.create(WORLD_ROWCOUNT, WORLD_COLUMNCOUNT, sf::Color::White);
+
+    sf::Color color;
+
+    sf::Clock clock;
+
     for (int row = 0; row < WORLD_ROWCOUNT; ++row) {
         for (int column = 0; column < WORLD_COLUMNCOUNT; ++column) {
-            m_blocks[row][column].type = distribution(rand);
+            color.r = m_blocks[column * WORLD_ROWCOUNT + row].type;
+            image.setPixel(row, column, color);
         }
     }
+
+    bool saved = image.saveToFile("../../saves/level1.png");
+    assert(saved);
+
+    const int elapsedTime = clock.getElapsedTime().asMilliseconds();
+    std::cout << "Time taken for map saving: " << elapsedTime << " Milliseconds" << std::endl;
+
 }
