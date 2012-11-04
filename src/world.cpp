@@ -17,12 +17,15 @@
 
 #include "world.h"
 
+#include "block.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
 #include <assert.h>
+#include <math.h>
 
-#include <pugixml.hpp>
+#include <SFML/Graphics/Drawable.hpp>
 
 World::World()
 {
@@ -42,35 +45,6 @@ void World::update()
 void World::loadMap()
 {
     std::cout << "loading map!" << std::endl;
-
-    pugi::xml_document doc;
-    pugi::xml_parse_result result = doc.load_file("../../level1.tmx");
-
-
-    //should indicate no error in loading process.
-    assert(result.status == 0);
-    std::cout << "Load result: " << result.description() << std::endl;
-
-    // <map>
-    pugi::xml_node map = doc.first_child();
-    std::cout << "Map loaded. Level info: { ######################## " << std::endl
-    << "height: " << map.attribute("height").as_int() << std::endl
-    << "width: " << map.attribute("width").as_int() << std::endl
-    << "tileWidth: " << map.attribute("tileWidth").as_int() << std::endl
-    << "tileHeight: " << map.attribute("tileHeight").as_int() << std::endl
-    << "} #########################################" << std::endl;
-
-    //iterate through <tileset>'s which define what each tile actually is supposed to be (file name and what not)
-//    pugi::xml_node tileset = map.child();
- //  std::cout << "TEST: " << tileset.name() << std::endl;
- // std::cout << "TEST: " << tileset.name() << std::endl;
-    std::cout << "Loading tileset nodes" << std::endl;
-    for (pugi::xml_node tileset = map.child("tileset"); tileset; tileset = map.next_sibling("tileset"))
-    {
-        //we don't actually use tileset, just the <image> inside them.
-        pugi::xml_node image = tileset.first_child();
-        std::cout << "image: " << image.attribute("height") << std::endl;
-    }
-    std::cout << sizeof(int) << std::endl;
+    std::cout << "SIZEOF BLOCK: " << sizeof(Block) << " BYTES!" << "MAX SIZE (so far): 8400*2400*sizeof = " << ((8400*2400*sizeof(Block))/(pow(10.0, 6.0))) << " MiB!" << std::endl;
 
 }

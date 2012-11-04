@@ -15,20 +15,22 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#ifndef WORLD_H
-#define WORLD_H
+#ifndef BLOCK_H
+#define BLOCK_H
 
-class World
+class Block
 {
 public:
-    World();
+    Block();
 
+    /**
+     * Function is called ONLY when this block is considered NOT paused, aka alive.
+     * So  only when this block is onscreen or close to it will this function be called.
+     */
     void update();
     void render();
 
-    void loadMap();
-    //create containers of various entities, and implement a tile system
-    //game.cpp calls into this each tick, which this descends downward into each entity
+    unsigned char health = 255;
 };
 
 #endif

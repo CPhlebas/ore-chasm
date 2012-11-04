@@ -15,20 +15,23 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#ifndef WORLD_H
-#define WORLD_H
+#include "block.h"
 
-class World
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+#include <assert.h>
+
+Block::Block()
 {
-public:
-    World();
+}
 
-    void update();
-    void render();
+void Block::render()
+{
 
-    void loadMap();
-    //create containers of various entities, and implement a tile system
-    //game.cpp calls into this each tick, which this descends downward into each entity
-};
+}
 
-#endif
+void Block::update()
+{
+
+}

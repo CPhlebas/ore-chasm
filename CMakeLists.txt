@@ -29,7 +29,6 @@ set (BOX2D_DIR "${CMAKE_SOURCE_DIR}/cmake_modules")
 set(buildarrhea_VERSION_MAJOR 0)
 set(buildarrhea_VERSION_MINOR 1)
 
-find_package( PugiXML REQUIRED)
 find_package( BOX2D REQUIRED)
 find_package( GLUT REQUIRED )
 find_package( GLU REQUIRED )
@@ -44,14 +43,7 @@ if (NOT BOX2D_FOUND)
     message(FATAL_ERROR "Could not find Box2D physics library.")
 endif()
 
-
-if (NOT PugiXML_FOUND)
-    message(FATAL_ERROR "Could not find pugixml library.")
-endif()
-
-include_directories( ${CMAKE_SOURCE_DIR} ${BOX2D_INCLUDE_DIR} ${GLUT_INCLUDE_DIR} ${CVARS_INCLUDE_DIR} ${PugiXML_INCLUDE_DIR})
-
-
+include_directories( ${CMAKE_SOURCE_DIR} ${BOX2D_INCLUDE_DIR} ${GLUT_INCLUDE_DIR} ${CVARS_INCLUDE_DIR} )
 
 configure_file(
   "${PROJECT_SOURCE_DIR}/config.h.in"
@@ -71,8 +63,8 @@ src/world.cpp
 src/renderer.cpp
 src/renderable.cpp
 src/entity.cpp
+src/block.cpp
 )
-
 
 #YAML, needed later
 ## pkg-config-based library
@@ -98,7 +90,7 @@ if (NOT SFML_FOUND)
 endif()
                                                                     INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR} ${GLUT_INCLUDE_DIR} )
 include_directories(${SFML_INCLUDE_DIR} ${CVARS_INCLUDE_DIR} ${BOX2D_INCLUDE_DIR})
-target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES} ${CVARS_LIBRARIES} ${GLUT_LIBRARIES} ${GLU_LIBRARIES} ${OPENGL_LIBRARIES} ${BOX2D_LIBRARIES} ${PugiXML_LIBRARY})
+target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES} ${CVARS_LIBRARIES} ${GLUT_LIBRARIES} ${GLU_LIBRARIES} ${OPENGL_LIBRARIES} ${BOX2D_LIBRARIES} )
 
 
 # CPack packaging
