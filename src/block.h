@@ -28,9 +28,18 @@ public:
      * So  only when this block is onscreen or close to it will this function be called.
      */
     void update();
-    void render();
 
+    /**
+     * 0-255, 0 obviously meaning this block is marked as to be destroyed.
+     * higher values are for more "difficult" to break block types. e.g. sand has a very low number.
+     */
     unsigned char health = 255;
+
+    /**
+     * The type of tile this is, 0-255 is valid and can be compared with the world's definition of tile types
+     * (an enum)
+     */
+    unsigned char type = 0;
 };
 
 #endif

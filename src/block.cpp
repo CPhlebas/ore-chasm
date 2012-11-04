@@ -26,11 +26,6 @@ Block::Block()
 {
 }
 
-void Block::render()
-{
-
-}
-
 void Block::update()
 {
 

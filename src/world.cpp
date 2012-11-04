@@ -22,10 +22,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <random>
 #include <assert.h>
 #include <math.h>
-
 #include <SFML/Graphics/Drawable.hpp>
+#include <SFML/System/Clock.hpp>
 
 World::World()
 {
@@ -46,5 +47,33 @@ void World::loadMap()
 {
     std::cout << "loading map!" << std::endl;
     std::cout << "SIZEOF BLOCK: " << sizeof(Block) << " BYTES!" << "MAX SIZE (so far): 8400*2400*sizeof = " << ((8400*2400*sizeof(Block))/(pow(10.0, 6.0))) << " MiB!" << std::endl;
+    generateMap();
+}
 
+void World::generateMap()
+{
+    std::random_device device;
+    std::mt19937 rand(device());
+    std::uniform_int_distribution<> distribution(0, 1);
+    //std::cout << distribution(rand) << ' ';
+
+    sf::Clock clock;
+
+    for (int row = 0; row < WORLD_ROWCOUNT; ++row) {
+        for (int column = 0; column < WORLD_COLUMNCOUNT; ++column) {
+            m_blocks[column * WORLD_ROWCOUNT + row].type = distribution(rand);
+        }
+    }
+
+    const int elapsedTime = clock.getElapsedTime().asMilliseconds();
+    std::cout << "Time taken for map generation: " << elapsedTime << " Milliseconds" << std::endl;
+}
+
+void World::saveMap()
+{
+    for (int row = 0; row < WORLD_ROWCOUNT; ++row) {
+        for (int column = 0; column < WORLD_COLUMNCOUNT; ++column) {
+            m_blocks[row][column].type = distribution(rand);
+        }
+    }
 }

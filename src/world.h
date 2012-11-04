@@ -18,6 +18,28 @@
 #ifndef WORLD_H
 #define WORLD_H
 
+#include "block.h"
+#include <stdlib.h>
+
+//height
+static const int WORLD_ROWCOUNT = 8400;
+//width
+static const int WORLD_COLUMNCOUNT = 2400;
+
+/*
+ e.g. [ ] [ ] [ ] [ ] [ ]  ... 8400
+        [ ] [ ] [ ] [ ] [ ]  ... 8400
+        ...
+        ...
+        ...
+        2400
+
+
+*/
+
+// height is the same as width (they're square)
+static const int TILE_SIZE = 16;
+
 class World
 {
 public:
@@ -27,8 +49,29 @@ public:
     void render();
 
     void loadMap();
+
+    /**
+     * Determines the health and texture of the Block.
+     */
+    enum BlockType {
+        Dirt = 0,
+        Stone
+    };
+
     //create containers of various entities, and implement a tile system
     //game.cpp calls into this each tick, which this descends downward into each entity
+private:
+    // it's faster and easier to manage with a linear array. access is trivial - array[y][x] simply becomes array[y*rowlength + x]
+    // makes sure that the memory allocated is in fact contiguous.
+    // [column * WORLD_ROWCOUNT + row]
+    Block m_blocks[WORLD_ROWCOUNT * WORLD_ROWCOUNT];
+
+    /**
+     * From scratch, create a randomly generated tileset and store it in our array
+     */
+    void generateMap();
+
+    void saveMap();
 };
 
 #endif
