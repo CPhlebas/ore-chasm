@@ -278,6 +278,8 @@ void Game::tick()
         }
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        m_player->update();
+
         m_app->pushGLStates();
         m_view->move(500 * xDir * elapsedTime, 500* yDir * elapsedTime);
 

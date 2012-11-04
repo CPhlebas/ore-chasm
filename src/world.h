@@ -23,7 +23,11 @@ class World
 public:
     World();
 
+    void update();
     void render();
+
+    //create containers of various entities, and implement a tile system
+    //game.cpp calls into this each tick, which this descends downward into each entity
 };
 
 

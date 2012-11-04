@@ -23,7 +23,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 
-const float GRAVITY = -9.8f;
+const float GRAVITY = 0.05f;
 
 class Entity : public Renderable
 {
