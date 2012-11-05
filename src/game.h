@@ -18,7 +18,6 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "player.h"
 #include "world.h"
 
 #include <stdio.h>
@@ -49,7 +48,6 @@ private:
     sf::RenderWindow *m_app = nullptr;
     sf::View *m_view = nullptr;
     sf::Font *m_font = nullptr;
-    Player *m_player = nullptr;
 };
 
 #endif

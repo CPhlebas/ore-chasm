@@ -33,17 +33,9 @@
 
 #include <Box2D/Box2D.h>
 
-#include <GL/glx.h>
-
-#include <GL/gl.h>
-#include <GL/glu.h>
-//#include <GL/glut.h>
-//include this header for CVars and GLConsole
 #include <GLConsole/GLConsole.h>
-
 //A CVar version of std::vector
 #include <CVars/CVarVectorIO.h>
-
 //A CVar version of std::map
 #include <CVars/CVarMapIO.h>
 
@@ -115,12 +107,10 @@ void Game::init()
     ImageManager* manager = ImageManager::instance();
     manager->addResourceDir("../textures");
 
-    m_player = new Player("../textures/player.png");
-
     m_console = new GLConsole(m_app);
     m_console->Init();
 
-    m_world = new World();
+    m_world = new World(m_app, m_view);
 
     tick();
     shutdown();
@@ -130,7 +120,7 @@ void Game::tick()
 {
     sf::Event event;
 
-    m_player->setPosition(m_view->getCenter());
+//    m_player->setPosition(m_view->getCenter());
 
     sf::Text text;
     text.setFont(*m_font);
@@ -278,21 +268,23 @@ void Game::tick()
 //               shutdown();
             //          }
         }
+
+        m_world->update();
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        m_player->update();
 
         m_app->pushGLStates();
         m_view->move(500 * xDir * elapsedTime, 500* yDir * elapsedTime);
 
         m_app->clear(sf::Color(200, 0, 0));
-        m_app->draw(*m_player);
 
         m_app->setView(m_app->getDefaultView());
 
         m_app->draw(text);
 
         m_app->setView(*m_view);
+        m_world->render();
 
         m_app->popGLStates();
 

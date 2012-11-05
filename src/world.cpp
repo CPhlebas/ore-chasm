@@ -29,8 +29,11 @@
 #include <SFML/Graphics/Image.hpp>
 #include <SFML/System/Clock.hpp>
 
-World::World()
+World::World(sf::RenderWindow *window, sf::View *view)
 {
+    m_window = window;
+    m_view = view;
+
     loadMap();
  //   saveMap();
 }

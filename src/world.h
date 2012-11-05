@@ -19,6 +19,8 @@
 #define WORLD_H
 
 #include "block.h"
+#include "player.h"
+
 #include <stdlib.h>
 
 //height
@@ -43,7 +45,7 @@ static const int TILE_SIZE = 16;
 class World
 {
 public:
-    World();
+    World(sf::RenderWindow *window, sf::View *view);
 
     void update();
     void render();
@@ -65,6 +67,11 @@ private:
     // makes sure that the memory allocated is in fact contiguous.
     // [column * WORLD_ROWCOUNT + row]
     Block m_blocks[WORLD_ROWCOUNT * WORLD_ROWCOUNT];
+    Player *m_player = nullptr;
+
+    //FIXME: just a ptr to the game.cpp one :(  same with window
+    sf::View *m_view = nullptr;
+    sf::RenderWindow *m_window = nullptr;
 
     /**
      * From scratch, create a randomly generated tileset and store it in our array
