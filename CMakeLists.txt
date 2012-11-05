@@ -11,14 +11,12 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 
 
     # because cmake has this annoying fucking bug that took me a while to figure out how i can use clang: http://www.cmake.org/pipermail/cmake/2011-February/042629.html
-    # HELP ME! CVARS DOESN"T BUILD WITH CLANG..SAD FACE, so for now, use..gcrapcrap :(
-    set(CMAKE_CXX_COMPILER "g++")
 
-    set(CMAKE_CXX_FLAGS "-std=c++11 -Wall -Wno-unused-variable -Wno-unused-function -funroll-loops -fexpensive-optimizations -Woverloaded-virtual -g3 -ggdb")
-    set(CMAKE_C_FLAGS "-Wall -Wno-unused-variable -Wno-unused-function -funroll-loops -fexpensive-optimizations -g3 -ggdb")
+    set(CMAKE_CXX_FLAGS "-std=c++11") # -Wall -Wno-unused-variable -Wno-unused-function -funroll-loops -fexpensive-optimizations -Woverloaded-virtual -g3 -ggdb")
+#    set(CMAKE_C_FLAGS "-Wall -Wno-unused-variable -Wno-unused-function -funroll-loops -fexpensive-optimizations -g3 -ggdb")
 else(CMAKE_BUILD_TYPE STREQUAL "")
-    set(CMAKE_CXX_FLAGS "-std=c++11 -O2 -Wall -Wno-unused-variable -Wno-unused-function -funroll-loops -fexpensive-optimizations -Woverloaded-virtual")
-    set(CMAKE_C_FLAGS "-O2 -Wall -Wno-unused-variable -Wno-unused-function -funroll-loops -fexpensive-optimizations")
+#    set(CMAKE_CXX_FLAGS "-std=c++11 -O2 -Wall -Wno-unused-variable -Wno-unused-function -funroll-loops -fexpensive-optimizations -Woverloaded-virtual")
+#    set(CMAKE_C_FLAGS "-O2 -Wall -Wno-unused-variable -Wno-unused-function -funroll-loops -fexpensive-optimizations")
 endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
 
 # (you can also set it on the command line: -D CMAKE_BUILD_TYPE=Release)

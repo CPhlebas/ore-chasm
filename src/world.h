@@ -66,7 +66,7 @@ private:
     // it's faster and easier to manage with a linear array. access is trivial - array[y][x] simply becomes array[y*rowlength + x]
     // makes sure that the memory allocated is in fact contiguous.
     // [column * WORLD_ROWCOUNT + row]
-    Block m_blocks[WORLD_ROWCOUNT * WORLD_ROWCOUNT];
+    Block m_blocks[WORLD_ROWCOUNT * WORLD_COLUMNCOUNT];
     Player *m_player = nullptr;
 
     //FIXME: just a ptr to the game.cpp one :(  same with window

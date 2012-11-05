@@ -196,17 +196,6 @@ std::string CVarTypeString( T *t )
     oss << typeid( *t ).name();
     return oss.str();
 }
-
-////////////////////////////////////////////////////////////////////////////////
-// Each time a CVar is constructed we register it's type so we can recover the
-// original type after being cast about (esp. within the Trie data structure).
-template <class T>
-void StringToCVarValue( T *t, const std::string &sValue )
-{
-    std::istringstream iss( sValue );
-    iss >> *t;
-}
-
 ////////////////////////////////////////////////////////////////////////////////
 // Console functions must have the following signature
 typedef bool (*ConsoleFunc)( std::vector<std::string> *args);
@@ -224,6 +213,17 @@ inline std::istream &operator>>(std::istream &stream, ConsoleFunc &ob)
     ob = ob;
     return stream;  
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Each time a CVar is constructed we register it's type so we can recover the
+// original type after being cast about (esp. within the Trie data structure).
+template <class T>
+void StringToCVarValue( T *t, const std::string &sValue )
+{
+    std::istringstream iss( sValue );
+    iss >> *t;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 namespace CVarUtils {

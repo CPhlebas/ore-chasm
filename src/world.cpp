@@ -45,13 +45,16 @@ void World::render()
 
 void World::update()
 {
-
+    
+//        std::cout << "VIEWPORT: view y: " << m_view->getCenter().y << " View x: " << m_view->getCenter().x << std::endl;
 }
 
 void World::loadMap()
 {
     std::cout << "loading map!" << std::endl;
-    std::cout << "SIZEOF BLOCK: " << sizeof(Block) << " BYTES!" << "MAX SIZE (so far): 8400*2400*sizeof = " << ((8400*2400*sizeof(Block))/(pow(10.0, 6.0))) << " MiB!" << std::endl;
+    std::cout << "SIZEOF BLOCK: " << sizeof(Block) << " BYTES!" << "MAX SIZE (so far): 8400*2400*sizeof = " << ((WORLD_ROWCOUNT * WORLD_COLUMNCOUNT*sizeof(Block))/(pow(10.0, 6.0))) << " MiB!" << std::endl;
+    std::cout << "SIZEOF m_blocks: " << sizeof(m_blocks)/1e6 << std::endl;
+    std::cout << "ALIGNOF BLOCK: " << alignof(Block) << std::endl;
     generateMap();
 }
 
@@ -86,7 +89,7 @@ void World::saveMap()
 
     for (int row = 0; row < WORLD_ROWCOUNT; ++row) {
         for (int column = 0; column < WORLD_COLUMNCOUNT; ++column) {
-            color.r = m_blocks[column * WORLD_ROWCOUNT + row].type;
+//            color.r = m_blocks[column * WORLD_ROWCOUNT + row].type;
             image.setPixel(row, column, color);
         }
     }
