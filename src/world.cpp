@@ -32,7 +32,7 @@
 World::World()
 {
     loadMap();
-    saveMap();
+ //   saveMap();
 }
 
 void World::render()
