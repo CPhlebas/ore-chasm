@@ -47,6 +47,9 @@ void World::render()
 {
     m_window->draw(*m_player);
 
+    for (int i = 0; i < WORLD_RENDERABLE_BLOCKS; ++i) {
+        m_window->draw(m_renderableBlocks[i]);
+    }
 }
 
 void World::handleEvent(const sf::Event& event)

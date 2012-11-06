@@ -27,7 +27,7 @@
 static const int WORLD_ROWCOUNT = 8400;
 //width
 static const int WORLD_COLUMNCOUNT = 2400;
-
+static const int WORLD_RENDERABLE_BLOCKS = 16;
 /*
  e.g. [ ] [ ] [ ] [ ] [ ]  ... 8400
         [ ] [ ] [ ] [ ] [ ]  ... 8400
@@ -69,6 +69,8 @@ private:
     // makes sure that the memory allocated is in fact contiguous.
     // [column * WORLD_ROWCOUNT + row]
     Block m_blocks[WORLD_ROWCOUNT * WORLD_COLUMNCOUNT];
+    Entity m_renderableBlocks[WORLD_RENDERABLE_BLOCKS];
+
     Player *m_player = nullptr;
 
     //FIXME: just a ptr to the game.cpp one :(  same with window

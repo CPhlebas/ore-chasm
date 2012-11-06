@@ -21,6 +21,10 @@ Entity::Entity(const char* texture) : Renderable(texture)
 {
 }
 
+Entity::Entity(): Renderable("../textures/error.png")
+{
+}
+
 void Entity::setVelocity(const sf::Vector2f& velocity)
 {
     m_velocity = velocity;

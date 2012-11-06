@@ -34,6 +34,12 @@ public:
      */
     Entity(const char* texture);
 
+    /**
+     * Default ctor, creates an entity which has an X/No sign, as it has no texture
+     * assigned, or is invalid somehow.
+     */
+    Entity();
+
     virtual void update();
 
     //FIXME: unused
