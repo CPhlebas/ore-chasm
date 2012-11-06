@@ -181,6 +181,7 @@ void Game::tick()
             // unsigned int MouseY = Input.getMouseY();
 
             m_console->handleEvent(event);
+            m_world->handleEvent(event);
             switch (event.type)
             {
                 // window closed

@@ -52,6 +52,8 @@ public:
 
     void loadMap();
 
+    void handleEvent(const sf::Event& event);
+
     /**
      * Determines the health and texture of the Block.
      */

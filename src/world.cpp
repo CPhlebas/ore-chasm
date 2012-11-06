@@ -34,6 +34,8 @@ World::World(sf::RenderWindow *window, sf::View *view)
     m_window = window;
     m_view = view;
 
+    m_player = new Player("../../player.png");
+
     loadMap();
  //   saveMap();
 }
@@ -43,10 +45,24 @@ void World::render()
 
 }
 
+void World::handleEvent(const sf::Event& event)
+{
+
+}
+
 void World::update()
 {
-    
-//        std::cout << "VIEWPORT: view y: " << m_view->getCenter().y << " View x: " << m_view->getCenter().x << std::endl;
+    sf::Vector2f center = m_view->getCenter();
+    std::cout << "VIEWPORT: view x: " << center.x << " View y: " << center.y << std::endl;
+    const sf::Vector2f playerPosition = m_player->getPosition();
+    std::cout << "VIEWPORT: view x: " << center.x << " View y: " << center.y << std::endl;
+
+    int tilesBeforeX = center.x / 16;
+    int tilesBeforeY = center.y / 16;
+    std::cout << "tilesbeforeX: " << tilesBeforeX << " tilesbeforeY: " << tilesBeforeY << std::endl;
+
+    sf::Vector2f converted = m_window->convertCoords(sf::Vector2i(580, 650), *m_view);
+    std::cout << "converted x: " << converted.x << " converted y: " << converted.y << std::endl;
 }
 
 void World::loadMap()
