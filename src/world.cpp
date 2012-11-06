@@ -76,16 +76,16 @@ void World::handleEvent(const sf::Event& event)
 
     case sf::Event::KeyReleased:
         if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
-            m_inputXDirection -= 1.f;
+            m_inputXDirection = 0.f;
         }
         if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
-            m_inputXDirection += 1.f;
+            m_inputXDirection = 0.f;
         }
         if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down) {
-            m_inputYDirection -= 1.f;
+            m_inputYDirection = 0.f;
         }
         if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
-            m_inputYDirection += 1.f;
+            m_inputYDirection = 0.f;
         }
         break;
     }
