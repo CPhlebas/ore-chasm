@@ -45,6 +45,7 @@ World::World(sf::RenderWindow *window, sf::View *view)
 
 void World::render()
 {
+    m_window->draw(*m_player);
 
 }
 
