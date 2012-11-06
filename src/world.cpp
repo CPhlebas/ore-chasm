@@ -61,31 +61,31 @@ void World::handleEvent(const sf::Event& event)
     switch (event.type) {
     case sf::Event::KeyPressed:
         if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
-            m_inputXDirection -= 1.f;
-        }
-        if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
             m_inputXDirection += 1.f;
         }
+        if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
+            m_inputXDirection -= 1.f;
+        }
         if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down) {
-            m_inputYDirection -= 1.f;
+            m_inputYDirection += 1.f;
         }
         if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
-            m_inputYDirection += 1.f;
+            m_inputYDirection -= 1.f;
         }
         break;
 
     case sf::Event::KeyReleased:
         if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
-            m_inputXDirection += 1.f;
-        }
-        if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
             m_inputXDirection -= 1.f;
         }
+        if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
+            m_inputXDirection += 1.f;
+        }
         if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down) {
-            m_inputYDirection += 1.f;
+            m_inputYDirection -= 1.f;
         }
         if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
-            m_inputYDirection -= 1.f;
+            m_inputYDirection += 1.f;
         }
         break;
     }
@@ -97,7 +97,7 @@ void World::update()
     //FIXME: bring in elapsedTime here ...
 
     m_player->move(m_inputXDirection, m_inputYDirection);
-//    m_view->setCenter(m_player->getPosition());
+    m_view->setCenter(m_player->getPosition());
 
 //    std::cout << "VIEWPORT: view x: " << center.x << " View y: " << center.y << std::endl;
     const sf::Vector2f playerPosition = m_player->getPosition();
