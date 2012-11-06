@@ -37,7 +37,7 @@ World::World(sf::RenderWindow *window, sf::View *view)
     m_window = window;
     m_view = view;
 
-    m_player = new Player("../../player.png");
+    m_player = new Player("../textures/player.png");
 
     loadMap();
  //   saveMap();
@@ -69,24 +69,29 @@ void World::handleEvent(const sf::Event& event)
             yDir += 1.f;
         }
         break;
-
-    case sf::Event::KeyReleased:
-        if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
-            xDir += 1.f;
-        }
-        if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
-            xDir -= 1.f;
-        }
-        if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down) {
-            yDir += 1.f;
-        }
-        if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
-            yDir -= 1.f;
-        }
-        break;
+        //FIXME:
+//
+//    case sf::Event::KeyReleased:
+//        if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
+//            xDir += 1.f;
+//        }
+//        if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
+//            xDir -= 1.f;
+//        }
+//        if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down) {
+//            yDir += 1.f;
+//        }
+//        if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
+//            yDir -= 1.f;
+//        }
+//        break;
     }
 
+    std::cout << "moving player by xDir: " << xDir << " yDir: " << yDir << std::endl;
+    //FIXME: bring in elapsedTime here ...
+
     m_player->move(xDir, yDir);
+    m_view->setCenter(m_player->getPosition());
 }
 
 void World::update()
@@ -100,8 +105,6 @@ void World::update()
     int tilesBeforeY = center.y / 16;
     std::cout << "tilesbeforeX: " << tilesBeforeX << " tilesbeforeY: " << tilesBeforeY << std::endl;
 
-    sf::Vector2f converted = m_window->convertCoords(sf::Vector2i(580, 650), *m_view);
-    std::cout << "converted x: " << converted.x << " converted y: " << converted.y << std::endl;
 }
 
 void World::loadMap()
@@ -111,6 +114,9 @@ void World::loadMap()
     std::cout << "SIZEOF m_blocks: " << sizeof(m_blocks)/1e6 << std::endl;
     std::cout << "ALIGNOF BLOCK: " << alignof(Block) << std::endl;
     generateMap();
+
+    m_player->setPosition(800, 450);
+ //   m_view->setCenter(m_player->getPosition());
 }
 
 void World::generateMap()
