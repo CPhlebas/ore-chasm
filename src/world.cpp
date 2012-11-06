@@ -50,37 +50,37 @@ void World::render()
 
 void World::handleEvent(const sf::Event& event)
 {
-    int xDir = 0;
-    int yDir = 0;
+    float xDir = 0.f;
+    float yDir = 0.f;
 
     switch (event.type) {
     case sf::Event::KeyPressed:
         if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
-            xDir -= 1;
+            xDir -= 1.f;
         }
         if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
-            xDir += 1;
+            xDir += 1.f;
         }
         if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down) {
-            yDir -= 1;
+            yDir -= 1.f;
         }
         if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
-            yDir += 1;
+            yDir += 1.f;
         }
         break;
 
     case sf::Event::KeyReleased:
         if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
-            xDir += 1;
+            xDir += 1.f;
         }
         if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
-            xDir -= 1;
+            xDir -= 1.f;
         }
         if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down) {
-            yDir += 1;
+            yDir += 1.f;
         }
         if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
-            yDir -= 1;
+            yDir -= 1.f;
         }
         break;
     }
