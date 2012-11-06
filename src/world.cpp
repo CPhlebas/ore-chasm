@@ -45,11 +45,14 @@ World::World(sf::RenderWindow *window, sf::View *view)
 
 void World::render()
 {
-    m_window->draw(*m_player);
 
     for (int i = 0; i < WORLD_RENDERABLE_BLOCKS; ++i) {
         m_window->draw(m_renderableBlocks[i]);
     }
+
+
+    //player drawn on top... since we don't have anything like z-ordering or layering (TODO)
+    m_window->draw(*m_player);
 }
 
 void World::handleEvent(const sf::Event& event)
@@ -70,40 +73,38 @@ void World::handleEvent(const sf::Event& event)
             m_inputYDirection += 1.f;
         }
         break;
-        //FIXME:
-//
-//    case sf::Event::KeyReleased:
-//        if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
-//            xDir += 1.f;
-//        }
-//        if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
-//            xDir -= 1.f;
-//        }
-//        if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down) {
-//            yDir += 1.f;
-//        }
-//        if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
-//            yDir -= 1.f;
-//        }
-//        break;
+
+    case sf::Event::KeyReleased:
+        if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
+            m_inputXDirection += 1.f;
+        }
+        if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
+            m_inputXDirection -= 1.f;
+        }
+        if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down) {
+            m_inputYDirection += 1.f;
+        }
+        if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
+            m_inputYDirection -= 1.f;
+        }
+        break;
     }
-
-    std::cout << "moving player by xDir: " << m_inputXDirection << " yDir: " << m_inputYDirection << std::endl;
-    //FIXME: bring in elapsedTime here ...
-
-    m_player->move(m_inputXDirection, m_inputYDirection);
-    m_view->setCenter(m_player->getPosition());
 }
 
 void World::update()
 {
-    sf::Vector2f center = m_view->getCenter();
-    std::cout << "VIEWPORT: view x: " << center.x << " View y: " << center.y << std::endl;
-    const sf::Vector2f playerPosition = m_player->getPosition();
-    std::cout << "VIEWPORT: view x: " << center.x << " View y: " << center.y << std::endl;
+    std::cout << "moving player by xDir: " << m_inputXDirection << " yDir: " << m_inputYDirection << std::endl;
+    //FIXME: bring in elapsedTime here ...
 
-    int tilesBeforeX = center.x / 16;
-    int tilesBeforeY = center.y / 16;
+    m_player->move(m_inputXDirection, m_inputYDirection);
+//    m_view->setCenter(m_player->getPosition());
+
+//    std::cout << "VIEWPORT: view x: " << center.x << " View y: " << center.y << std::endl;
+    const sf::Vector2f playerPosition = m_player->getPosition();
+//    std::cout << "VIEWPORT: view x: " << center.x << " View y: " << center.y << std::endl;
+
+    int tilesBeforeX = playerPosition.x / 16;
+    int tilesBeforeY = playerPosition.y / 16;
     std::cout << "tilesbeforeX: " << tilesBeforeX << " tilesbeforeY: " << tilesBeforeY << std::endl;
 
 }
