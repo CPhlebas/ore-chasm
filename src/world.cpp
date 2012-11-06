@@ -25,9 +25,12 @@
 #include <random>
 #include <assert.h>
 #include <math.h>
+
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Image.hpp>
 #include <SFML/System/Clock.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/Window/Keyboard.hpp>
 
 World::World(sf::RenderWindow *window, sf::View *view)
 {
@@ -47,7 +50,42 @@ void World::render()
 
 void World::handleEvent(const sf::Event& event)
 {
+    int xDir = 0;
+    int yDir = 0;
 
+    switch (event.type) {
+    case sf::Event::KeyPressed:
+        if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
+            xDir -= 1;
+        }
+        if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
+            xDir += 1;
+        }
+        if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down) {
+            yDir -= 1;
+        }
+        if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
+            yDir += 1;
+        }
+        break;
+
+    case sf::Event::KeyReleased:
+        if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
+            xDir += 1;
+        }
+        if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
+            xDir -= 1;
+        }
+        if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down) {
+            yDir += 1;
+        }
+        if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
+            yDir -= 1;
+        }
+        break;
+    }
+
+    m_player->move(xDir, yDir);
 }
 
 void World::update()

@@ -139,8 +139,6 @@ void Game::tick()
     const int MAX_BENCH = 300;
     int benchTime = MAX_BENCH;
 
-    int xDir = 0;
-    int yDir = 0;
 
     float elapsedTime = 0;
 
@@ -195,18 +193,6 @@ void Game::tick()
                     if (event.key.code == sf::Keyboard::Escape) {
                         shutdown();
                     }
-                    if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
-                        xDir -= 1;
-                    }
-                    if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
-                        xDir += 1;
-                    }
-                    if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down) {
-                        yDir -= 1;
-                    }
-                    if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
-                        yDir += 1;
-                    }
                 } else {
                 }
 
@@ -224,18 +210,7 @@ void Game::tick()
 
             case sf::Event::KeyReleased:
                 if (!m_console->IsOpen()) {
-                    if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
-                        xDir += 1;
-                    }
-                    if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
-                        xDir -= 1;
-                    }
-                    if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down) {
-                        yDir += 1;
-                    }
-                    if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
-                        yDir -= 1;
-                    }
+
                 } else {
                 }
                 break;
@@ -276,7 +251,7 @@ void Game::tick()
 
 
         m_app->pushGLStates();
-        m_view->move(500 * xDir * elapsedTime, 500* yDir * elapsedTime);
+//        m_view->move(500 * xDir * elapsedTime, 500* yDir * elapsedTime);
 
         m_app->clear(sf::Color(200, 0, 0));
 
