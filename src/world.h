@@ -77,6 +77,9 @@ private:
     sf::View *m_view = nullptr;
     sf::RenderWindow *m_window = nullptr;
 
+    float m_inputXDirection = 0.f;
+    float m_inputYDirection = 0.f;
+
     /**
      * From scratch, create a randomly generated tileset and store it in our array
      */

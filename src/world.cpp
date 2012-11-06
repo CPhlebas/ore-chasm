@@ -54,22 +54,20 @@ void World::render()
 
 void World::handleEvent(const sf::Event& event)
 {
-    float xDir = 0.f;
-    float yDir = 0.f;
 
     switch (event.type) {
     case sf::Event::KeyPressed:
         if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
-            xDir -= 1.f;
+            m_inputXDirection -= 1.f;
         }
         if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
-            xDir += 1.f;
+            m_inputXDirection += 1.f;
         }
         if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down) {
-            yDir -= 1.f;
+            m_inputYDirection -= 1.f;
         }
         if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
-            yDir += 1.f;
+            m_inputYDirection += 1.f;
         }
         break;
         //FIXME:
@@ -90,10 +88,10 @@ void World::handleEvent(const sf::Event& event)
 //        break;
     }
 
-    std::cout << "moving player by xDir: " << xDir << " yDir: " << yDir << std::endl;
+    std::cout << "moving player by xDir: " << m_inputXDirection << " yDir: " << m_inputYDirection << std::endl;
     //FIXME: bring in elapsedTime here ...
 
-    m_player->move(xDir, yDir);
+    m_player->move(m_inputXDirection, m_inputYDirection);
     m_view->setCenter(m_player->getPosition());
 }
 
