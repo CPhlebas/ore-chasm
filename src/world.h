@@ -69,7 +69,7 @@ private:
     // makes sure that the memory allocated is in fact contiguous.
     // [column * WORLD_ROWCOUNT + row]
     Block m_blocks[WORLD_ROWCOUNT * WORLD_COLUMNCOUNT];
-    Entity m_renderableBlocks[WORLD_RENDERABLE_BLOCKS];
+    Entity *m_renderableBlocks[WORLD_RENDERABLE_BLOCKS];
 
     Player *m_player = nullptr;
 

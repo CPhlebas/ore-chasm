@@ -40,6 +40,11 @@ World::World(sf::RenderWindow *window, sf::View *view)
     m_player = new Player("../textures/player.png");
 
     loadMap();
+
+    for (int i = 0; i < WORLD_RENDERABLE_BLOCKS; ++i) {
+        m_renderableBlocks[i] = new Entity("../textures/player.png");
+    }
+
  //   saveMap();
 }
 
@@ -47,7 +52,8 @@ void World::render()
 {
 
     for (int i = 0; i < WORLD_RENDERABLE_BLOCKS; ++i) {
-        m_window->draw(m_renderableBlocks[i]);
+//        m_renderableBlocks[i].getTexture().
+        m_window->draw(*m_renderableBlocks[i]);
     }
 
 
@@ -103,8 +109,36 @@ void World::update()
     const sf::Vector2f playerPosition = m_player->getPosition();
 //    std::cout << "VIEWPORT: view x: " << center.x << " View y: " << center.y << std::endl;
 
+    //consider block map as starting at player pos == 0,0 and going down and to the right-ward
     int tilesBeforeX = playerPosition.x / 16;
     int tilesBeforeY = playerPosition.y / 16;
+
+    // [y*rowlength + x]
+    for (int i = 1; i <= WORLD_RENDERABLE_BLOCKS; ++i) {
+        int type = m_blocks[tilesBeforeY * WORLD_ROWCOUNT + tilesBeforeX].type;
+        Entity *currentBlock = m_renderableBlocks[i - 1];
+
+        const char* texture;
+        switch (type) {
+            case 0:
+                texture = "../textures/dirt.png";
+                break;
+
+            case 1:
+                texture = "../textures/stone.png";
+                break;
+
+            default:
+                assert(0);
+        }
+        currentBlock->setTexture(texture);
+        currentBlock->setPosition(0, i * 50);
+        std::cout << "iterating, i value: " << i << std::endl;
+
+        ++tilesBeforeX;
+        ++tilesBeforeY;
+    }
+
     std::cout << "tilesbeforeX: " << tilesBeforeX << " tilesbeforeY: " << tilesBeforeY << std::endl;
 
 }
@@ -112,9 +146,7 @@ void World::update()
 void World::loadMap()
 {
     std::cout << "loading map!" << std::endl;
-    std::cout << "SIZEOF BLOCK: " << sizeof(Block) << " BYTES!" << "MAX SIZE (so far): 8400*2400*sizeof = " << ((WORLD_ROWCOUNT * WORLD_COLUMNCOUNT*sizeof(Block))/(pow(10.0, 6.0))) << " MiB!" << std::endl;
-    std::cout << "SIZEOF m_blocks: " << sizeof(m_blocks)/1e6 << std::endl;
-    std::cout << "ALIGNOF BLOCK: " << alignof(Block) << std::endl;
+    std::cout << "SIZEOF m_blocks: " << sizeof(m_blocks)/1e6 << " MiB" << std::endl;
     generateMap();
 
     m_player->setPosition(800, 450);

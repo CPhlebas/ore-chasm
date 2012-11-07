@@ -34,11 +34,12 @@ public:
      */
     Entity(const char* texture);
 
+    //FIXME: actually broken, seems it never lets me call setTexture on it?
     /**
      * Default ctor, creates an entity which has an X/No sign, as it has no texture
      * assigned, or is invalid somehow.
      */
-    Entity();
+//    Entity();
 
     virtual void update();
 
