@@ -28,6 +28,9 @@
 
 #include <GLConsole/GLConsole.h>
 
+
+static bool DEBUG_RENDERING = true;
+
 class Game
 {
   public:
@@ -49,5 +52,6 @@ private:
     sf::View *m_view = nullptr;
     sf::Font *m_font = nullptr;
 };
+
 
 #endif

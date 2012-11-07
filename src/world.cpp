@@ -54,11 +54,13 @@ void World::render()
     for (int i = 0; i < WORLD_RENDERABLE_BLOCKS; ++i) {
 //        m_renderableBlocks[i].getTexture().
         m_window->draw(*m_renderableBlocks[i]);
+        m_renderableBlocks[i]->render(m_window);
     }
 
 
     //player drawn on top... since we don't have anything like z-ordering or layering (TODO)
     m_window->draw(*m_player);
+    m_player->render(m_window);
 }
 
 void World::handleEvent(const sf::Event& event)

@@ -39,6 +39,12 @@ public:
      */
     void setTexture(const char* texture);
 
+    /**
+     * important ONLY for debug rendering, so there's less duplication..
+     * CALL THIS AFTER m_window->draw(myrenderable)!!
+     */
+    void render(sf::RenderWindow *window);
+
 private:
     /**
      * Hidden!! So that we don't screw up and start caching stuff outside, and not using

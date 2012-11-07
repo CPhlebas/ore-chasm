@@ -17,6 +17,11 @@
 
 #include "renderable.h"
 #include "imagemanager.h"
+#include "game.h"
+
+#include <SFML/System/Vector2.hpp>
+
+#include <SFML/Graphics/RectangleShape.hpp>
 
 Renderable::Renderable(const char* texture)
 {
@@ -27,4 +32,22 @@ Renderable::Renderable(const char* texture)
 void Renderable::setTexture(const char* texture)
 {
     sf::Sprite::setTexture(m_imageManager->loadTexture(texture));
+
+    if (DEBUG_RENDERING) {
+        // make things transparent so we can see, also tint them magenta
+        sf::Color color(255, 0, 255, 180);
+        sf::Sprite::setColor(color);
+    }
+}
+
+void Renderable::render(sf::RenderWindow* window)
+{
+    sf::RectangleShape outline;
+    sf::Vector2u size = sf::Sprite::getTexture()->getSize();
+    outline.setSize(sf::Vector2f(size.x, size.y));
+    outline.setOutlineColor(sf::Color::Cyan);
+    outline.setPosition(sf::Sprite::getPosition());
+    outline.setFillColor(sf::Color(255, 0, 0, 255));
+
+    window->draw(outline);
 }
