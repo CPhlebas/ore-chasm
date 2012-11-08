@@ -23,6 +23,7 @@
 
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/VertexArray.hpp>
+#include <SFML/Graphics/Shader.hpp>
 
 Renderable::Renderable(const char* texture)
 {
@@ -61,6 +62,8 @@ void Renderable::render(sf::RenderWindow* window)
     sf::VertexArray line2(sf::LinesStrip, 2);
     line2[0].position = sf::Vector2f(pos.x + rectSize.x, pos.y);
     line2[1].position = sf::Vector2f(pos.x, pos.y + rectSize.y);
+
+
 
     window->draw(outline);
     window->draw(line1);

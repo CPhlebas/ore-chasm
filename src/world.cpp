@@ -113,7 +113,8 @@ void World::update()
 
     //consider block map as starting at player pos == 0,0 and going down and to the right-ward
     int tilesBeforeX = playerPosition.x / 16;
-    int tilesBeforeY = playerPosition.y / 16;
+    //shouldn't change...yet
+    const int tilesBeforeY = playerPosition.y / 16;
 
     // [y*rowlength + x]
     for (int i = 1; i <= WORLD_RENDERABLE_BLOCKS; ++i) {
@@ -131,14 +132,15 @@ void World::update()
                 break;
 
             default:
-                assert(0);
+                texture = "../textures/stone.png";
+//                assert(0);
         }
         currentBlock->setTexture(texture);
-        currentBlock->setPosition(0, i * 50);
+        
+        currentBlock->setPosition(floor(i/(5*i)) * 16, floor(i/500) * 16);
         std::cout << "iterating, i value: " << i << std::endl;
 
         ++tilesBeforeX;
-        ++tilesBeforeY;
     }
 
     std::cout << "tilesbeforeX: " << tilesBeforeX << " tilesbeforeY: " << tilesBeforeY << std::endl;

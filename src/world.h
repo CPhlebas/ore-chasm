@@ -27,7 +27,7 @@
 static const int WORLD_ROWCOUNT = 8400;
 //width
 static const int WORLD_COLUMNCOUNT = 2400;
-static const int WORLD_RENDERABLE_BLOCKS = 16;
+static const int WORLD_RENDERABLE_BLOCKS = 1000;
 /*
  e.g. [ ] [ ] [ ] [ ] [ ]  ... 8400
         [ ] [ ] [ ] [ ] [ ]  ... 8400
