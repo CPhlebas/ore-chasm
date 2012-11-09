@@ -9,13 +9,13 @@
 #include <TextConsole/TextConsole.h>
 
 
-int main( int, char** ) 
+int main(int, char**)
 {
     TextConsole Console;
 
-    while(1){
+    while (1) {
         int c = KbHit();
-        Console.ProcessKey( c );
+        Console.ProcessKey(c);
     }
 }
 

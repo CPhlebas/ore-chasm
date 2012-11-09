@@ -13,8 +13,8 @@
  */
 std::ostream &operator<<(std::ostream &stream, Point3D &point)
 {
-  stream << "[ " << point.x << ",  " << point.y << ",  " << point.z << " ]";
-  return stream;
+    stream << "[ " << point.x << ",  " << point.y << ",  " << point.z << " ]";
+    return stream;
 }
 
 /**
@@ -23,8 +23,8 @@ std::ostream &operator<<(std::ostream &stream, Point3D &point)
 std::istream &operator>>(std::istream &stream, Point3D &point)
 {
     char str[NAME_MAX] = {0};
-    stream.readsome( str, NAME_MAX );
-    sscanf( str, "[ %f, %f, %f ]", &point.x, &point.y, &point.z );
+    stream.readsome(str, NAME_MAX);
+    sscanf(str, "[ %f, %f, %f ]", &point.x, &point.y, &point.z);
 
     return stream;
 }
@@ -34,11 +34,11 @@ std::istream &operator>>(std::istream &stream, Point3D &point)
  */
 Point3D Point3D::operator+(const Point3D& that) const
 {
-  Point3D result;
-  result.x = this->x + that.x;
-  result.y = this->y + that.y;
-  result.z = this->z + that.z;
-  return result;
+    Point3D result;
+    result.x = this->x + that.x;
+    result.y = this->y + that.y;
+    result.z = this->z + that.z;
+    return result;
 }
 
 /**
@@ -46,9 +46,9 @@ Point3D Point3D::operator+(const Point3D& that) const
  */
 Point3D Point3D::operator*(const Point3D& that) const
 {
-  Point3D result;
-  result.x = this->x * that.x;
-  result.y = this->y * that.y;
-  result.z = this->z * that.z;
-  return result;
+    Point3D result;
+    result.x = this->x * that.x;
+    result.y = this->y * that.y;
+    result.z = this->z * that.z;
+    return result;
 }

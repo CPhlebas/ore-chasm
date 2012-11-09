@@ -15,37 +15,34 @@
 #include <cstdio>
 
 ////////////////////////////////////////////////////////////////////////////////
-struct GLColor
-{
+struct GLColor {
     GLColor(
-            float tr = 1.0f,
-            float tg = 1.0f, 
-            float tb = 1.0f, 
-            float ta = 1.0f 
-           )
-    {
+        float tr = 1.0f,
+        float tg = 1.0f,
+        float tb = 1.0f,
+        float ta = 1.0f
+    ) {
         r = tr;
         g = tg;
         b = tb;
         a = ta;
     }
 
-    GLColor( 
-            int tr,
-            int tg,
-            int tb,
-            int ta = 255 
-           ) 
-    {
-        r = tr/255.0f; 
-        g = tg/255.0f;
-        b = tb/255.0f;
-        a = ta/255.0f;
+    GLColor(
+        int tr,
+        int tg,
+        int tb,
+        int ta = 255
+    ) {
+        r = tr / 255.0f;
+        g = tg / 255.0f;
+        b = tb / 255.0f;
+        a = ta / 255.0f;
     }
 
     //        float fColor[4];
     float fColor[0];
-    struct{
+    struct {
         float r;
         float g;
         float b;
@@ -62,10 +59,10 @@ struct GLColor
 /// All types you wish to use with CVars must overload << and >>.
 inline std::ostream &operator<<(std::ostream &stream, GLColor &color)
 {
-    int r = int( 255*color.r );
-    int g = int( 255*color.g );
-    int b = int( 255*color.b );
-    int a = int( 255*color.a );
+    int r = int(255 * color.r);
+    int g = int(255 * color.g);
+    int b = int(255 * color.b);
+    int a = int(255 * color.a);
 
     stream << "[ " << r << ",  " << g << ",  " << b << ",  " << a << " ]";
     return stream;
@@ -75,17 +72,17 @@ inline std::ostream &operator<<(std::ostream &stream, GLColor &color)
 /// All types you wish to use with CVars must overload << and >>.
 inline std::istream &operator>>(std::istream &stream, GLColor &color)
 {
-    int r=0,g=0,b=0,a=0;
+    int r = 0, g = 0, b = 0, a = 0;
 
     char str[NAME_MAX] = {0};
-    stream.readsome( str, NAME_MAX );
-    sscanf( str, "[ %d, %d, %d, %d ]", &r, &g, &b, &a );
+    stream.readsome(str, NAME_MAX);
+    sscanf(str, "[ %d, %d, %d, %d ]", &r, &g, &b, &a);
 
-    color.r = (float)r/255.0f;
-    color.g = (float)g/255.0f;
-    color.b = (float)b/255.0f;
-    color.a = (float)a/255.0f;
- 
+    color.r = (float)r / 255.0f;
+    color.g = (float)g / 255.0f;
+    color.b = (float)b / 255.0f;
+    color.a = (float)a / 255.0f;
+
     return stream;
 }
 

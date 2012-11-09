@@ -21,37 +21,37 @@ class TrieNode;
 
 class Trie
 {
- public:
+public:
     Trie();
     ~Trie();
     void Init();
     // add string to tree and store data at leaf
-    void         Insert( std::string s, void *data );
+    void         Insert(std::string s, void *data);
     // finds s in the tree and returns the node (may not be a leaf)
     // returns null otherwise
-    TrieNode*    FindSubStr( const std::string& s );
-    std::vector<std::string> FindListSubStr( const std::string& s );
-    TrieNode*    Find( const std::string& s );
-    void*        FindData( const std::string& s );
+    TrieNode*    FindSubStr(const std::string& s);
+    std::vector<std::string> FindListSubStr(const std::string& s);
+    TrieNode*    Find(const std::string& s);
+    void*        FindData(const std::string& s);
 
-    bool         Exists( const std::string& s );
+    bool         Exists(const std::string& s);
 
     TrieNode*    GetRoot();
-    void         SetAcceptedSubstrings( std::vector< std::string > vAcceptedSubstrings );
-    bool         IsNameAcceptable( const std::string& sVarName );
+    void         SetAcceptedSubstrings(std::vector< std::string > vAcceptedSubstrings);
+    bool         IsNameAcceptable(const std::string& sVarName);
     bool         IsVerbose();
-    void         SetVerbose( bool bVerbose );
+    void         SetVerbose(bool bVerbose);
 
     // does an in order traversal starting at node and printing all leaves
     // to a list
-    std::vector<std::string> CollectAllNames( TrieNode* node );
+    std::vector<std::string> CollectAllNames(TrieNode* node);
     // traverse from the supplied node and return a list of all nodes
-    std::vector<TrieNode*>   CollectAllNodes( TrieNode* node );
+    std::vector<TrieNode*>   CollectAllNodes(TrieNode* node);
 
     // CVar
     int*   m_pVerboseCVarNamePaddingWidth;
 
- private:
+private:
     TrieNode* root;
     std::vector< std::string > m_vAcceptedSubstrings;
     std::vector< std::string > m_vNotAcceptedSubstrings;
@@ -59,8 +59,8 @@ class Trie
     bool m_bVerbose;
 };
 
-std::ostream &operator<<(std::ostream &stream, Trie &rTrie );
-std::istream &operator>>(std::istream &stream, Trie &rTrie );
+std::ostream &operator<<(std::ostream &stream, Trie &rTrie);
+std::istream &operator>>(std::istream &stream, Trie &rTrie);
 
 
 #endif

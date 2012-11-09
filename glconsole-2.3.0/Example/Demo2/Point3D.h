@@ -6,11 +6,11 @@
 
 class Point3D
 {
-  public:
+public:
     Point3D(float tx = 0.0f, float ty = 0.0f, float tz = 0.0f)
-      : x(tx), y(ty), z(tz) {}
+        : x(tx), y(ty), z(tz) {}
     ~Point3D() {}
-    
+
     Point3D operator+(const Point3D&) const;
     Point3D operator*(const Point3D&) const;
 
@@ -19,8 +19,8 @@ class Point3D
 };
 
 // All types you wish to use with CVars must overload << and >>.
-std::ostream &operator<<(std::ostream &stream, Point3D &point );
-std::istream &operator>>(std::istream &stream, Point3D &point );
+std::ostream &operator<<(std::ostream &stream, Point3D &point);
+std::istream &operator>>(std::istream &stream, Point3D &point);
 
 
 #endif

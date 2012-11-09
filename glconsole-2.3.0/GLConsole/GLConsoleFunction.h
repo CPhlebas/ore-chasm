@@ -1,5 +1,5 @@
 /*
-    
+
     \file GLConsoleFunction.h
 
     Collection of ConsoleFunc's for GLConsole.
@@ -18,13 +18,13 @@
 /**
  * The current console version.
  */
-inline bool ConsoleVersion( std::vector<std::string>* )
+inline bool ConsoleVersion(std::vector<std::string>*)
 {
     GLConsole* pConsole = GetConsole();
-    pConsole->Printf( "CVars v%d.%d.%d", 
-                      CVARS_MAJOR_REV, 
-                      CVARS_MINOR_REV, 
-                      CVARS_PATCH_REV );
+    pConsole->Printf("CVars v%d.%d.%d",
+                     CVARS_MAJOR_REV,
+                     CVARS_MINOR_REV,
+                     CVARS_PATCH_REV);
     return true;
 }
 
@@ -32,25 +32,25 @@ inline bool ConsoleVersion( std::vector<std::string>* )
 /**
  * Help for functions and variables or just general help.
  */
-inline bool ConsoleHelp( std::vector<std::string> *vArgs )
+inline bool ConsoleHelp(std::vector<std::string> *vArgs)
 {
     GLConsole* pConsole = GetConsole();
-    return pConsole->Help( vArgs );
+    return pConsole->Help(vArgs);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 /**
  * Looks for the lists of substrings provided in vArgs in the CVarTrie.
  */
-inline bool ConsoleFind( std::vector<std::string> *vArgs )
+inline bool ConsoleFind(std::vector<std::string> *vArgs)
 {
     GLConsole* pConsole = GetConsole();
-    if( vArgs != NULL && vArgs->size() > 0 ) {
-        for( size_t i=0; i<vArgs->size(); i++ ) {
-            std::vector<std::string> vCVarNames = g_pCVarTrie->FindListSubStr( vArgs->at(i) );
-            
-            for( size_t j=0; j<vCVarNames.size(); j++ ) { 
-                pConsole->Printf( "%s", vCVarNames[j].c_str() );       
+    if (vArgs != NULL && vArgs->size() > 0) {
+        for (size_t i = 0; i < vArgs->size(); i++) {
+            std::vector<std::string> vCVarNames = g_pCVarTrie->FindListSubStr(vArgs->at(i));
+
+            for (size_t j = 0; j < vCVarNames.size(); j++) {
+                pConsole->Printf("%s", vCVarNames[j].c_str());
             }
         }
     }
@@ -64,22 +64,22 @@ inline bool ConsoleFind( std::vector<std::string> *vArgs )
  * substrings.
  * Last argument can be used to be verbose when saving.
  */
-inline bool ConsoleSave( std::vector<std::string> *vArgs )
+inline bool ConsoleSave(std::vector<std::string> *vArgs)
 {
     GLConsole* pConsole = GetConsole();
     std::string sFile = "cvars.xml";
     std::vector< std::string > vAcceptedSubstrings;
 
-    if( vArgs != NULL && vArgs->size() > 0 ) {
-        sFile = vArgs->at( 0 );
-        for( size_t i=1; i<vArgs->size(); i++ ) {
-            vAcceptedSubstrings.push_back( vArgs->at( i ) );
+    if (vArgs != NULL && vArgs->size() > 0) {
+        sFile = vArgs->at(0);
+        for (size_t i = 1; i < vArgs->size(); i++) {
+            vAcceptedSubstrings.push_back(vArgs->at(i));
         }
     }
 
-    pConsole->Printf( "Saving cvars to \"%s\".", sFile.c_str() );
-    if( !CVarUtils::Save( sFile, vAcceptedSubstrings ) ) {
-        pConsole->PrintError( "Error saving file.\n" );
+    pConsole->Printf("Saving cvars to \"%s\".", sFile.c_str());
+    if (!CVarUtils::Save(sFile, vAcceptedSubstrings)) {
+        pConsole->PrintError("Error saving file.\n");
         return false;
     }
 
@@ -90,21 +90,21 @@ inline bool ConsoleSave( std::vector<std::string> *vArgs )
 /**
  * Load CVars from a file
  */
-inline bool ConsoleLoad( std::vector<std::string> *vArgs )
+inline bool ConsoleLoad(std::vector<std::string> *vArgs)
 {
     GLConsole* pConsole = GetConsole();
     std::string sFile = "cvars.xml";
     std::vector< std::string > vAcceptedSubstrings;
-    
-    if( vArgs != NULL && vArgs->size() > 0 ) {
-        sFile = vArgs->at( 0 ); 
-        for( size_t i=1; i<vArgs->size(); i++ ) {
-            vAcceptedSubstrings.push_back( vArgs->at(i) );
+
+    if (vArgs != NULL && vArgs->size() > 0) {
+        sFile = vArgs->at(0);
+        for (size_t i = 1; i < vArgs->size(); i++) {
+            vAcceptedSubstrings.push_back(vArgs->at(i));
         }
     }
-    pConsole->Printf( "Loading file \"%s\".", sFile.c_str() );
-    if( !CVarUtils::Load( sFile, vAcceptedSubstrings ) ) {
-        pConsole->PrintError( "Error: Could not load \"%s\".", sFile.c_str() );
+    pConsole->Printf("Loading file \"%s\".", sFile.c_str());
+    if (!CVarUtils::Load(sFile, vAcceptedSubstrings)) {
+        pConsole->PrintError("Error: Could not load \"%s\".", sFile.c_str());
     }
     return true;
 }
@@ -113,22 +113,21 @@ inline bool ConsoleLoad( std::vector<std::string> *vArgs )
 /**
  * Exits program from command line
  */
-inline bool ConsoleExit( std::vector<std::string> * )
+inline bool ConsoleExit(std::vector<std::string> *)
 {
-    exit( 0 );
+    exit(0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 /**
  * Save the console history to a file
  */
-inline bool ConsoleHistorySave( std::vector<std::string> *vArgs )
+inline bool ConsoleHistorySave(std::vector<std::string> *vArgs)
 {
     GLConsole* pConsole = GetConsole();
-    if( vArgs != NULL && vArgs->size() != 0 ) {
-        return pConsole->HistorySave( vArgs->at( 0 ) );
-    }
-    else {
+    if (vArgs != NULL && vArgs->size() != 0) {
+        return pConsole->HistorySave(vArgs->at(0));
+    } else {
         return pConsole->HistorySave();
     }
 }
@@ -137,13 +136,12 @@ inline bool ConsoleHistorySave( std::vector<std::string> *vArgs )
 /**
  * Load a previously saved console history from a file
  */
-inline bool ConsoleHistoryLoad( std::vector<std::string> *vArgs )
+inline bool ConsoleHistoryLoad(std::vector<std::string> *vArgs)
 {
     GLConsole* pConsole = GetConsole();
-    if( vArgs != NULL && vArgs->size() != 0 ) {
-        return pConsole->HistoryLoad( vArgs->at( 0 ) );
-    }
-    else {
+    if (vArgs != NULL && vArgs->size() != 0) {
+        return pConsole->HistoryLoad(vArgs->at(0));
+    } else {
         return pConsole->HistoryLoad();
     }
 }
@@ -152,7 +150,7 @@ inline bool ConsoleHistoryLoad( std::vector<std::string> *vArgs )
 /**
  * clear the console history
  */
-inline bool ConsoleHistoryClear( std::vector<std::string>* )
+inline bool ConsoleHistoryClear(std::vector<std::string>*)
 {
     GLConsole* pConsole = GetConsole();
     pConsole->HistoryClear();
@@ -163,13 +161,12 @@ inline bool ConsoleHistoryClear( std::vector<std::string>* )
 /**
  * Save the current script
  */
-inline bool ConsoleScriptSave( std::vector<std::string> *vArgs )
+inline bool ConsoleScriptSave(std::vector<std::string> *vArgs)
 {
     GLConsole* pConsole = GetConsole();
-    if( vArgs != NULL && vArgs->size() != 0 ) {
-        return pConsole->ScriptSave( vArgs->at( 0 ) );
-    }
-    else {
+    if (vArgs != NULL && vArgs->size() != 0) {
+        return pConsole->ScriptSave(vArgs->at(0));
+    } else {
         return pConsole->ScriptSave();
     }
 
@@ -179,13 +176,12 @@ inline bool ConsoleScriptSave( std::vector<std::string> *vArgs )
 /**
  * Load a script from a file
  */
-inline bool ConsoleScriptLoad( std::vector<std::string> *vArgs )
+inline bool ConsoleScriptLoad(std::vector<std::string> *vArgs)
 {
     GLConsole* pConsole = GetConsole();
-    if( vArgs != NULL && vArgs->size() != 0 ) {
-        return pConsole->ScriptLoad( vArgs->at( 0 ) );
-    }
-    else {
+    if (vArgs != NULL && vArgs->size() != 0) {
+        return pConsole->ScriptLoad(vArgs->at(0));
+    } else {
         return pConsole->ScriptLoad();
     }
 }
@@ -194,7 +190,7 @@ inline bool ConsoleScriptLoad( std::vector<std::string> *vArgs )
 /**
  * Start script recording
  */
-inline bool ConsoleScriptRecordStart( std::vector<std::string> * )
+inline bool ConsoleScriptRecordStart(std::vector<std::string> *)
 {
     GLConsole* pConsole = GetConsole();
     pConsole->ScriptRecordStart();
@@ -205,7 +201,7 @@ inline bool ConsoleScriptRecordStart( std::vector<std::string> * )
 /**
  * Stop script recording
  */
-inline bool ConsoleScriptRecordStop( std::vector<std::string> * )
+inline bool ConsoleScriptRecordStop(std::vector<std::string> *)
 {
     GLConsole* pConsole = GetConsole();
     pConsole->ScriptRecordStop();
@@ -216,7 +212,7 @@ inline bool ConsoleScriptRecordStop( std::vector<std::string> * )
 /**
  * Pause script recording
  */
-inline bool ConsoleScriptRecordPause( std::vector<std::string> * )
+inline bool ConsoleScriptRecordPause(std::vector<std::string> *)
 {
     GLConsole* pConsole = GetConsole();
     pConsole->ScriptRecordPause();
@@ -227,7 +223,7 @@ inline bool ConsoleScriptRecordPause( std::vector<std::string> * )
 /**
  * Show the current script
  */
-inline bool ConsoleScriptShow( std::vector<std::string> * )
+inline bool ConsoleScriptShow(std::vector<std::string> *)
 {
     GLConsole* pConsole = GetConsole();
     pConsole->ScriptShow();
@@ -238,13 +234,12 @@ inline bool ConsoleScriptShow( std::vector<std::string> * )
 /**
  * Run the current scipt or one from the named file
  */
-inline bool ConsoleScriptRun( std::vector<std::string> *vArgs )
+inline bool ConsoleScriptRun(std::vector<std::string> *vArgs)
 {
     GLConsole* pConsole = GetConsole();
-    if( vArgs != NULL && vArgs->size() != 0 ) {
-        return pConsole->ScriptRun( vArgs->at( 0 ) );
-    }
-    else {
+    if (vArgs != NULL && vArgs->size() != 0) {
+        return pConsole->ScriptRun(vArgs->at(0));
+    } else {
         return pConsole->ScriptRun();
     }
 }
@@ -253,13 +248,12 @@ inline bool ConsoleScriptRun( std::vector<std::string> *vArgs )
 /**
  * Save the console settings
  */
-inline bool ConsoleSettingsSave( std::vector<std::string> *vArgs )
+inline bool ConsoleSettingsSave(std::vector<std::string> *vArgs)
 {
     GLConsole* pConsole = GetConsole();
-    if( vArgs != NULL && vArgs->size() != 0 ) {
-        return pConsole->SettingsSave( vArgs->at( 0 ) );
-    }
-    else {
+    if (vArgs != NULL && vArgs->size() != 0) {
+        return pConsole->SettingsSave(vArgs->at(0));
+    } else {
         return pConsole->SettingsSave();
     }
     return false;
@@ -269,13 +263,12 @@ inline bool ConsoleSettingsSave( std::vector<std::string> *vArgs )
 /**
  * Load console settings
  */
-inline bool ConsoleSettingsLoad( std::vector<std::string> *vArgs )
+inline bool ConsoleSettingsLoad(std::vector<std::string> *vArgs)
 {
     GLConsole* pConsole = GetConsole();
-    if( vArgs != NULL && vArgs->size() != 0 ) {
-        return pConsole->SettingsLoad( vArgs->at( 0 ) );
-    }
-    else {
+    if (vArgs != NULL && vArgs->size() != 0) {
+        return pConsole->SettingsLoad(vArgs->at(0));
+    } else {
         return pConsole->SettingsLoad();
     }
     return false;
