@@ -44,7 +44,7 @@ static const unsigned short WORLD_RENDERABLE_BLOCKS = 1000;
 // height is the same as width (they're square)
 static const unsigned char WORLD_TILE_SIZE = 16;
 //NOTE: update this when you update m_blockTextures
-static const unsigned short WORLD_TILE_TYPE_COUNT = 2;
+static const unsigned short WORLD_TILE_TYPE_COUNT = 3;
 
 class World
 {
@@ -74,7 +74,8 @@ public:
      */
     const char* const m_blockTextures[WORLD_TILE_TYPE_COUNT] {
         "../textures/dirt.png",
-        "../textures/stone.png"
+        "../textures/stone.png",
+        "../textures/grass.png"
     };
 
     //create containers of various entities, and implement a tile system
