@@ -1,4 +1,4 @@
-#include <LTBL/Constructs/Point2i.h>
+#include <lighting/Constructs/Point2i.h>
 
 Point2i::Point2i()
 {

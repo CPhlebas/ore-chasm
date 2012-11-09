@@ -27,12 +27,12 @@
 #include <SFML/Graphics/RenderTexture.hpp>
 #include <SFML/Graphics/Shader.hpp>
 
-#include <LTBL/QuadTree/StaticQuadTree.h>
-#include <LTBL/Light/Light.h>
-#include <LTBL/Light/EmissiveLight.h>
-#include <LTBL/Light/ConvexHull.h>
-#include <LTBL/Light/ShadowFin.h>
-#include <LTBL/Constructs.h>
+#include <lighting/QuadTree/StaticQuadTree.h>
+#include <lighting/Light/Light.h>
+#include <lighting/Light/EmissiveLight.h>
+#include <lighting/Light/ConvexHull.h>
+#include <lighting/Light/ShadowFin.h>
+#include <lighting/Constructs.h>
 
 #include <unordered_set>
 #include <vector>

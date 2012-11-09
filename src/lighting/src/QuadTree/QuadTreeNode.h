@@ -1,9 +1,9 @@
 #ifndef QDT_QUADTREENODE_H
 #define QDT_QUADTREENODE_H
 
-#include <LTBL/Constructs/AABB.h>
-#include <LTBL/Constructs/Point2i.h>
-#include <LTBL/QuadTree/QuadTreeOccupant.h>
+#include <lighting/Constructs/AABB.h>
+#include <lighting/Constructs/Point2i.h>
+#include <lighting/QuadTree/QuadTreeOccupant.h>
 
 #include <vector>
 #include <unordered_set>

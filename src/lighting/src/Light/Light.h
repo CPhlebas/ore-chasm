@@ -26,8 +26,8 @@
 #include <SFML/Graphics/RenderTexture.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 
-#include <LTBL/Constructs.h>
-#include <LTBL/QuadTree/QuadTree.h>
+#include <lighting/Constructs.h>
+#include <lighting/QuadTree/QuadTree.h>
 
 namespace ltbl
 {

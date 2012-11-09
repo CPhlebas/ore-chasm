@@ -23,7 +23,7 @@
 #define LTBL_SHADOWFIN_H
 
 #include <SFML/OpenGL.hpp>
-#include <LTBL/Constructs/Vec2f.h>
+#include <lighting/Constructs/Vec2f.h>
 
 namespace ltbl
 {

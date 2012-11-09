@@ -1,4 +1,4 @@
-#include <LTBL/QuadTree/StaticQuadTree.h>
+#include <lighting/QuadTree/StaticQuadTree.h>
 
 #include <assert.h>
 

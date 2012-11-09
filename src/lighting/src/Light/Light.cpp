@@ -19,7 +19,7 @@
 	3. This notice may not be removed or altered from any source distribution.
 */
 
-#include <LTBL/Light/Light.h>
+#include <lighting/Light/Light.h>
 
 #include <assert.h>
 

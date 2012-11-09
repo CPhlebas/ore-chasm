@@ -19,7 +19,7 @@
 	3. This notice may not be removed or altered from any source distribution.
 */
 
-#include <LTBL/Light/EmissiveLight.h>
+#include <lighting/Light/EmissiveLight.h>
 
 
 #define _USE_MATH_DEFINES

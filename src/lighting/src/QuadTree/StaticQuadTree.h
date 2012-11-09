@@ -1,7 +1,7 @@
 #ifndef QDT_STATICQUADTREE_H
 #define QDT_STATICQUADTREE_H
 
-#include <LTBL/QuadTree/QuadTree.h>
+#include <lighting/QuadTree/QuadTree.h>
 
 namespace qdt
 {

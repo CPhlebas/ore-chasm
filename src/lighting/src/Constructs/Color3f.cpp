@@ -1,4 +1,4 @@
-#include <LTBL/Constructs/Color3f.h>
+#include <lighting/Constructs/Color3f.h>
 
 #include <SFML/OpenGL.hpp>
 

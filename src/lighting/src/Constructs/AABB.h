@@ -1,7 +1,7 @@
 #ifndef LTBL_AABB_H
 #define LTBL_AABB_H
 
-#include <LTBL/Constructs/Vec2f.h>
+#include <lighting/Constructs/Vec2f.h>
 
 class AABB
 {

@@ -19,10 +19,10 @@
 	3. This notice may not be removed or altered from any source distribution.
 */
 
-#include <LTBL/Light/Light_Point.h>
-#include <LTBL/Light/ShadowFin.h>
+#include <lighting/Light/Light_Point.h>
+#include <lighting/Light/ShadowFin.h>
 
-#include <LTBL/Utils.h>
+#include <lighting/Utils.h>
 
 #include <assert.h>
 

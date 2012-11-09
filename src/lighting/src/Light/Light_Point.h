@@ -22,7 +22,7 @@
 #ifndef LTBL_LIGHT_POINT_H
 #define LTBL_LIGHT_POINT_H
 
-#include <LTBL/Light/Light.h>
+#include <lighting/Light/Light.h>
 
 namespace ltbl
 {
