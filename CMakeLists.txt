@@ -9,7 +9,6 @@ endif()
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_definitions(-DDEBUG)
 
-
     # because cmake has this annoying fucking bug that took me a while to figure out how i can use clang: http://www.cmake.org/pipermail/cmake/2011-February/042629.html
 
     set(CMAKE_CXX_FLAGS "-std=c++11") # -Wall -Wno-unused-variable -Wno-unused-function -funroll-loops -fexpensive-optimizations -Woverloaded-virtual -g3 -ggdb")
@@ -106,4 +105,5 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/src/)
 install(DIRECTORY textures/ DESTINATION "textures") #FILES_MATCHING PATTERN "*")
 install(DIRECTORY font/ DESTINATION "font") #FILES_MATCHING PATTERN "*")
 
+install(DIRECTORY src/ DESTINATION bin FILES_MATCHING PATTERN "*.frag" )
 install(TARGETS ${EXECUTABLE_NAME} DESTINATION bin)
