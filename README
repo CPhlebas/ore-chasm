@@ -1,5 +1,25 @@
 TODO :)
 
+
+Coding style:  http://techbase.kde.org/Policies/Kdelibs_Coding_Style
+use astyle.sh file to automatically format everything to this.
+
+I'll do so ruthlessly every so often. I'd rather have clean code than easy history
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Uses SFML from git (2.0, unreleased) since it is buttloads better.
 
 Periodically sync with releases from: http://sfgui.sfml-dev.de/download
