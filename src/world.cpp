@@ -45,6 +45,15 @@ World::World(sf::RenderWindow *window, sf::View *view)
         m_renderableBlocks[i] = new Entity("../textures/player.png");
     }
 
+    if (m_shader.loadFromFile("tilerenderer.frag", sf::Shader::Fragment)) {
+        std::cout << "Successfully loaded tilerenderer fragment shader!" << std::endl;
+    } else {
+        std::cout << "failed to load tilerenderer fragment shader!" << std::endl;
+        assert(0);
+    }
+
+//TODO:    m_shader.setParameter("texture", );
+
  //   saveMap();
 }
 

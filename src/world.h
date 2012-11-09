@@ -22,6 +22,7 @@
 #include "player.h"
 
 #include <stdlib.h>
+#include <SFML/Graphics/Shader.hpp>
 
 //height
 static const int WORLD_ROWCOUNT = 8400;
@@ -76,6 +77,8 @@ private:
     //FIXME: just a ptr to the game.cpp one :(  same with window
     sf::View *m_view = nullptr;
     sf::RenderWindow *m_window = nullptr;
+
+    sf::Shader m_shader;
 
     float m_inputXDirection = 0.f;
     float m_inputYDirection = 0.f;
