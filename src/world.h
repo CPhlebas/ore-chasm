@@ -23,12 +23,13 @@
 
 #include <stdlib.h>
 #include <SFML/Graphics/Shader.hpp>
+#include <SFML/Graphics/Texture.hpp>
 
 //height
-static const int WORLD_ROWCOUNT = 8400;
+static const unsigned short WORLD_ROWCOUNT = 8400;
 //width
-static const int WORLD_COLUMNCOUNT = 2400;
-static const int WORLD_RENDERABLE_BLOCKS = 1000;
+static const unsigned short WORLD_COLUMNCOUNT = 2400;
+static const unsigned short WORLD_RENDERABLE_BLOCKS = 1000;
 /*
  e.g. [ ] [ ] [ ] [ ] [ ]  ... 8400
         [ ] [ ] [ ] [ ] [ ]  ... 8400
@@ -41,7 +42,9 @@ static const int WORLD_RENDERABLE_BLOCKS = 1000;
 */
 
 // height is the same as width (they're square)
-static const int TILE_SIZE = 16;
+static const unsigned char WORLD_TILE_SIZE = 16;
+//NOTE: update this when you update m_blockTextures
+static const unsigned short WORLD_TILE_TYPE_COUNT = 2;
 
 class World
 {
@@ -63,6 +66,17 @@ public:
         Stone
     };
 
+    /**
+     * Coincides with BlockType (and goes in order.
+     * The enum BlockType acts as index for this.
+     * NOTE: update TILE_TYPE_COUNT when this gets something
+     * added to it.
+     */
+    const char* const m_blockTextures[WORLD_TILE_TYPE_COUNT] {
+        "../textures/dirt.png",
+        "../textures/stone.png"
+    };
+
     //create containers of various entities, and implement a tile system
     //game.cpp calls into this each tick, which this descends downward into each entity
 private:
@@ -79,6 +93,18 @@ private:
     sf::RenderWindow *m_window = nullptr;
 
     sf::Shader m_shader;
+
+    /**
+     * A super image which is loaded ONLY at init, which is a tilesheet/spritesheet
+     * of every tile that is possible. Used for passing it to the tile rendering shader
+     * (also at init).
+     */
+    sf::Image *m_tileTypesSuperImage = nullptr;
+
+    /**
+     * What is actually passed to the frag shader.
+     */
+    sf::Texture *m_tileTypesSuperTexture = nullptr;
 
     float m_inputXDirection = 0.f;
     float m_inputYDirection = 0.f;

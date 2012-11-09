@@ -41,18 +41,43 @@ World::World(sf::RenderWindow *window, sf::View *view)
 
     m_player = new Player("../textures/player.png");
 
-    loadMap();
+    const unsigned short textureSize= WORLD_TILE_TYPE_COUNT * WORLD_TILE_SIZE;
+    m_tileTypesSuperImage = new sf::Image();
+    m_tileTypesSuperImage->create(textureSize, textureSize);
+    m_tileTypesSuperTexture = new sf::Texture();
+    m_tileTypesSuperTexture->create(textureSize, textureSize);
 
-    for (int i = 0; i < WORLD_RENDERABLE_BLOCKS; ++i) {
-        m_renderableBlocks[i] = new Entity("../textures/player.png");
+    //FIXME/TODO: use RenderTexture, so we're not slow as all mighty fuck
+    sf::Image currentTile;
+    bool loaded;
+
+    for (int i = 0; i < WORLD_TILE_TYPE_COUNT; ++i) {
+        loaded = currentTile.loadFromFile(m_blockTextures[i]);
+
+        //would indicate we couldn't find a tile. obviously, we need that..
+        assert(loaded);
+
+        unsigned int destX = i % WORLD_TILE_TYPE_COUNT;
+        unsigned int destY = i / WORLD_TILE_TYPE_COUNT * WORLD_TILE_TYPE_COUNT;
+
+        m_tileTypesSuperImage->copy(currentTile, destX, destY);
     }
 
-    if (m_shader.loadFromFile("tilerenderer.frag", sf::Shader::Fragment)) {
-        std::cout << "Successfully loaded tilerenderer fragment shader!" << std::endl;
-    } else {
-        std::cout << "failed to load tilerenderer fragment shader!" << std::endl;
-//        assert(0);
-    }
+    m_tileTypesSuperImage->saveToFile("TEST.png");
+    m_tileTypesSuperTexture->loadFromImage(*m_tileTypesSuperImage);
+
+//    loadMap();
+//
+//    for (int i = 0; i < WORLD_RENDERABLE_BLOCKS; ++i) {
+//        m_renderableBlocks[i] = new Entity("../textures/player.png");
+//    }
+//
+//    if (m_shader.loadFromFile("tilerenderer.frag", sf::Shader::Fragment)) {
+//        std::cout << "Successfully loaded tilerenderer fragment shader!" << std::endl;
+//    } else {
+//        std::cout << "failed to load tilerenderer fragment shader!" << std::endl;
+////        assert(0);
+//    }
 
 //TODO:    m_shader.setParameter("texture", );
 
@@ -112,7 +137,7 @@ void World::handleEvent(const sf::Event& event)
 
 void World::update()
 {
-    std::cout << "moving player by xDir: " << m_inputXDirection << " yDir: " << m_inputYDirection << std::endl;
+    //std::cout << "moving player by xDir: " << m_inputXDirection << " yDir: " << m_inputYDirection << std::endl;
     //FIXME: bring in elapsedTime here ...
 
     m_player->move(m_inputXDirection, m_inputYDirection);
