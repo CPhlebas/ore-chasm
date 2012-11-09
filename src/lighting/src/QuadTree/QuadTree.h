@@ -1,8 +1,8 @@
 #ifndef QDT_QUADTREE_H
 #define QDT_QUADTREE_H
 
-#include <lighting/QuadTree/QuadTreeNode.h>
-#include <lighting/QuadTree/QuadTreeOccupant.h>
+#include "QuadTreeNode.h"
+#include "QuadTreeOccupant.h"
 
 #include <unordered_set>
 #include <memory>

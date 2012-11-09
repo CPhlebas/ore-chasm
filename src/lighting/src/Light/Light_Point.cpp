@@ -19,10 +19,10 @@
     3. This notice may not be removed or altered from any source distribution.
 */
 
-#include <lighting/Light/Light_Point.h>
-#include <lighting/Light/ShadowFin.h>
+#include "Light_Point.h"
+#include "ShadowFin.h"
 
-#include <lighting/Utils.h>
+#include "../Utils.h
 
 #include <assert.h>
 

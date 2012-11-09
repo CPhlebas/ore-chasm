@@ -22,8 +22,8 @@
 #ifndef LTBL_EMISSIVELIGHT_H
 #define LTBL_EMISSIVELIGHT_H
 
-#include <lighting/QuadTree/QuadTree.h>
-#include <lighting/Constructs/Color3f.h>
+#include "../QuadTree/QuadTree.h"
+#include "../Constructs/Color3f.h"
 
 #include <SFML/OpenGL.hpp>
 #include <SFML/Graphics/Texture.hpp>

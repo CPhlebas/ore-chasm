@@ -1,7 +1,7 @@
-#include <lighting/QuadTree/QuadTree.h>
+#include "QuadTree.h"
 
-#include <lighting/QuadTree/QuadTreeNode.h>
-#include <lighting/QuadTree/QuadTree.h>
+#include "QuadTreeNode.h"
+#include "QuadTree.h"
 
 #include <SFML/OpenGL.hpp>
 

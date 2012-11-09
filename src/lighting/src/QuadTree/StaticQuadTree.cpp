@@ -1,4 +1,4 @@
-#include <lighting/QuadTree/StaticQuadTree.h>
+#include "StaticQuadTree.h"
 
 #include <assert.h>
 

@@ -19,6 +19,8 @@
 
 #include "block.h"
 
+#include "lighting/src/Light/LightSystem.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>

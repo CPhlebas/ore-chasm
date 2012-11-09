@@ -1,8 +1,8 @@
 #ifndef QDT_QUADTREEOCCUPANT_H
 #define QDT_QUADTREEOCCUPANT_H
 
-#include <lighting/QuadTree/QuadTreeNode.h>
-#include <lighting/Constructs/AABB.h>
+#include "QuadTreeNode.h"
+#include "../Constructs/AABB.h"
 
 namespace qdt
 {

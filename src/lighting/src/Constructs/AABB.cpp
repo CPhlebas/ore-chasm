@@ -1,4 +1,4 @@
-#include <lighting/Constructs/AABB.h>
+#include "AABB.h"
 
 #include <SFML/OpenGL.hpp>
 

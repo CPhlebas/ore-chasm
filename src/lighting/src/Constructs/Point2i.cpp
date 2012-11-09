@@ -1,4 +1,4 @@
-#include <lighting/Constructs/Point2i.h>
+#include "Point2i.h"
 
 Point2i::Point2i()
 {

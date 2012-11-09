@@ -23,8 +23,8 @@
 #define LTBL_CONVEX_HULL_H
 
 #include <SFML/OpenGL.hpp>
-#include <lighting/Constructs.h>
-#include <lighting/QuadTree/QuadTree.h>
+#include "../Constructs.h"
+#include "../QuadTree/QuadTree.h"
 #include <vector>
 
 namespace ltbl

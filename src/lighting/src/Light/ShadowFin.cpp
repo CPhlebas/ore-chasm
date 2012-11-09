@@ -19,7 +19,7 @@
     3. This notice may not be removed or altered from any source distribution.
 */
 
-#include <lighting/Light/ShadowFin.h>
+#include "ShadowFin.h"
 
 namespace ltbl
 {

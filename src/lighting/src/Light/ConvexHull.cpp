@@ -19,8 +19,8 @@
     3. This notice may not be removed or altered from any source distribution.
 */
 
-#include <lighting/Light/ConvexHull.h>
-#include <lighting/Utils.h>
+#include "ConvexHull.h"
+#include "../Utils.h"
 
 #include <assert.h>
 #include <iostream>

@@ -1,6 +1,6 @@
-#include <lighting/QuadTree/QuadTreeNode.h>
+#include "QuadTreeNode.h"
 
-#include <lighting/QuadTree/QuadTree.h>
+#include "QuadTree.h"
 
 #include <assert.h>
 

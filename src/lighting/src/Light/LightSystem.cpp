@@ -19,10 +19,10 @@
     3. This notice may not be removed or altered from any source distribution.
 */
 
-#include <lighting/QuadTree/QuadTreeOccupant.h>
-#include <lighting/Light/LightSystem.h>
-#include <lighting/Light/ShadowFin.h>
-#include <lighting/Utils.h>
+#include "LightSystem.h"
+#include "ShadowFin.h"
+#include "../QuadTree/QuadTreeOccupant.h"
+#include "../Utils.h"
 
 #include <assert.h>
 

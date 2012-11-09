@@ -62,6 +62,7 @@ src/renderer.cpp
 src/renderable.cpp
 src/entity.cpp
 src/block.cpp
+src/lighting/
 )
 
 #YAML, needed later
@@ -76,7 +77,7 @@ include(FindPkgConfig)
 #target_link_libraries(${EXECUTABLE_NAME} ${yaml-cpp_LIBRARIES})
 #
 if (NOT BOX2D_FOUND)
-#  message(FATAL_ERROR "Could not find Box2D library.")
+  message(FATAL_ERROR "Could not find Box2D library.")
 endif()
 
 add_executable(${EXECUTABLE_NAME} ${SRC})

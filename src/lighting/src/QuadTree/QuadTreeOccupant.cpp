@@ -1,9 +1,9 @@
-#include <lighting/QuadTree/QuadTreeOccupant.h>
+#include "QuadTreeOccupant.h"
 
-#include <lighting/QuadTree/QuadTreeNode.h>
-#include <lighting/QuadTree/QuadTree.h>
+#include "QuadTreeNode.h"
+#include "QuadTree.h"
 
-#include <lighting/Constructs/Vec2f.h>
+#include "../Constructs/Vec2f.h"
 
 #include <assert.h>
 
