@@ -1,22 +1,22 @@
 /*
-	Let There Be Light
-	Copyright (C) 2012 Eric Laukien
+    Let There Be Light
+    Copyright (C) 2012 Eric Laukien
 
-	This software is provided 'as-is', without any express or implied
-	warranty.  In no event will the authors be held liable for any damages
-	arising from the use of this software.
+    This software is provided 'as-is', without any express or implied
+    warranty.  In no event will the authors be held liable for any damages
+    arising from the use of this software.
 
-	Permission is granted to anyone to use this software for any purpose,
-	including commercial applications, and to alter it and redistribute it
-	freely, subject to the following restrictions:
+    Permission is granted to anyone to use this software for any purpose,
+    including commercial applications, and to alter it and redistribute it
+    freely, subject to the following restrictions:
 
-	1. The origin of this software must not be misrepresented; you must not
-		claim that you wrote the original software. If you use this software
-		in a product, an acknowledgment in the product documentation would be
-		appreciated but is not required.
-	2. Altered source versions must be plainly marked as such, and must not be
-		misrepresented as being the original software.
-	3. This notice may not be removed or altered from any source distribution.
+    1. The origin of this software must not be misrepresented; you must not
+        claim that you wrote the original software. If you use this software
+        in a product, an acknowledgment in the product documentation would be
+        appreciated but is not required.
+    2. Altered source versions must be plainly marked as such, and must not be
+        misrepresented as being the original software.
+    3. This notice may not be removed or altered from any source distribution.
 */
 
 #ifndef LTBL_LIGHTSYSTEM_H
@@ -39,97 +39,96 @@
 
 namespace ltbl
 {
-	class LightSystem
-	{
-	private:
-		sf::RenderWindow* m_pWin;
+class LightSystem
+{
+private:
+    sf::RenderWindow* m_pWin;
 
-		std::unordered_set<Light*> m_lights;
-	
-		std::unordered_set<EmissiveLight*> m_emissiveLights;
+    std::unordered_set<Light*> m_lights;
 
-		std::unordered_set<ConvexHull*> m_convexHulls;
+    std::unordered_set<EmissiveLight*> m_emissiveLights;
 
-		std::vector<Light*> m_lightsToPreBuild;
+    std::unordered_set<ConvexHull*> m_convexHulls;
 
-		qdt::StaticQuadTree m_lightTree;
-		qdt::StaticQuadTree m_hullTree;
-		qdt::StaticQuadTree m_emissiveTree;
+    std::vector<Light*> m_lightsToPreBuild;
 
-		sf::RenderTexture m_compositionTexture;
-		sf::RenderTexture m_lightTempTexture;
-		sf::RenderTexture m_bloomTexture;
+    qdt::StaticQuadTree m_lightTree;
+    qdt::StaticQuadTree m_hullTree;
+    qdt::StaticQuadTree m_emissiveTree;
 
-		sf::Shader m_lightAttenuationShader;
+    sf::RenderTexture m_compositionTexture;
+    sf::RenderTexture m_lightTempTexture;
+    sf::RenderTexture m_bloomTexture;
 
-		sf::Texture m_softShadowTexture;
+    sf::Shader m_lightAttenuationShader;
 
-		int m_prebuildTimer;
+    sf::Texture m_softShadowTexture;
 
-		void MaskShadow(Light* light, ConvexHull* convexHull, bool minPoly, float depth);
+    int m_prebuildTimer;
 
-		// Returns number of fins added
-		int AddExtraFins(const ConvexHull &hull, std::vector<ShadowFin> &fins, const Light &light, int boundryIndex, bool wrapCW, Vec2f &mainUmbraRoot, Vec2f &mainUmbraVec);
+    void MaskShadow(Light* light, ConvexHull* convexHull, bool minPoly, float depth);
 
-		void CameraSetup();
-		void SetUp(const AABB &region);
+    // Returns number of fins added
+    int AddExtraFins(const ConvexHull &hull, std::vector<ShadowFin> &fins, const Light &light, int boundryIndex, bool wrapCW, Vec2f &mainUmbraRoot, Vec2f &mainUmbraVec);
 
-		// Switching between render textures
-		void SwitchLightTemp();
-		void SwitchComposition();
-		void SwitchBloom();
-		void SwitchWindow();
+    void CameraSetup();
+    void SetUp(const AABB &region);
 
-		void SwitchWindowProjection();
+    // Switching between render textures
+    void SwitchLightTemp();
+    void SwitchComposition();
+    void SwitchBloom();
+    void SwitchWindow();
 
-		enum CurrentRenderTexture
-		{
-			cur_lightTemp, cur_shadow, cur_main, cur_bloom, cur_window, cur_lightStatic
-		} m_currentRenderTexture;
+    void SwitchWindowProjection();
 
-		void ClearLightTexture(sf::RenderTexture &renTex);
+    enum CurrentRenderTexture {
+        cur_lightTemp, cur_shadow, cur_main, cur_bloom, cur_window, cur_lightStatic
+    } m_currentRenderTexture;
 
-	public:
-		AABB m_viewAABB;
+    void ClearLightTexture(sf::RenderTexture &renTex);
 
-		sf::Color m_ambientColor;
+public:
+    AABB m_viewAABB;
 
-		bool m_checkForHullIntersect;
-		bool m_useBloom;
+    sf::Color m_ambientColor;
 
-		unsigned int m_maxFins;
+    bool m_checkForHullIntersect;
+    bool m_useBloom;
 
-		LightSystem();
-		LightSystem(const AABB &region, sf::RenderWindow* pRenderWindow, const std::string &finImagePath, const std::string &lightAttenuationShaderPath);
-		~LightSystem();
+    unsigned int m_maxFins;
 
-		void Create(const AABB &region, sf::RenderWindow* pRenderWindow, const std::string &finImagePath, const std::string &lightAttenuationShaderPath);
+    LightSystem();
+    LightSystem(const AABB &region, sf::RenderWindow* pRenderWindow, const std::string &finImagePath, const std::string &lightAttenuationShaderPath);
+    ~LightSystem();
 
-		void SetView(const sf::View &view);
+    void Create(const AABB &region, sf::RenderWindow* pRenderWindow, const std::string &finImagePath, const std::string &lightAttenuationShaderPath);
 
-		// All objects are controller through pointer, but these functions return indices that allow easy removal
-		void AddLight(Light* newLight);
-		void AddConvexHull(ConvexHull* newConvexHull);
-		void AddEmissiveLight(EmissiveLight* newEmissiveLight);
+    void SetView(const sf::View &view);
 
-		void RemoveLight(Light* pLight);
-		void RemoveConvexHull(ConvexHull* pHull);
-		void RemoveEmissiveLight(EmissiveLight* pEmissiveLight);
+    // All objects are controller through pointer, but these functions return indices that allow easy removal
+    void AddLight(Light* newLight);
+    void AddConvexHull(ConvexHull* newConvexHull);
+    void AddEmissiveLight(EmissiveLight* newEmissiveLight);
 
-		// Pre-builds the light
-		void BuildLight(Light* pLight);
+    void RemoveLight(Light* pLight);
+    void RemoveConvexHull(ConvexHull* pHull);
+    void RemoveEmissiveLight(EmissiveLight* pEmissiveLight);
 
-		void ClearLights();
-		void ClearConvexHulls();
-		void ClearEmissiveLights();
+    // Pre-builds the light
+    void BuildLight(Light* pLight);
 
-		// Renders lights to the light texture
-		void RenderLights();
+    void ClearLights();
+    void ClearConvexHulls();
+    void ClearEmissiveLights();
 
-		void RenderLightTexture();
+    // Renders lights to the light texture
+    void RenderLights();
 
-		void DebugRender();
-	};
+    void RenderLightTexture();
+
+    void DebugRender();
+};
 }
 
 #endif

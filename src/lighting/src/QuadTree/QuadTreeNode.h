@@ -11,67 +11,67 @@
 
 namespace qdt
 {
-	class QuadTreeNode
-	{
-	private:
-		class QuadTreeNode* m_pParent;
-		class QuadTree* m_pQuadTree;
+class QuadTreeNode
+{
+private:
+    class QuadTreeNode* m_pParent;
+    class QuadTree* m_pQuadTree;
 
-		// Cannot use a unique_ptr, since the vector requires copy ctor/assignment ops
-		std::vector<std::vector<QuadTreeNode>>* m_children;
-		bool m_hasChildren;
+    // Cannot use a unique_ptr, since the vector requires copy ctor/assignment ops
+    std::vector<std::vector<QuadTreeNode>>* m_children;
+    bool m_hasChildren;
 
-		std::unordered_set<class QuadTreeOccupant*> m_pOccupants;
+    std::unordered_set<class QuadTreeOccupant*> m_pOccupants;
 
-		AABB m_region;
+    AABB m_region;
 
-		int m_level;
+    int m_level;
 
-		int m_numOccupantsBelow;
+    int m_numOccupantsBelow;
 
-		inline QuadTreeNode* GetChild(const Point2i position);
+    inline QuadTreeNode* GetChild(const Point2i position);
 
-		void GetPossibleOccupantPosition(QuadTreeOccupant* pOc, Point2i &point);
+    void GetPossibleOccupantPosition(QuadTreeOccupant* pOc, Point2i &point);
 
-		void AddToThisLevel(QuadTreeOccupant* pOc);
+    void AddToThisLevel(QuadTreeOccupant* pOc);
 
-		// Returns true if occupant was added to children
-		bool AddToChildren(QuadTreeOccupant* pOc);
+    // Returns true if occupant was added to children
+    bool AddToChildren(QuadTreeOccupant* pOc);
 
-		void GetOccupants(std::unordered_set<QuadTreeOccupant*> &occupants);
+    void GetOccupants(std::unordered_set<QuadTreeOccupant*> &occupants);
 
-		void Partition();
-		void DestroyChildren();
-		void Merge();
+    void Partition();
+    void DestroyChildren();
+    void Merge();
 
-		void Update(QuadTreeOccupant* pOc);
-		void Remove(QuadTreeOccupant* pOc);
+    void Update(QuadTreeOccupant* pOc);
+    void Remove(QuadTreeOccupant* pOc);
 
-	public:
-		static int minNumOccupants;
-		static int maxNumOccupants;
-		static int maxNumLevels;
+public:
+    static int minNumOccupants;
+    static int maxNumOccupants;
+    static int maxNumLevels;
 
-		static float m_oversizeMultiplier;
+    static float m_oversizeMultiplier;
 
-		QuadTreeNode();
-		QuadTreeNode(const AABB &region, int level, QuadTreeNode* pParent = NULL, QuadTree* pQuadTree = NULL);
-		~QuadTreeNode();
+    QuadTreeNode();
+    QuadTreeNode(const AABB &region, int level, QuadTreeNode* pParent = NULL, QuadTree* pQuadTree = NULL);
+    ~QuadTreeNode();
 
-		// For use after using default constructor
-		void Create(const AABB &region, int level, QuadTreeNode* pParent = NULL, QuadTree* pQuadTree = NULL);
+    // For use after using default constructor
+    void Create(const AABB &region, int level, QuadTreeNode* pParent = NULL, QuadTree* pQuadTree = NULL);
 
-		QuadTree* GetTree();
+    QuadTree* GetTree();
 
-		void Add(QuadTreeOccupant* pOc);
+    void Add(QuadTreeOccupant* pOc);
 
-		const AABB &GetRegion();
+    const AABB &GetRegion();
 
-		void GetAllOccupantsBelow(std::vector<QuadTreeOccupant*> &occupants);
+    void GetAllOccupantsBelow(std::vector<QuadTreeOccupant*> &occupants);
 
-		friend class QuadTreeOccupant;
-		friend class QuadTree;
-	};
+    friend class QuadTreeOccupant;
+    friend class QuadTree;
+};
 }
 
 #endif

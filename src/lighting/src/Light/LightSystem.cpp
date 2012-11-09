@@ -1,22 +1,22 @@
 /*
-	Let There Be Light
-	Copyright (C) 2012 Eric Laukien
+    Let There Be Light
+    Copyright (C) 2012 Eric Laukien
 
-	This software is provided 'as-is', without any express or implied
-	warranty.  In no event will the authors be held liable for any damages
-	arising from the use of this software.
+    This software is provided 'as-is', without any express or implied
+    warranty.  In no event will the authors be held liable for any damages
+    arising from the use of this software.
 
-	Permission is granted to anyone to use this software for any purpose,
-	including commercial applications, and to alter it and redistribute it
-	freely, subject to the following restrictions:
+    Permission is granted to anyone to use this software for any purpose,
+    including commercial applications, and to alter it and redistribute it
+    freely, subject to the following restrictions:
 
-	1. The origin of this software must not be misrepresented; you must not
-		claim that you wrote the original software. If you use this software
-		in a product, an acknowledgment in the product documentation would be
-		appreciated but is not required.
-	2. Altered source versions must be plainly marked as such, and must not be
-		misrepresented as being the original software.
-	3. This notice may not be removed or altered from any source distribution.
+    1. The origin of this software must not be misrepresented; you must not
+        claim that you wrote the original software. If you use this software
+        in a product, an acknowledgment in the product documentation would be
+        appreciated but is not required.
+    2. Altered source versions must be plainly marked as such, and must not be
+        misrepresented as being the original software.
+    3. This notice may not be removed or altered from any source distribution.
 */
 
 #include <lighting/QuadTree/QuadTreeOccupant.h>
@@ -28,989 +28,946 @@
 
 namespace ltbl
 {
-	LightSystem::LightSystem()
-		: m_ambientColor(55, 55, 55), m_checkForHullIntersect(true),
-		m_prebuildTimer(0), m_useBloom(true), m_maxFins(1)
-	{
-	}
-
-	LightSystem::LightSystem(const AABB &region, sf::RenderWindow* pRenderWindow, const std::string &finImagePath, const std::string &lightAttenuationShaderPath)
-		: m_ambientColor(55, 55, 55), m_checkForHullIntersect(true),
-		m_prebuildTimer(0), m_pWin(pRenderWindow), m_useBloom(true), m_maxFins(1)
-	{
-		// Load the soft shadows texture
-		if(!m_softShadowTexture.loadFromFile(finImagePath))
-			abort(); // Could not find the texture, abort
-
-		if(!m_lightAttenuationShader.loadFromFile(lightAttenuationShaderPath, sf::Shader::Fragment))
-			abort();
+LightSystem::LightSystem()
+    : m_ambientColor(55, 55, 55), m_checkForHullIntersect(true),
+      m_prebuildTimer(0), m_useBloom(true), m_maxFins(1)
+{
+}
 
-		SetUp(region);
-	}
+LightSystem::LightSystem(const AABB &region, sf::RenderWindow* pRenderWindow, const std::string &finImagePath, const std::string &lightAttenuationShaderPath)
+    : m_ambientColor(55, 55, 55), m_checkForHullIntersect(true),
+      m_prebuildTimer(0), m_pWin(pRenderWindow), m_useBloom(true), m_maxFins(1)
+{
+    // Load the soft shadows texture
+    if (!m_softShadowTexture.loadFromFile(finImagePath))
+        abort(); // Could not find the texture, abort
 
-	LightSystem::~LightSystem()
-	{
-		// Destroy resources
-		ClearLights();
-		ClearConvexHulls();
-		ClearEmissiveLights();
-	}
+    if (!m_lightAttenuationShader.loadFromFile(lightAttenuationShaderPath, sf::Shader::Fragment))
+        abort();
 
-	void LightSystem::Create(const AABB &region, sf::RenderWindow* pRenderWindow, const std::string &finImagePath, const std::string &lightAttenuationShaderPath)
-	{
-		m_pWin = pRenderWindow;
+    SetUp(region);
+}
 
-		// Load the soft shadows texture
-		if(!m_softShadowTexture.loadFromFile(finImagePath))
-			abort(); // Could not find the texture, abort
+LightSystem::~LightSystem()
+{
+    // Destroy resources
+    ClearLights();
+    ClearConvexHulls();
+    ClearEmissiveLights();
+}
 
-		if(!m_lightAttenuationShader.loadFromFile(lightAttenuationShaderPath, sf::Shader::Fragment))
-			abort();
+void LightSystem::Create(const AABB &region, sf::RenderWindow* pRenderWindow, const std::string &finImagePath, const std::string &lightAttenuationShaderPath)
+{
+    m_pWin = pRenderWindow;
 
-		SetUp(region);
-	}
+    // Load the soft shadows texture
+    if (!m_softShadowTexture.loadFromFile(finImagePath))
+        abort(); // Could not find the texture, abort
 
-	void LightSystem::SetView(const sf::View &view)
-	{
-		sf::Vector2f viewSize(view.getSize());
-		m_viewAABB.SetDims(Vec2f(viewSize.x, viewSize.y));
-		sf::Vector2f viewCenter(view.getCenter());
+    if (!m_lightAttenuationShader.loadFromFile(lightAttenuationShaderPath, sf::Shader::Fragment))
+        abort();
 
-		// Flipped
-		m_viewAABB.SetCenter(Vec2f(viewCenter.x, viewSize.y - viewCenter.y));
-	}
+    SetUp(region);
+}
 
-	void LightSystem::CameraSetup()
-	{
-		glLoadIdentity();
-		glTranslatef(-m_viewAABB.m_lowerBound.x, -m_viewAABB.m_lowerBound.y, 0.0f);
-	}
+void LightSystem::SetView(const sf::View &view)
+{
+    sf::Vector2f viewSize(view.getSize());
+    m_viewAABB.SetDims(Vec2f(viewSize.x, viewSize.y));
+    sf::Vector2f viewCenter(view.getCenter());
 
-	void LightSystem::MaskShadow(Light* light, ConvexHull* convexHull, bool minPoly, float depth)
-	{
-		// ----------------------------- Determine the Shadow Boundaries -----------------------------
+    // Flipped
+    m_viewAABB.SetCenter(Vec2f(viewCenter.x, viewSize.y - viewCenter.y));
+}
 
-		Vec2f lCenter(light->m_center);
-		float lRadius = light->m_radius;
+void LightSystem::CameraSetup()
+{
+    glLoadIdentity();
+    glTranslatef(-m_viewAABB.m_lowerBound.x, -m_viewAABB.m_lowerBound.y, 0.0f);
+}
 
-		Vec2f hCenter(convexHull->GetWorldCenter());
+void LightSystem::MaskShadow(Light* light, ConvexHull* convexHull, bool minPoly, float depth)
+{
+    // ----------------------------- Determine the Shadow Boundaries -----------------------------
 
-		const int numVertices = convexHull->m_vertices.size();
+    Vec2f lCenter(light->m_center);
+    float lRadius = light->m_radius;
 
-		std::vector<bool> backFacing(numVertices);
+    Vec2f hCenter(convexHull->GetWorldCenter());
 
-		for(int i = 0; i < numVertices; i++)
-		{
-			Vec2f firstVertex(convexHull->GetWorldVertex(i));
-			int secondIndex = (i + 1) % numVertices;
-			Vec2f secondVertex(convexHull->GetWorldVertex(secondIndex));
-			Vec2f middle((firstVertex + secondVertex) / 2.0f);
+    const int numVertices = convexHull->m_vertices.size();
 
-			// Use normal to take light width into account, this eliminates popping
-			Vec2f lightNormal(-(lCenter.y - middle.y), lCenter.x - middle.x);
+    std::vector<bool> backFacing(numVertices);
 
-			Vec2f centerToBoundry(middle - hCenter);
+    for (int i = 0; i < numVertices; i++) {
+        Vec2f firstVertex(convexHull->GetWorldVertex(i));
+        int secondIndex = (i + 1) % numVertices;
+        Vec2f secondVertex(convexHull->GetWorldVertex(secondIndex));
+        Vec2f middle((firstVertex + secondVertex) / 2.0f);
 
-			if(centerToBoundry.Dot(lightNormal) < 0)
-				lightNormal *= -1;
+        // Use normal to take light width into account, this eliminates popping
+        Vec2f lightNormal(-(lCenter.y - middle.y), lCenter.x - middle.x);
 
-			lightNormal = lightNormal.Normalize() * light->m_size;
+        Vec2f centerToBoundry(middle - hCenter);
 
-			Vec2f L((lCenter - lightNormal) - middle);
-                
-			if (convexHull->m_normals[i].Dot(L) > 0)
-				backFacing[i] = false;
-			else
-				backFacing[i] = true;
-		}
+        if (centerToBoundry.Dot(lightNormal) < 0)
+            lightNormal *= -1;
 
-		int firstBoundryIndex = 0;
-		int secondBoundryIndex = 0;
+        lightNormal = lightNormal.Normalize() * light->m_size;
 
-		for(int currentEdge = 0; currentEdge < numVertices; currentEdge++)
-		{
-			int nextEdge = (currentEdge + 1) % numVertices;
+        Vec2f L((lCenter - lightNormal) - middle);
 
-			if (backFacing[currentEdge] && !backFacing[nextEdge])
-				firstBoundryIndex = nextEdge;
+        if (convexHull->m_normals[i].Dot(L) > 0)
+            backFacing[i] = false;
+        else
+            backFacing[i] = true;
+    }
 
-			if (!backFacing[currentEdge] && backFacing[nextEdge])
-				secondBoundryIndex = nextEdge;
-		}
+    int firstBoundryIndex = 0;
+    int secondBoundryIndex = 0;
 
-		// -------------------------------- Shadow Fins --------------------------------
+    for (int currentEdge = 0; currentEdge < numVertices; currentEdge++) {
+        int nextEdge = (currentEdge + 1) % numVertices;
 
-		Vec2f firstBoundryPoint(convexHull->GetWorldVertex(firstBoundryIndex));
+        if (backFacing[currentEdge] && !backFacing[nextEdge])
+            firstBoundryIndex = nextEdge;
 
-		Vec2f lightNormal(-(lCenter.y - firstBoundryPoint.y), lCenter.x - firstBoundryPoint.x);
+        if (!backFacing[currentEdge] && backFacing[nextEdge])
+            secondBoundryIndex = nextEdge;
+    }
 
-		Vec2f centerToBoundry(firstBoundryPoint - hCenter);
+    // -------------------------------- Shadow Fins --------------------------------
 
-		if(centerToBoundry.Dot(lightNormal) < 0)
-			lightNormal *= -1;
+    Vec2f firstBoundryPoint(convexHull->GetWorldVertex(firstBoundryIndex));
 
-		lightNormal = lightNormal.Normalize() * light->m_size;
+    Vec2f lightNormal(-(lCenter.y - firstBoundryPoint.y), lCenter.x - firstBoundryPoint.x);
 
-		ShadowFin firstFin;
+    Vec2f centerToBoundry(firstBoundryPoint - hCenter);
 
-		firstFin.m_rootPos = firstBoundryPoint;
-		firstFin.m_umbra = firstBoundryPoint - (lCenter + lightNormal);
-		firstFin.m_umbra = firstFin.m_umbra.Normalize() * lRadius;
+    if (centerToBoundry.Dot(lightNormal) < 0)
+        lightNormal *= -1;
 
-		firstFin.m_penumbra = firstBoundryPoint - (lCenter - lightNormal);
-		firstFin.m_penumbra = firstFin.m_penumbra.Normalize() * lRadius;
+    lightNormal = lightNormal.Normalize() * light->m_size;
 
-		ShadowFin secondFin;
+    ShadowFin firstFin;
 
-		Vec2f secondBoundryPoint = convexHull->GetWorldVertex(secondBoundryIndex);
+    firstFin.m_rootPos = firstBoundryPoint;
+    firstFin.m_umbra = firstBoundryPoint - (lCenter + lightNormal);
+    firstFin.m_umbra = firstFin.m_umbra.Normalize() * lRadius;
 
-		lightNormal.x = -(lCenter.y - secondBoundryPoint.y);
-		lightNormal.y = lCenter.x - secondBoundryPoint.x;
+    firstFin.m_penumbra = firstBoundryPoint - (lCenter - lightNormal);
+    firstFin.m_penumbra = firstFin.m_penumbra.Normalize() * lRadius;
 
-		centerToBoundry = secondBoundryPoint - hCenter;
+    ShadowFin secondFin;
 
-		if(centerToBoundry.Dot(lightNormal) < 0)
-			lightNormal *= -1;
+    Vec2f secondBoundryPoint = convexHull->GetWorldVertex(secondBoundryIndex);
 
-		lightNormal = lightNormal.Normalize() * light->m_size;
+    lightNormal.x = -(lCenter.y - secondBoundryPoint.y);
+    lightNormal.y = lCenter.x - secondBoundryPoint.x;
 
-		secondFin.m_rootPos = secondBoundryPoint;
-		secondFin.m_umbra = secondBoundryPoint - (lCenter + lightNormal);
-		secondFin.m_umbra = secondFin.m_umbra.Normalize() * lRadius;
-	
-		secondFin.m_penumbra = secondBoundryPoint - (lCenter - lightNormal);
-		secondFin.m_penumbra = secondFin.m_penumbra.Normalize() * lRadius;
+    centerToBoundry = secondBoundryPoint - hCenter;
 
-		std::vector<ShadowFin> finsToRender_firstBoundary;
-		std::vector<ShadowFin> finsToRender_secondBoundary;
+    if (centerToBoundry.Dot(lightNormal) < 0)
+        lightNormal *= -1;
 
-		// Store generated fins to render later
-		// First two, will always be there
-		finsToRender_firstBoundary.push_back(firstFin);
-		finsToRender_secondBoundary.push_back(secondFin);
+    lightNormal = lightNormal.Normalize() * light->m_size;
 
-		// Need to get address of fin in array instead of firstFin/secondFin since they are copies, and we want it to be modified directly
-		// Can avoid by not creating firstFin and secondFin and instead using finsToRender[0] and finsToRender[1]
-		// Also, move the boundary points for rendering depending on the number of hulls added
-		Vec2f mainUmbraRoot1;
-		Vec2f mainUmbraVec1;
+    secondFin.m_rootPos = secondBoundryPoint;
+    secondFin.m_umbra = secondBoundryPoint - (lCenter + lightNormal);
+    secondFin.m_umbra = secondFin.m_umbra.Normalize() * lRadius;
 
-		firstBoundryIndex = Wrap(firstBoundryIndex + AddExtraFins(*convexHull, finsToRender_firstBoundary, *light, firstBoundryIndex, false, mainUmbraRoot1, mainUmbraVec1), numVertices);
+    secondFin.m_penumbra = secondBoundryPoint - (lCenter - lightNormal);
+    secondFin.m_penumbra = secondFin.m_penumbra.Normalize() * lRadius;
 
-		Vec2f mainUmbraRoot2;
-		Vec2f mainUmbraVec2;
+    std::vector<ShadowFin> finsToRender_firstBoundary;
+    std::vector<ShadowFin> finsToRender_secondBoundary;
 
-		secondBoundryIndex = Wrap(secondBoundryIndex - AddExtraFins(*convexHull, finsToRender_secondBoundary, *light, secondBoundryIndex, true, mainUmbraRoot2, mainUmbraVec2), numVertices);
+    // Store generated fins to render later
+    // First two, will always be there
+    finsToRender_firstBoundary.push_back(firstFin);
+    finsToRender_secondBoundary.push_back(secondFin);
 
-		// ----------------------------- Drawing the umbra -----------------------------
+    // Need to get address of fin in array instead of firstFin/secondFin since they are copies, and we want it to be modified directly
+    // Can avoid by not creating firstFin and secondFin and instead using finsToRender[0] and finsToRender[1]
+    // Also, move the boundary points for rendering depending on the number of hulls added
+    Vec2f mainUmbraRoot1;
+    Vec2f mainUmbraVec1;
 
-		glDisable(GL_TEXTURE_2D);
+    firstBoundryIndex = Wrap(firstBoundryIndex + AddExtraFins(*convexHull, finsToRender_firstBoundary, *light, firstBoundryIndex, false, mainUmbraRoot1, mainUmbraVec1), numVertices);
 
-		glBlendFunc(GL_ZERO, GL_SRC_ALPHA);
+    Vec2f mainUmbraRoot2;
+    Vec2f mainUmbraVec2;
 
-		glColor4f(0.0f, 0.0f, 0.0f, 1.0f - convexHull->m_transparency);
+    secondBoundryIndex = Wrap(secondBoundryIndex - AddExtraFins(*convexHull, finsToRender_secondBoundary, *light, secondBoundryIndex, true, mainUmbraRoot2, mainUmbraVec2), numVertices);
 
-		if(!convexHull->m_renderLightOverHull)
-		{
-			Vec2f throughCenter((hCenter - lCenter).Normalize() * lRadius);
+    // ----------------------------- Drawing the umbra -----------------------------
 
-			// 3 rays all the time, less polygons
-			glBegin(GL_TRIANGLE_STRIP);
+    glDisable(GL_TEXTURE_2D);
 
-			glVertex3f(mainUmbraRoot1.x, mainUmbraRoot1.y, depth);
-			glVertex3f(mainUmbraRoot1.x + mainUmbraVec1.x, mainUmbraRoot1.y + mainUmbraVec1.y, depth);
-			glVertex3f(hCenter.x, hCenter.y, depth);
-			glVertex3f(hCenter.x + throughCenter.x, hCenter.y + throughCenter.y, depth);
-			glVertex3f(mainUmbraRoot2.x, mainUmbraRoot2.y, depth);
-			glVertex3f(mainUmbraRoot2.x + mainUmbraVec2.x, mainUmbraRoot2.y + mainUmbraVec2.y, depth);
+    glBlendFunc(GL_ZERO, GL_SRC_ALPHA);
 
-			glEnd();
-		}
-		else
-		{
-			glBegin(GL_TRIANGLE_STRIP);
+    glColor4f(0.0f, 0.0f, 0.0f, 1.0f - convexHull->m_transparency);
 
-			// Umbra and penumbra sides done separately, since they do not follow light rays
-			glVertex3f(mainUmbraRoot1.x, mainUmbraRoot1.y, depth);
-			glVertex3f(mainUmbraRoot1.x + mainUmbraVec1.x, mainUmbraRoot1.y + mainUmbraVec1.y, depth);
+    if (!convexHull->m_renderLightOverHull) {
+        Vec2f throughCenter((hCenter - lCenter).Normalize() * lRadius);
 
-			int endV; 
+        // 3 rays all the time, less polygons
+        glBegin(GL_TRIANGLE_STRIP);
 
-			if(firstBoundryIndex < secondBoundryIndex)
-				endV = secondBoundryIndex - 1;
-			else
-				endV = secondBoundryIndex + numVertices - 1;
+        glVertex3f(mainUmbraRoot1.x, mainUmbraRoot1.y, depth);
+        glVertex3f(mainUmbraRoot1.x + mainUmbraVec1.x, mainUmbraRoot1.y + mainUmbraVec1.y, depth);
+        glVertex3f(hCenter.x, hCenter.y, depth);
+        glVertex3f(hCenter.x + throughCenter.x, hCenter.y + throughCenter.y, depth);
+        glVertex3f(mainUmbraRoot2.x, mainUmbraRoot2.y, depth);
+        glVertex3f(mainUmbraRoot2.x + mainUmbraVec2.x, mainUmbraRoot2.y + mainUmbraVec2.y, depth);
 
-			// Mask off around the hull, requires more polygons
-			for(int v = firstBoundryIndex + 1; v <= endV; v++)
-			{
-				// Get actual vertex
-				int vi = v % numVertices;
+        glEnd();
+    } else {
+        glBegin(GL_TRIANGLE_STRIP);
 
-				Vec2f startVert(convexHull->GetWorldVertex(vi));
-				Vec2f endVert((startVert - light->m_center).Normalize() * light->m_radius + startVert);
+        // Umbra and penumbra sides done separately, since they do not follow light rays
+        glVertex3f(mainUmbraRoot1.x, mainUmbraRoot1.y, depth);
+        glVertex3f(mainUmbraRoot1.x + mainUmbraVec1.x, mainUmbraRoot1.y + mainUmbraVec1.y, depth);
 
-				// 2 points for ray in strip
-				glVertex3f(startVert.x, startVert.y, depth);
-				glVertex3f(endVert.x, endVert.y, depth);
-			}
+        int endV;
 
-			glVertex3f(mainUmbraRoot2.x, mainUmbraRoot2.y, depth);
-			glVertex3f(mainUmbraRoot2.x + mainUmbraVec2.x, mainUmbraRoot2.y + mainUmbraVec2.y, depth);
+        if (firstBoundryIndex < secondBoundryIndex)
+            endV = secondBoundryIndex - 1;
+        else
+            endV = secondBoundryIndex + numVertices - 1;
 
-			glEnd();
-		}
+        // Mask off around the hull, requires more polygons
+        for (int v = firstBoundryIndex + 1; v <= endV; v++) {
+            // Get actual vertex
+            int vi = v % numVertices;
 
-		// Render shadow fins
-		glEnable(GL_TEXTURE_2D);
+            Vec2f startVert(convexHull->GetWorldVertex(vi));
+            Vec2f endVert((startVert - light->m_center).Normalize() * light->m_radius + startVert);
 
-		m_softShadowTexture.bind();
+            // 2 points for ray in strip
+            glVertex3f(startVert.x, startVert.y, depth);
+            glVertex3f(endVert.x, endVert.y, depth);
+        }
 
-		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        glVertex3f(mainUmbraRoot2.x, mainUmbraRoot2.y, depth);
+        glVertex3f(mainUmbraRoot2.x + mainUmbraVec2.x, mainUmbraRoot2.y + mainUmbraVec2.y, depth);
 
-		for(unsigned int f = 0, numFins = finsToRender_firstBoundary.size(); f < numFins; f++)
-			finsToRender_firstBoundary[f].Render(convexHull->m_transparency);
+        glEnd();
+    }
 
-		for(unsigned int f = 0, numFins = finsToRender_secondBoundary.size(); f < numFins; f++)
-			finsToRender_secondBoundary[f].Render(convexHull->m_transparency);
-	}
+    // Render shadow fins
+    glEnable(GL_TEXTURE_2D);
 
-	int LightSystem::AddExtraFins(const ConvexHull &hull, std::vector<ShadowFin> &fins, const Light &light, int boundryIndex, bool wrapCW, Vec2f &mainUmbraRoot, Vec2f &mainUmbraVec)
-	{
-		ShadowFin* pFin = &fins.back();
+    m_softShadowTexture.bind();
 
-		Vec2f hCenter(hull.GetWorldCenter());
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-		int secondEdgeIndex;
-		int numVertices = static_cast<signed>(hull.m_vertices.size());
+    for (unsigned int f = 0, numFins = finsToRender_firstBoundary.size(); f < numFins; f++)
+        finsToRender_firstBoundary[f].Render(convexHull->m_transparency);
 
-		mainUmbraRoot = fins.back().m_rootPos;
-		mainUmbraVec = fins.back().m_umbra;
+    for (unsigned int f = 0, numFins = finsToRender_secondBoundary.size(); f < numFins; f++)
+        finsToRender_secondBoundary[f].Render(convexHull->m_transparency);
+}
 
-		unsigned int i;
+int LightSystem::AddExtraFins(const ConvexHull &hull, std::vector<ShadowFin> &fins, const Light &light, int boundryIndex, bool wrapCW, Vec2f &mainUmbraRoot, Vec2f &mainUmbraVec)
+{
+    ShadowFin* pFin = &fins.back();
 
-		for(i = 0; i < m_maxFins; i++)
-		{	
-			if(wrapCW)
-				secondEdgeIndex = Wrap(boundryIndex - 1, numVertices);
-			else
-				secondEdgeIndex = Wrap(boundryIndex + 1, numVertices);
+    Vec2f hCenter(hull.GetWorldCenter());
 
-			Vec2f edgeVec((hull.m_vertices[secondEdgeIndex] - hull.m_vertices[boundryIndex]).Normalize());
+    int secondEdgeIndex;
+    int numVertices = static_cast<signed>(hull.m_vertices.size());
 
-			Vec2f penNorm(pFin->m_penumbra.Normalize());
+    mainUmbraRoot = fins.back().m_rootPos;
+    mainUmbraVec = fins.back().m_umbra;
 
-			float angle1 = acosf(penNorm.Dot(edgeVec));
-			float angle2 = acosf(penNorm.Dot(pFin->m_umbra.Normalize()));
+    unsigned int i;
 
-			if(angle1 >= angle2)
-				break; // No intersection, break
+    for (i = 0; i < m_maxFins; i++) {
+        if (wrapCW)
+            secondEdgeIndex = Wrap(boundryIndex - 1, numVertices);
+        else
+            secondEdgeIndex = Wrap(boundryIndex + 1, numVertices);
 
-			// Change existing fin to attatch to side of hull
-			pFin->m_umbra = edgeVec * light.m_radius;
+        Vec2f edgeVec((hull.m_vertices[secondEdgeIndex] - hull.m_vertices[boundryIndex]).Normalize());
 
-			// Calculate a lower fin instensity based on ratio of angles (0 if angles are same, so disappears then)
-			pFin->m_umbraBrightness = 1.0f - angle1 / angle2;
+        Vec2f penNorm(pFin->m_penumbra.Normalize());
 
-			// Add the extra fin
-			Vec2f secondBoundryPoint(hull.GetWorldVertex(secondEdgeIndex));
+        float angle1 = acosf(penNorm.Dot(edgeVec));
+        float angle2 = acosf(penNorm.Dot(pFin->m_umbra.Normalize()));
 
-			Vec2f lightNormal(-(light.m_center.y - secondBoundryPoint.y), light.m_center.x - secondBoundryPoint.x);
+        if (angle1 >= angle2)
+            break; // No intersection, break
 
-			Vec2f centerToBoundry(secondBoundryPoint - hCenter);
+        // Change existing fin to attatch to side of hull
+        pFin->m_umbra = edgeVec * light.m_radius;
 
-			if(centerToBoundry.Dot(lightNormal) < 0)
-				lightNormal *= -1;
+        // Calculate a lower fin instensity based on ratio of angles (0 if angles are same, so disappears then)
+        pFin->m_umbraBrightness = 1.0f - angle1 / angle2;
 
-			lightNormal = lightNormal.Normalize() * light.m_size;
+        // Add the extra fin
+        Vec2f secondBoundryPoint(hull.GetWorldVertex(secondEdgeIndex));
 
-			ShadowFin newFin;
+        Vec2f lightNormal(-(light.m_center.y - secondBoundryPoint.y), light.m_center.x - secondBoundryPoint.x);
 
-			mainUmbraRoot = newFin.m_rootPos = secondBoundryPoint;
-			newFin.m_umbra = secondBoundryPoint - (light.m_center + lightNormal);
-			mainUmbraVec = newFin.m_umbra = newFin.m_umbra.Normalize() * light.m_radius;
-			newFin.m_penumbra = pFin->m_umbra;
+        Vec2f centerToBoundry(secondBoundryPoint - hCenter);
 
-			newFin.m_penumbraBrightness = pFin->m_umbraBrightness;
+        if (centerToBoundry.Dot(lightNormal) < 0)
+            lightNormal *= -1;
 
-			fins.push_back(newFin);
+        lightNormal = lightNormal.Normalize() * light.m_size;
 
-			pFin = &fins.back();
+        ShadowFin newFin;
 
-			boundryIndex = secondEdgeIndex;
-		}
+        mainUmbraRoot = newFin.m_rootPos = secondBoundryPoint;
+        newFin.m_umbra = secondBoundryPoint - (light.m_center + lightNormal);
+        mainUmbraVec = newFin.m_umbra = newFin.m_umbra.Normalize() * light.m_radius;
+        newFin.m_penumbra = pFin->m_umbra;
 
-		return i;
-	}
+        newFin.m_penumbraBrightness = pFin->m_umbraBrightness;
 
-	void LightSystem::SetUp(const AABB &region)
-	{
-		// Create the quad trees
-		m_lightTree.Create(region);
-		m_hullTree.Create(region);
-		m_emissiveTree.Create(region);
+        fins.push_back(newFin);
 
-		// Base RT size off of window resolution
-		sf::Vector2u viewSizeui(m_pWin->getSize());
+        pFin = &fins.back();
 
-		m_compositionTexture.create(viewSizeui.x, viewSizeui.y, false);
-		m_compositionTexture.setSmooth(true);
+        boundryIndex = secondEdgeIndex;
+    }
 
-		m_compositionTexture.setActive();
-		glEnable(GL_BLEND);
-		glEnable(GL_TEXTURE_2D);
+    return i;
+}
 
-		m_bloomTexture.create(viewSizeui.x, viewSizeui.y, false);
-		m_bloomTexture.setSmooth(true);
+void LightSystem::SetUp(const AABB &region)
+{
+    // Create the quad trees
+    m_lightTree.Create(region);
+    m_hullTree.Create(region);
+    m_emissiveTree.Create(region);
 
-		m_bloomTexture.setActive();
-		glEnable(GL_BLEND);
-		glEnable(GL_TEXTURE_2D);
+    // Base RT size off of window resolution
+    sf::Vector2u viewSizeui(m_pWin->getSize());
 
-		m_lightTempTexture.create(viewSizeui.x, viewSizeui.y, false);
-		m_lightTempTexture.setSmooth(true);
+    m_compositionTexture.create(viewSizeui.x, viewSizeui.y, false);
+    m_compositionTexture.setSmooth(true);
 
-		m_lightTempTexture.setActive();
-		glEnable(GL_BLEND);
-		glEnable(GL_TEXTURE_2D);
+    m_compositionTexture.setActive();
+    glEnable(GL_BLEND);
+    glEnable(GL_TEXTURE_2D);
 
-		m_pWin->setActive();
-	}
+    m_bloomTexture.create(viewSizeui.x, viewSizeui.y, false);
+    m_bloomTexture.setSmooth(true);
 
-	void LightSystem::AddLight(Light* newLight)
-	{
-		newLight->m_pWin = m_pWin;
-		newLight->m_pLightSystem = this;
-		m_lights.insert(newLight);
-		m_lightTree.Add(newLight);
-	}
+    m_bloomTexture.setActive();
+    glEnable(GL_BLEND);
+    glEnable(GL_TEXTURE_2D);
 
-	void LightSystem::AddConvexHull(ConvexHull* newConvexHull)
-	{
-		m_convexHulls.insert(newConvexHull);
-		m_hullTree.Add(newConvexHull);
-	}
+    m_lightTempTexture.create(viewSizeui.x, viewSizeui.y, false);
+    m_lightTempTexture.setSmooth(true);
 
-	void LightSystem::AddEmissiveLight(EmissiveLight* newEmissiveLight)
-	{
-		m_emissiveLights.insert(newEmissiveLight);
-		m_emissiveTree.Add(newEmissiveLight);
-	}
+    m_lightTempTexture.setActive();
+    glEnable(GL_BLEND);
+    glEnable(GL_TEXTURE_2D);
 
-	void LightSystem::RemoveLight(Light* pLight)
-	{
-		std::unordered_set<Light*>::iterator it = m_lights.find(pLight);
+    m_pWin->setActive();
+}
 
-		assert(it != m_lights.end());
+void LightSystem::AddLight(Light* newLight)
+{
+    newLight->m_pWin = m_pWin;
+    newLight->m_pLightSystem = this;
+    m_lights.insert(newLight);
+    m_lightTree.Add(newLight);
+}
 
-		(*it)->RemoveFromTree();
+void LightSystem::AddConvexHull(ConvexHull* newConvexHull)
+{
+    m_convexHulls.insert(newConvexHull);
+    m_hullTree.Add(newConvexHull);
+}
 
-		m_lights.erase(it);
+void LightSystem::AddEmissiveLight(EmissiveLight* newEmissiveLight)
+{
+    m_emissiveLights.insert(newEmissiveLight);
+    m_emissiveTree.Add(newEmissiveLight);
+}
 
-		delete pLight;
-	}
+void LightSystem::RemoveLight(Light* pLight)
+{
+    std::unordered_set<Light*>::iterator it = m_lights.find(pLight);
 
-	void LightSystem::RemoveConvexHull(ConvexHull* pHull)
-	{
-		std::unordered_set<ConvexHull*>::iterator it = m_convexHulls.find(pHull);
+    assert(it != m_lights.end());
 
-		assert(it != m_convexHulls.end());
+    (*it)->RemoveFromTree();
 
-		(*it)->RemoveFromTree();
+    m_lights.erase(it);
 
-		m_convexHulls.erase(it);
+    delete pLight;
+}
 
-		delete pHull;
-	}
+void LightSystem::RemoveConvexHull(ConvexHull* pHull)
+{
+    std::unordered_set<ConvexHull*>::iterator it = m_convexHulls.find(pHull);
 
-	void LightSystem::RemoveEmissiveLight(EmissiveLight* pEmissiveLight)
-	{
-		std::unordered_set<EmissiveLight*>::iterator it = m_emissiveLights.find(pEmissiveLight);
+    assert(it != m_convexHulls.end());
 
-		assert(it != m_emissiveLights.end());
+    (*it)->RemoveFromTree();
 
-		(*it)->RemoveFromTree();
+    m_convexHulls.erase(it);
 
-		m_emissiveLights.erase(it);
+    delete pHull;
+}
 
-		delete pEmissiveLight;
-	}
+void LightSystem::RemoveEmissiveLight(EmissiveLight* pEmissiveLight)
+{
+    std::unordered_set<EmissiveLight*>::iterator it = m_emissiveLights.find(pEmissiveLight);
 
-	void LightSystem::ClearLights()
-	{
-		// Delete contents
-		for(std::unordered_set<Light*>::iterator it = m_lights.begin(); it != m_lights.end(); it++)
-			delete *it;
+    assert(it != m_emissiveLights.end());
 
-		m_lights.clear();
+    (*it)->RemoveFromTree();
 
-		if(m_lightTree.Created())
-		{
-			m_lightTree.Clear();
-			m_lightTree.Create(AABB(Vec2f(-50.0f, -50.0f), Vec2f(-50.0f, -50.0f)));
-		}
-	}
+    m_emissiveLights.erase(it);
 
-	void LightSystem::ClearConvexHulls()
-	{
-		// Delete contents
-		for(std::unordered_set<ConvexHull*>::iterator it = m_convexHulls.begin(); it != m_convexHulls.end(); it++)
-			delete *it;
+    delete pEmissiveLight;
+}
 
-		m_convexHulls.clear();
+void LightSystem::ClearLights()
+{
+    // Delete contents
+    for (std::unordered_set<Light*>::iterator it = m_lights.begin(); it != m_lights.end(); it++)
+        delete *it;
 
-		if(!m_hullTree.Created())
-		{
-			m_hullTree.Clear();
-			m_hullTree.Create(AABB(Vec2f(-50.0f, -50.0f), Vec2f(-50.0f, -50.0f)));
-		}
-	}
+    m_lights.clear();
 
-	void LightSystem::ClearEmissiveLights()
-	{
-		// Delete contents
-		for(std::unordered_set<EmissiveLight*>::iterator it = m_emissiveLights.begin(); it != m_emissiveLights.end(); it++)
-			delete *it;
+    if (m_lightTree.Created()) {
+        m_lightTree.Clear();
+        m_lightTree.Create(AABB(Vec2f(-50.0f, -50.0f), Vec2f(-50.0f, -50.0f)));
+    }
+}
 
-		m_emissiveLights.clear();
+void LightSystem::ClearConvexHulls()
+{
+    // Delete contents
+    for (std::unordered_set<ConvexHull*>::iterator it = m_convexHulls.begin(); it != m_convexHulls.end(); it++)
+        delete *it;
 
-		if(m_emissiveTree.Created())
-		{
-			m_emissiveTree.Clear();
-			m_emissiveTree.Create(AABB(Vec2f(-50.0f, -50.0f), Vec2f(-50.0f, -50.0f)));
-		}
-	}
+    m_convexHulls.clear();
 
-	void LightSystem::SwitchLightTemp()
-	{
-		if(m_currentRenderTexture != cur_lightTemp)
-		{
-			m_lightTempTexture.setActive();
+    if (!m_hullTree.Created()) {
+        m_hullTree.Clear();
+        m_hullTree.Create(AABB(Vec2f(-50.0f, -50.0f), Vec2f(-50.0f, -50.0f)));
+    }
+}
 
-			//if(currentRenderTexture == cur_lightStatic)
-				SwitchWindowProjection();
+void LightSystem::ClearEmissiveLights()
+{
+    // Delete contents
+    for (std::unordered_set<EmissiveLight*>::iterator it = m_emissiveLights.begin(); it != m_emissiveLights.end(); it++)
+        delete *it;
 
-			m_currentRenderTexture = cur_lightTemp;
-		}
-	}
+    m_emissiveLights.clear();
 
-	void LightSystem::SwitchComposition()
-	{
-		if(m_currentRenderTexture != cur_main)
-		{
-			m_compositionTexture.setActive();
+    if (m_emissiveTree.Created()) {
+        m_emissiveTree.Clear();
+        m_emissiveTree.Create(AABB(Vec2f(-50.0f, -50.0f), Vec2f(-50.0f, -50.0f)));
+    }
+}
 
-			if(m_currentRenderTexture == cur_lightStatic)
-				SwitchWindowProjection();
+void LightSystem::SwitchLightTemp()
+{
+    if (m_currentRenderTexture != cur_lightTemp) {
+        m_lightTempTexture.setActive();
 
-			m_currentRenderTexture = cur_main;
-		}
-	}
+        //if(currentRenderTexture == cur_lightStatic)
+        SwitchWindowProjection();
 
-	void LightSystem::SwitchBloom()
-	{
-		if(m_currentRenderTexture != cur_bloom)
-		{
-			m_bloomTexture.setActive();
+        m_currentRenderTexture = cur_lightTemp;
+    }
+}
 
-			if(m_currentRenderTexture == cur_lightStatic)
-				SwitchWindowProjection();
+void LightSystem::SwitchComposition()
+{
+    if (m_currentRenderTexture != cur_main) {
+        m_compositionTexture.setActive();
 
-			m_currentRenderTexture = cur_bloom;
-		}
-	}
+        if (m_currentRenderTexture == cur_lightStatic)
+            SwitchWindowProjection();
 
-	void LightSystem::SwitchWindow()
-	{
-		m_pWin->resetGLStates();
-	}
+        m_currentRenderTexture = cur_main;
+    }
+}
 
-	void LightSystem::SwitchWindowProjection()
-	{
-		Vec2f viewSize(m_viewAABB.GetDims());
-		sf::Vector2u viewSizeui(static_cast<unsigned int>(viewSize.x), static_cast<unsigned int>(viewSize.y));
+void LightSystem::SwitchBloom()
+{
+    if (m_currentRenderTexture != cur_bloom) {
+        m_bloomTexture.setActive();
 
-		glViewport(0, 0, viewSizeui.x, viewSizeui.y);
+        if (m_currentRenderTexture == cur_lightStatic)
+            SwitchWindowProjection();
 
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
+        m_currentRenderTexture = cur_bloom;
+    }
+}
 
-		// Upside-down, because SFML is pro like that
-		glOrtho(0, viewSize.x, 0, viewSize.y, -100.0f, 100.0f);
-		glMatrixMode(GL_MODELVIEW);
-	}
+void LightSystem::SwitchWindow()
+{
+    m_pWin->resetGLStates();
+}
 
-	void LightSystem::ClearLightTexture(sf::RenderTexture &renTex)
-	{	
-		glLoadIdentity();
-				
-		renTex.clear(sf::Color::Transparent);
+void LightSystem::SwitchWindowProjection()
+{
+    Vec2f viewSize(m_viewAABB.GetDims());
+    sf::Vector2u viewSizeui(static_cast<unsigned int>(viewSize.x), static_cast<unsigned int>(viewSize.y));
 
-		// Clear with quad, since glClear is not working for some reason... if results in very ugly artifacts. MUST clear with full color, with alpha!
-		glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
+    glViewport(0, 0, viewSizeui.x, viewSizeui.y);
 
-		sf::Vector2u size(renTex.getSize());
-		float width = static_cast<float>(size.x);
-		float height = static_cast<float>(size.y);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
 
-		glBlendFunc(GL_ONE, GL_ZERO);
+    // Upside-down, because SFML is pro like that
+    glOrtho(0, viewSize.x, 0, viewSize.y, -100.0f, 100.0f);
+    glMatrixMode(GL_MODELVIEW);
+}
 
-		glBegin(GL_QUADS);
-			glVertex2f(0.0f, 0.0f);
-			glVertex2f(width, 0.0f);
-			glVertex2f(width, height);
-			glVertex2f(0.0f, height);
-		glEnd();
-	}
+void LightSystem::ClearLightTexture(sf::RenderTexture &renTex)
+{
+    glLoadIdentity();
 
-	void LightSystem::RenderLights()
-	{
-		// So will switch to main render textures from SFML projection
-		m_currentRenderTexture = cur_lightStatic;
+    renTex.clear(sf::Color::Transparent);
 
-		Vec2f viewCenter(m_viewAABB.GetCenter());
-		Vec2f viewSize(m_viewAABB.GetDims());
+    // Clear with quad, since glClear is not working for some reason... if results in very ugly artifacts. MUST clear with full color, with alpha!
+    glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
 
-		glDisable(GL_TEXTURE_2D);
+    sf::Vector2u size(renTex.getSize());
+    float width = static_cast<float>(size.x);
+    float height = static_cast<float>(size.y);
 
-		if(m_useBloom)
-		{
-			// Clear the bloom texture
-			SwitchBloom();
-			glLoadIdentity();
+    glBlendFunc(GL_ONE, GL_ZERO);
 
-			m_bloomTexture.clear(sf::Color::Transparent);
+    glBegin(GL_QUADS);
+    glVertex2f(0.0f, 0.0f);
+    glVertex2f(width, 0.0f);
+    glVertex2f(width, height);
+    glVertex2f(0.0f, height);
+    glEnd();
+}
 
-			glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
+void LightSystem::RenderLights()
+{
+    // So will switch to main render textures from SFML projection
+    m_currentRenderTexture = cur_lightStatic;
 
-			glBlendFunc(GL_ONE, GL_ZERO);
+    Vec2f viewCenter(m_viewAABB.GetCenter());
+    Vec2f viewSize(m_viewAABB.GetDims());
 
-			// Clear with quad, since glClear is not working for some reason... if results in very ugly artifacts
-			glBegin(GL_QUADS);
-				glVertex2f(0.0f, 0.0f);
-				glVertex2f(viewSize.x, 0.0f);
-				glVertex2f(viewSize.x, viewSize.y);
-				glVertex2f(0.0f, viewSize.y);
-			glEnd();
+    glDisable(GL_TEXTURE_2D);
 
-			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-		}
+    if (m_useBloom) {
+        // Clear the bloom texture
+        SwitchBloom();
+        glLoadIdentity();
 
-		SwitchComposition();
-		glLoadIdentity();
+        m_bloomTexture.clear(sf::Color::Transparent);
 
-		m_compositionTexture.clear(m_ambientColor);
+        glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
 
-		glColor4b(m_ambientColor.r, m_ambientColor.g, m_ambientColor.b, m_ambientColor.a);
+        glBlendFunc(GL_ONE, GL_ZERO);
 
-		glBlendFunc(GL_ONE, GL_ZERO);
+        // Clear with quad, since glClear is not working for some reason... if results in very ugly artifacts
+        glBegin(GL_QUADS);
+        glVertex2f(0.0f, 0.0f);
+        glVertex2f(viewSize.x, 0.0f);
+        glVertex2f(viewSize.x, viewSize.y);
+        glVertex2f(0.0f, viewSize.y);
+        glEnd();
 
-		// Clear with quad, since glClear is not working for some reason... if results in very ugly artifacts
-		glBegin(GL_QUADS);
-			glVertex2f(0.0f, 0.0f);
-			glVertex2f(viewSize.x, 0.0f);
-			glVertex2f(viewSize.x, viewSize.y);
-			glVertex2f(0.0f, viewSize.y);
-		glEnd();
+        glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    }
 
-		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    SwitchComposition();
+    glLoadIdentity();
 
-		glEnable(GL_TEXTURE_2D);
+    m_compositionTexture.clear(m_ambientColor);
 
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glColor4b(m_ambientColor.r, m_ambientColor.g, m_ambientColor.b, m_ambientColor.a);
 
-		// Get visible lights
-		std::vector<qdt::QuadTreeOccupant*> visibleLights;
-		m_lightTree.Query_Region(m_viewAABB, visibleLights);
+    glBlendFunc(GL_ONE, GL_ZERO);
 
-		// Add lights from pre build list if there are any
-		if(!m_lightsToPreBuild.empty())
-		{
-			if(m_prebuildTimer < 2)
-			{
-				m_prebuildTimer++;
+    // Clear with quad, since glClear is not working for some reason... if results in very ugly artifacts
+    glBegin(GL_QUADS);
+    glVertex2f(0.0f, 0.0f);
+    glVertex2f(viewSize.x, 0.0f);
+    glVertex2f(viewSize.x, viewSize.y);
+    glVertex2f(0.0f, viewSize.y);
+    glEnd();
 
-				const unsigned int numLightsToPreBuild = m_lightsToPreBuild.size();
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-				for(unsigned int i = 0; i < numLightsToPreBuild; i++)
-				{
-					m_lightsToPreBuild[i]->m_updateRequired = true;
-					visibleLights.push_back(m_lightsToPreBuild[i]);
-				}
-			}
-			else
-				m_lightsToPreBuild.clear();
-		}
+    glEnable(GL_TEXTURE_2D);
 
-		const unsigned int numVisibleLights = visibleLights.size();
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		for(unsigned int l = 0; l < numVisibleLights; l++)
-		{
-			Light* pLight = static_cast<Light*>(visibleLights[l]);
+    // Get visible lights
+    std::vector<qdt::QuadTreeOccupant*> visibleLights;
+    m_lightTree.Query_Region(m_viewAABB, visibleLights);
 
-			// Skip invisible lights
-			if(pLight->m_intensity == 0.0f)
-				continue;
+    // Add lights from pre build list if there are any
+    if (!m_lightsToPreBuild.empty()) {
+        if (m_prebuildTimer < 2) {
+            m_prebuildTimer++;
 
-			bool updateRequired = false;
+            const unsigned int numLightsToPreBuild = m_lightsToPreBuild.size();
 
-			if(pLight->AlwaysUpdate())
-				updateRequired = true;
-			else if(pLight->m_updateRequired)
-				updateRequired = true;
+            for (unsigned int i = 0; i < numLightsToPreBuild; i++) {
+                m_lightsToPreBuild[i]->m_updateRequired = true;
+                visibleLights.push_back(m_lightsToPreBuild[i]);
+            }
+        } else
+            m_lightsToPreBuild.clear();
+    }
 
-			// Get hulls that the light affects
-			std::vector<qdt::QuadTreeOccupant*> regionHulls;
-			m_hullTree.Query_Region(*pLight->GetAABB(), regionHulls);
+    const unsigned int numVisibleLights = visibleLights.size();
 
-			const unsigned int numHulls = regionHulls.size();
+    for (unsigned int l = 0; l < numVisibleLights; l++) {
+        Light* pLight = static_cast<Light*>(visibleLights[l]);
 
-			if(!updateRequired)
-			{
-				// See of any of the hulls need updating
-				for(unsigned int h = 0; h < numHulls; h++)
-				{
-					ConvexHull* pHull = static_cast<ConvexHull*>(regionHulls[h]);
+        // Skip invisible lights
+        if (pLight->m_intensity == 0.0f)
+            continue;
 
-					if(pHull->m_updateRequired)
-					{
-						pHull->m_updateRequired = false;
-						updateRequired = true;
-						break;
-					}
-				}
-			}
+        bool updateRequired = false;
 
-			if(updateRequired)
-			{
-				Vec2f staticTextureOffset;
+        if (pLight->AlwaysUpdate())
+            updateRequired = true;
+        else if (pLight->m_updateRequired)
+            updateRequired = true;
 
-				// Activate the intermediate render Texture
-				if(pLight->AlwaysUpdate())
-				{
-					SwitchLightTemp();
+        // Get hulls that the light affects
+        std::vector<qdt::QuadTreeOccupant*> regionHulls;
+        m_hullTree.Query_Region(*pLight->GetAABB(), regionHulls);
 
-					ClearLightTexture(m_lightTempTexture);
+        const unsigned int numHulls = regionHulls.size();
 
-					CameraSetup();
+        if (!updateRequired) {
+            // See of any of the hulls need updating
+            for (unsigned int h = 0; h < numHulls; h++) {
+                ConvexHull* pHull = static_cast<ConvexHull*>(regionHulls[h]);
 
-					// Reset color
-					glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-				}
-				else
-				{
-					pLight->SwitchStaticTexture();
-					m_currentRenderTexture = cur_lightStatic;
+                if (pHull->m_updateRequired) {
+                    pHull->m_updateRequired = false;
+                    updateRequired = true;
+                    break;
+                }
+            }
+        }
 
-					ClearLightTexture(*pLight->m_pStaticTexture);
+        if (updateRequired) {
+            Vec2f staticTextureOffset;
 
-					// Reset color
-					glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+            // Activate the intermediate render Texture
+            if (pLight->AlwaysUpdate()) {
+                SwitchLightTemp();
 
-					staticTextureOffset = pLight->m_aabb.GetDims() / 2.0f;
+                ClearLightTexture(m_lightTempTexture);
 
-					glTranslatef(-pLight->m_aabb.m_lowerBound.x, -pLight->m_aabb.m_lowerBound.y, 0.0f);
-				}
+                CameraSetup();
 
-				if(pLight->m_shaderAttenuation)
-				{
-					m_lightAttenuationShader.bind();
+                // Reset color
+                glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+            } else {
+                pLight->SwitchStaticTexture();
+                m_currentRenderTexture = cur_lightStatic;
 
-					if(pLight->AlwaysUpdate())
-						m_lightAttenuationShader.setParameter("lightPos", pLight->m_center.x - m_viewAABB.m_lowerBound.x, pLight->m_center.y - m_viewAABB.m_lowerBound.y);
-					else
-						m_lightAttenuationShader.setParameter("lightPos", pLight->m_center.x - pLight->m_aabb.m_lowerBound.x, pLight->m_center.y - pLight->m_aabb.m_lowerBound.y);
+                ClearLightTexture(*pLight->m_pStaticTexture);
 
-					m_lightAttenuationShader.setParameter("lightColor", pLight->m_color.r, pLight->m_color.g, pLight->m_color.b);
-					m_lightAttenuationShader.setParameter("radius", pLight->m_radius);
-					m_lightAttenuationShader.setParameter("bleed", pLight->m_bleed);
-					m_lightAttenuationShader.setParameter("linearizeFactor", pLight->m_linearizeFactor);
+                // Reset color
+                glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-					// Render the current light
-					pLight->RenderLightSolidPortion();
+                staticTextureOffset = pLight->m_aabb.GetDims() / 2.0f;
 
-					m_lightAttenuationShader.unbind();
-				}
-				else
-					// Render the current light
-					pLight->RenderLightSolidPortion();
+                glTranslatef(-pLight->m_aabb.m_lowerBound.x, -pLight->m_aabb.m_lowerBound.y, 0.0f);
+            }
 
-				// Mask off lights
-				if(m_checkForHullIntersect)
-					for(unsigned int h = 0; h < numHulls; h++)
-					{
-						ConvexHull* pHull = static_cast<ConvexHull*>(regionHulls[h]);
+            if (pLight->m_shaderAttenuation) {
+                m_lightAttenuationShader.bind();
 
-						Vec2f hullToLight(pLight->m_center - pHull->GetWorldCenter());
-						hullToLight = hullToLight.Normalize() * pLight->m_size;
+                if (pLight->AlwaysUpdate())
+                    m_lightAttenuationShader.setParameter("lightPos", pLight->m_center.x - m_viewAABB.m_lowerBound.x, pLight->m_center.y - m_viewAABB.m_lowerBound.y);
+                else
+                    m_lightAttenuationShader.setParameter("lightPos", pLight->m_center.x - pLight->m_aabb.m_lowerBound.x, pLight->m_center.y - pLight->m_aabb.m_lowerBound.y);
 
-						if(!pHull->PointInsideHull(pLight->m_center - hullToLight))
-							MaskShadow(pLight, pHull, !pHull->m_renderLightOverHull, 2.0f);
-					}
-				else
-					for(unsigned int h = 0; h < numHulls; h++)
-					{
-						ConvexHull* pHull = static_cast<ConvexHull*>(regionHulls[h]);
+                m_lightAttenuationShader.setParameter("lightColor", pLight->m_color.r, pLight->m_color.g, pLight->m_color.b);
+                m_lightAttenuationShader.setParameter("radius", pLight->m_radius);
+                m_lightAttenuationShader.setParameter("bleed", pLight->m_bleed);
+                m_lightAttenuationShader.setParameter("linearizeFactor", pLight->m_linearizeFactor);
 
-						MaskShadow(pLight, pHull, !pHull->m_renderLightOverHull, 2.0f);
-					}
+                // Render the current light
+                pLight->RenderLightSolidPortion();
 
-				// Render the hulls only for the hulls that had
-				// there shadows rendered earlier (not out of bounds)
-				for(unsigned int h = 0; h < numHulls; h++)
-					static_cast<ConvexHull*>(regionHulls[h])->RenderHull(2.0f);
+                m_lightAttenuationShader.unbind();
+            } else
+                // Render the current light
+                pLight->RenderLightSolidPortion();
 
-				// Soft light angle fins (additional masking)
-				pLight->RenderLightSoftPortion();
+            // Mask off lights
+            if (m_checkForHullIntersect)
+                for (unsigned int h = 0; h < numHulls; h++) {
+                    ConvexHull* pHull = static_cast<ConvexHull*>(regionHulls[h]);
 
-				// Color reset
-				glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+                    Vec2f hullToLight(pLight->m_center - pHull->GetWorldCenter());
+                    hullToLight = hullToLight.Normalize() * pLight->m_size;
 
-				// Now render that intermediate render Texture to the main render Texture
-				if(pLight->AlwaysUpdate())
-				{
-					m_lightTempTexture.display();
+                    if (!pHull->PointInsideHull(pLight->m_center - hullToLight))
+                        MaskShadow(pLight, pHull, !pHull->m_renderLightOverHull, 2.0f);
+                }
+            else
+                for (unsigned int h = 0; h < numHulls; h++) {
+                    ConvexHull* pHull = static_cast<ConvexHull*>(regionHulls[h]);
 
-					SwitchComposition();
-					glLoadIdentity();
+                    MaskShadow(pLight, pHull, !pHull->m_renderLightOverHull, 2.0f);
+                }
 
-					m_lightTempTexture.getTexture().bind();
+            // Render the hulls only for the hulls that had
+            // there shadows rendered earlier (not out of bounds)
+            for (unsigned int h = 0; h < numHulls; h++)
+                static_cast<ConvexHull*>(regionHulls[h])->RenderHull(2.0f);
 
-					glBlendFunc(GL_ONE, GL_ONE);
+            // Soft light angle fins (additional masking)
+            pLight->RenderLightSoftPortion();
 
-					// Texture is upside-down for some reason, so draw flipped
-					glBegin(GL_QUADS);
-						glTexCoord2i(0, 1); glVertex2f(0.0f, 0.0f);
-						glTexCoord2i(1, 1); glVertex2f(viewSize.x, 0.0f);
-						glTexCoord2i(1, 0); glVertex2f(viewSize.x, viewSize.y);
-						glTexCoord2i(0, 0); glVertex2f(0.0f, viewSize.y);
-					glEnd();
+            // Color reset
+            glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-					// Bloom render
-					if(m_useBloom && pLight->m_intensity > 1.0f)
-					{
-						SwitchBloom();
-						glLoadIdentity();
+            // Now render that intermediate render Texture to the main render Texture
+            if (pLight->AlwaysUpdate()) {
+                m_lightTempTexture.display();
 
-						m_lightTempTexture.getTexture().bind();
+                SwitchComposition();
+                glLoadIdentity();
 
-						glBlendFunc(GL_ONE, GL_ONE);
-	
-						// Bloom amount
-						glColor4f(1.0f, 1.0f, 1.0f, pLight->m_intensity - 1.0f);
+                m_lightTempTexture.getTexture().bind();
 
-						// Texture is upside-down for some reason, so draw flipped
-						glBegin(GL_QUADS);
-							glTexCoord2i(0, 1); glVertex2f(0.0f, 0.0f);
-							glTexCoord2i(1, 1); glVertex2f(viewSize.x, 0.0f);
-							glTexCoord2i(1, 0); glVertex2f(viewSize.x, viewSize.y);
-							glTexCoord2i(0, 0); glVertex2f(0.0f, viewSize.y);
-						glEnd();
+                glBlendFunc(GL_ONE, GL_ONE);
 
-						glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-					}
-				}
-				else
-				{
-					pLight->m_pStaticTexture->display();
+                // Texture is upside-down for some reason, so draw flipped
+                glBegin(GL_QUADS);
+                glTexCoord2i(0, 1); glVertex2f(0.0f, 0.0f);
+                glTexCoord2i(1, 1); glVertex2f(viewSize.x, 0.0f);
+                glTexCoord2i(1, 0); glVertex2f(viewSize.x, viewSize.y);
+                glTexCoord2i(0, 0); glVertex2f(0.0f, viewSize.y);
+                glEnd();
 
-					SwitchComposition();
-					CameraSetup();
+                // Bloom render
+                if (m_useBloom && pLight->m_intensity > 1.0f) {
+                    SwitchBloom();
+                    glLoadIdentity();
 
-					pLight->m_pStaticTexture->getTexture().bind();
+                    m_lightTempTexture.getTexture().bind();
 
-					glTranslatef(pLight->m_center.x - staticTextureOffset.x, pLight->m_center.y - staticTextureOffset.y, 0.0f);
+                    glBlendFunc(GL_ONE, GL_ONE);
 
-					glBlendFunc(GL_ONE, GL_ONE);
+                    // Bloom amount
+                    glColor4f(1.0f, 1.0f, 1.0f, pLight->m_intensity - 1.0f);
 
-					sf::Vector2u lightStaticTextureSize(pLight->m_pStaticTexture->getSize());
-					const float lightStaticTextureWidth = static_cast<float>(lightStaticTextureSize.x);
-					const float lightStaticTextureHeight = static_cast<float>(lightStaticTextureSize.y);
+                    // Texture is upside-down for some reason, so draw flipped
+                    glBegin(GL_QUADS);
+                    glTexCoord2i(0, 1); glVertex2f(0.0f, 0.0f);
+                    glTexCoord2i(1, 1); glVertex2f(viewSize.x, 0.0f);
+                    glTexCoord2i(1, 0); glVertex2f(viewSize.x, viewSize.y);
+                    glTexCoord2i(0, 0); glVertex2f(0.0f, viewSize.y);
+                    glEnd();
 
-					glBegin(GL_QUADS);
-						glTexCoord2i(0, 0); glVertex2f(0.0f, 0.0f);
-						glTexCoord2i(1, 0); glVertex2f(lightStaticTextureWidth, 0.0f);
-						glTexCoord2i(1, 1); glVertex2f(lightStaticTextureWidth, lightStaticTextureHeight);
-						glTexCoord2i(0, 1); glVertex2f(0.0f, lightStaticTextureHeight);
-					glEnd();
+                    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+                }
+            } else {
+                pLight->m_pStaticTexture->display();
 
-					// Bloom render
-					if(m_useBloom && pLight->m_intensity > 1.0f)
-					{
-						SwitchBloom();
-						CameraSetup();
+                SwitchComposition();
+                CameraSetup();
 
-						glTranslatef(pLight->m_center.x - staticTextureOffset.x, pLight->m_center.y - staticTextureOffset.y, 0.0f);
+                pLight->m_pStaticTexture->getTexture().bind();
 
-						pLight->m_pStaticTexture->getTexture().bind();
+                glTranslatef(pLight->m_center.x - staticTextureOffset.x, pLight->m_center.y - staticTextureOffset.y, 0.0f);
 
-						glBlendFunc(GL_ONE, GL_ONE);
-	
-						// Bloom amount
-						glColor4f(1.0f, 1.0f, 1.0f, pLight->m_intensity - 1.0f);
+                glBlendFunc(GL_ONE, GL_ONE);
 
-						glBegin(GL_QUADS);
-							glTexCoord2i(0, 0); glVertex2f(0.0f, 0.0f);
-							glTexCoord2i(1, 0); glVertex2f(lightStaticTextureWidth, 0.0f);
-							glTexCoord2i(1, 1); glVertex2f(lightStaticTextureWidth, lightStaticTextureHeight);
-							glTexCoord2i(0, 1); glVertex2f(0.0f, lightStaticTextureHeight);
-						glEnd();
+                sf::Vector2u lightStaticTextureSize(pLight->m_pStaticTexture->getSize());
+                const float lightStaticTextureWidth = static_cast<float>(lightStaticTextureSize.x);
+                const float lightStaticTextureHeight = static_cast<float>(lightStaticTextureSize.y);
 
-						glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-					}
-				}
+                glBegin(GL_QUADS);
+                glTexCoord2i(0, 0); glVertex2f(0.0f, 0.0f);
+                glTexCoord2i(1, 0); glVertex2f(lightStaticTextureWidth, 0.0f);
+                glTexCoord2i(1, 1); glVertex2f(lightStaticTextureWidth, lightStaticTextureHeight);
+                glTexCoord2i(0, 1); glVertex2f(0.0f, lightStaticTextureHeight);
+                glEnd();
 
-				pLight->m_updateRequired = false;
-			}
-			else
-			{
-				SwitchComposition();
+                // Bloom render
+                if (m_useBloom && pLight->m_intensity > 1.0f) {
+                    SwitchBloom();
+                    CameraSetup();
 
-				// Render existing texture
-				pLight->m_pStaticTexture->getTexture().bind();
+                    glTranslatef(pLight->m_center.x - staticTextureOffset.x, pLight->m_center.y - staticTextureOffset.y, 0.0f);
 
-				Vec2f staticTextureOffset(pLight->m_center - pLight->m_aabb.m_lowerBound);
+                    pLight->m_pStaticTexture->getTexture().bind();
 
-				CameraSetup();
-				glTranslatef(pLight->m_center.x - staticTextureOffset.x, pLight->m_center.y - staticTextureOffset.y, 0.0f);
+                    glBlendFunc(GL_ONE, GL_ONE);
 
-				glBlendFunc(GL_ONE, GL_ONE);
+                    // Bloom amount
+                    glColor4f(1.0f, 1.0f, 1.0f, pLight->m_intensity - 1.0f);
 
-				sf::Vector2u lightStaticTextureSize(pLight->m_pStaticTexture->getSize());
-				const float lightStaticTextureWidth = static_cast<float>(lightStaticTextureSize.x);
-				const float lightStaticTextureHeight = static_cast<float>(lightStaticTextureSize.y);
+                    glBegin(GL_QUADS);
+                    glTexCoord2i(0, 0); glVertex2f(0.0f, 0.0f);
+                    glTexCoord2i(1, 0); glVertex2f(lightStaticTextureWidth, 0.0f);
+                    glTexCoord2i(1, 1); glVertex2f(lightStaticTextureWidth, lightStaticTextureHeight);
+                    glTexCoord2i(0, 1); glVertex2f(0.0f, lightStaticTextureHeight);
+                    glEnd();
 
-				glBegin(GL_QUADS);
-					glTexCoord2i(0, 0); glVertex2f(0.0f, 0.0f);
-					glTexCoord2i(1, 0); glVertex2f(lightStaticTextureWidth, 0.0f);
-					glTexCoord2i(1, 1); glVertex2f(lightStaticTextureWidth, lightStaticTextureHeight);
-					glTexCoord2i(0, 1); glVertex2f(0.0f, lightStaticTextureHeight);
-				glEnd();
+                    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+                }
+            }
 
-				// Bloom render
-				if(m_useBloom && pLight->m_intensity > 1.0f)
-				{
-					SwitchBloom();
-					CameraSetup();
+            pLight->m_updateRequired = false;
+        } else {
+            SwitchComposition();
 
-					glTranslatef(pLight->m_center.x - staticTextureOffset.x, pLight->m_center.y - staticTextureOffset.y, 0.0f);
+            // Render existing texture
+            pLight->m_pStaticTexture->getTexture().bind();
 
-					pLight->m_pStaticTexture->getTexture().bind();
+            Vec2f staticTextureOffset(pLight->m_center - pLight->m_aabb.m_lowerBound);
 
-					glBlendFunc(GL_ONE, GL_ONE);
-	
-					// Bloom amount
-					glColor4f(1.0f, 1.0f, 1.0f, pLight->m_intensity - 1.0f);
+            CameraSetup();
+            glTranslatef(pLight->m_center.x - staticTextureOffset.x, pLight->m_center.y - staticTextureOffset.y, 0.0f);
 
-					glBegin(GL_QUADS);
-						glTexCoord2i(0, 0); glVertex2f(0.0f, 0.0f);
-						glTexCoord2i(1, 0); glVertex2f(lightStaticTextureWidth, 0.0f);
-						glTexCoord2i(1, 1); glVertex2f(lightStaticTextureWidth, lightStaticTextureHeight);
-						glTexCoord2i(0, 1); glVertex2f(0.0f, lightStaticTextureHeight);
-					glEnd();
+            glBlendFunc(GL_ONE, GL_ONE);
 
-					glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-				}
-			}
+            sf::Vector2u lightStaticTextureSize(pLight->m_pStaticTexture->getSize());
+            const float lightStaticTextureWidth = static_cast<float>(lightStaticTextureSize.x);
+            const float lightStaticTextureHeight = static_cast<float>(lightStaticTextureSize.y);
 
-			regionHulls.clear();
-		}
+            glBegin(GL_QUADS);
+            glTexCoord2i(0, 0); glVertex2f(0.0f, 0.0f);
+            glTexCoord2i(1, 0); glVertex2f(lightStaticTextureWidth, 0.0f);
+            glTexCoord2i(1, 1); glVertex2f(lightStaticTextureWidth, lightStaticTextureHeight);
+            glTexCoord2i(0, 1); glVertex2f(0.0f, lightStaticTextureHeight);
+            glEnd();
 
-		// Emissive lights
-		std::vector<qdt::QuadTreeOccupant*> visibleEmissiveLights;
-		m_emissiveTree.Query_Region(m_viewAABB, visibleEmissiveLights);
+            // Bloom render
+            if (m_useBloom && pLight->m_intensity > 1.0f) {
+                SwitchBloom();
+                CameraSetup();
 
-		const unsigned int numEmissiveLights = visibleEmissiveLights.size();
+                glTranslatef(pLight->m_center.x - staticTextureOffset.x, pLight->m_center.y - staticTextureOffset.y, 0.0f);
 
-		for(unsigned int i = 0; i < numEmissiveLights; i++)
-		{
-			EmissiveLight* pEmissive = static_cast<EmissiveLight*>(visibleEmissiveLights[i]);
+                pLight->m_pStaticTexture->getTexture().bind();
 
-			if(m_useBloom && pEmissive->m_intensity > 1.0f)
-			{
-				SwitchBloom();
-				CameraSetup();
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-				pEmissive->Render();
-			}
-			else
-			{
-				SwitchComposition();
-				CameraSetup();
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-				pEmissive->Render();
-			}
-		}
+                glBlendFunc(GL_ONE, GL_ONE);
 
-		m_bloomTexture.display();
+                // Bloom amount
+                glColor4f(1.0f, 1.0f, 1.0f, pLight->m_intensity - 1.0f);
 
-		m_compositionTexture.display();
+                glBegin(GL_QUADS);
+                glTexCoord2i(0, 0); glVertex2f(0.0f, 0.0f);
+                glTexCoord2i(1, 0); glVertex2f(lightStaticTextureWidth, 0.0f);
+                glTexCoord2i(1, 1); glVertex2f(lightStaticTextureWidth, lightStaticTextureHeight);
+                glTexCoord2i(0, 1); glVertex2f(0.0f, lightStaticTextureHeight);
+                glEnd();
 
-		SwitchWindow();
-	}
+                glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+            }
+        }
 
-	void LightSystem::BuildLight(Light* pLight)
-	{
-		m_lightsToPreBuild.push_back(pLight);
-	}
+        regionHulls.clear();
+    }
 
-	void LightSystem::RenderLightTexture()
-	{
-		Vec2f viewSize(m_viewAABB.GetDims());
+    // Emissive lights
+    std::vector<qdt::QuadTreeOccupant*> visibleEmissiveLights;
+    m_emissiveTree.Query_Region(m_viewAABB, visibleEmissiveLights);
 
-		// Translate by negative camera coordinates. glLoadIdentity will not work, probably
-		// because SFML stores view transformations in the projection matrix
-		glTranslatef(m_viewAABB.GetLowerBound().x, -m_viewAABB.GetLowerBound().y, 0.0f);
+    const unsigned int numEmissiveLights = visibleEmissiveLights.size();
 
-		m_compositionTexture.getTexture().bind();
+    for (unsigned int i = 0; i < numEmissiveLights; i++) {
+        EmissiveLight* pEmissive = static_cast<EmissiveLight*>(visibleEmissiveLights[i]);
 
-		// Set up color function to multiply the existing color with the render texture color
-		glBlendFunc(GL_DST_COLOR, GL_ZERO); // Seperate allows you to set color and alpha functions seperately
+        if (m_useBloom && pEmissive->m_intensity > 1.0f) {
+            SwitchBloom();
+            CameraSetup();
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            pEmissive->Render();
+        } else {
+            SwitchComposition();
+            CameraSetup();
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            pEmissive->Render();
+        }
+    }
 
-		glBegin(GL_QUADS);
-			glTexCoord2i(0, 0); glVertex2f(0.0f, 0.0f);
-			glTexCoord2i(1, 0); glVertex2f(viewSize.x, 0.0f);
-			glTexCoord2i(1, 1); glVertex2f(viewSize.x, viewSize.y);
-			glTexCoord2i(0, 1); glVertex2f(0.0f, viewSize.y);
-		glEnd();
+    m_bloomTexture.display();
 
-		if(m_useBloom)
-		{
-			m_bloomTexture.getTexture().bind();
+    m_compositionTexture.display();
 
-			glBlendFunc(GL_ONE, GL_ONE);
+    SwitchWindow();
+}
 
-			glBegin(GL_QUADS);
-				glTexCoord2i(0, 0); glVertex2f(0.0f, 0.0f);
-				glTexCoord2i(1, 0); glVertex2f(viewSize.x, 0.0f);
-				glTexCoord2i(1, 1); glVertex2f(viewSize.x, viewSize.y);
-				glTexCoord2i(0, 1); glVertex2f(0.0f, viewSize.y);
-			glEnd();
-		}
+void LightSystem::BuildLight(Light* pLight)
+{
+    m_lightsToPreBuild.push_back(pLight);
+}
 
-		// Reset blend function
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+void LightSystem::RenderLightTexture()
+{
+    Vec2f viewSize(m_viewAABB.GetDims());
 
-		m_pWin->resetGLStates();
-	}
+    // Translate by negative camera coordinates. glLoadIdentity will not work, probably
+    // because SFML stores view transformations in the projection matrix
+    glTranslatef(m_viewAABB.GetLowerBound().x, -m_viewAABB.GetLowerBound().y, 0.0f);
 
-	void LightSystem::DebugRender()
-	{
-		// Set to a more useful-for-OpenGL projection
-		Vec2f viewSize(m_viewAABB.GetDims());
+    m_compositionTexture.getTexture().bind();
 
-		glLoadIdentity();
+    // Set up color function to multiply the existing color with the render texture color
+    glBlendFunc(GL_DST_COLOR, GL_ZERO); // Seperate allows you to set color and alpha functions seperately
 
-		CameraSetup();
+    glBegin(GL_QUADS);
+    glTexCoord2i(0, 0); glVertex2f(0.0f, 0.0f);
+    glTexCoord2i(1, 0); glVertex2f(viewSize.x, 0.0f);
+    glTexCoord2i(1, 1); glVertex2f(viewSize.x, viewSize.y);
+    glTexCoord2i(0, 1); glVertex2f(0.0f, viewSize.y);
+    glEnd();
 
-		// Render all trees
-		m_lightTree.DebugRender();
-		m_emissiveTree.DebugRender();
-		m_hullTree.DebugRender();
+    if (m_useBloom) {
+        m_bloomTexture.getTexture().bind();
 
-		glLoadIdentity();
+        glBlendFunc(GL_ONE, GL_ONE);
 
-		// Reset to SFML's projection
-		m_pWin->resetGLStates();
-	}
+        glBegin(GL_QUADS);
+        glTexCoord2i(0, 0); glVertex2f(0.0f, 0.0f);
+        glTexCoord2i(1, 0); glVertex2f(viewSize.x, 0.0f);
+        glTexCoord2i(1, 1); glVertex2f(viewSize.x, viewSize.y);
+        glTexCoord2i(0, 1); glVertex2f(0.0f, viewSize.y);
+        glEnd();
+    }
+
+    // Reset blend function
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    m_pWin->resetGLStates();
+}
+
+void LightSystem::DebugRender()
+{
+    // Set to a more useful-for-OpenGL projection
+    Vec2f viewSize(m_viewAABB.GetDims());
+
+    glLoadIdentity();
+
+    CameraSetup();
+
+    // Render all trees
+    m_lightTree.DebugRender();
+    m_emissiveTree.DebugRender();
+    m_hullTree.DebugRender();
+
+    glLoadIdentity();
+
+    // Reset to SFML's projection
+    m_pWin->resetGLStates();
+}
 }

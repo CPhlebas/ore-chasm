@@ -6,26 +6,26 @@
 
 namespace qdt
 {
-	class QuadTreeOccupant
-	{
-	private:
-		class QuadTreeNode* m_pQuadTreeNode;
-		class QuadTree* m_pQuadTree;
+class QuadTreeOccupant
+{
+private:
+    class QuadTreeNode* m_pQuadTreeNode;
+    class QuadTree* m_pQuadTree;
 
-	protected:
-		AABB m_aabb;
+protected:
+    AABB m_aabb;
 
-	public:
-		QuadTreeOccupant();
+public:
+    QuadTreeOccupant();
 
-		void TreeUpdate();
-		void RemoveFromTree();
+    void TreeUpdate();
+    void RemoveFromTree();
 
-		const AABB &GetAABB();
+    const AABB &GetAABB();
 
-		friend class QuadTreeNode;
-		friend class QuadTree;
-	};
+    friend class QuadTreeNode;
+    friend class QuadTree;
+};
 }
 
 #endif

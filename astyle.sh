@@ -9,5 +9,5 @@
 astyle --indent=spaces=4 --brackets=linux \
       --indent-labels --pad-oper --unpad-paren --pad-header \
       --keep-one-line-statements --convert-tabs \
-      --indent-preprocessor \
-      `find -type f -name '*.c' -or -name '*.cpp' -or -name '*.cc' -or -name '*.h'`
+      --indent-preprocessor --suffix=none \
+      `find $1 -type f -name '*.c' -or -name '*.cpp' -or -name '*.cc' -or -name '*.h'`

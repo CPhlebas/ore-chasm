@@ -54,7 +54,7 @@ World::World(sf::RenderWindow *window, sf::View *view)
 
 //TODO:    m_shader.setParameter("texture", );
 
- //   saveMap();
+//   saveMap();
 }
 
 void World::render()
@@ -132,21 +132,21 @@ void World::update()
 
         const char* texture;
         switch (type) {
-            case 0:
-                texture = "../textures/dirt.png";
-                break;
+        case 0:
+            texture = "../textures/dirt.png";
+            break;
 
-            case 1:
-                texture = "../textures/stone.png";
-                break;
+        case 1:
+            texture = "../textures/stone.png";
+            break;
 
-            default:
-                texture = "../textures/stone.png";
+        default:
+            texture = "../textures/stone.png";
 //                assert(0);
         }
         currentBlock->setTexture(texture);
-        
-        currentBlock->setPosition(floor(i/(5*i)) * 16, floor(i/500) * 16);
+
+        currentBlock->setPosition(floor(i / (5 * i)) * 16, floor(i / 500) * 16);
         std::cout << "iterating, i value: " << i << std::endl;
 
         ++tilesBeforeX;
@@ -159,11 +159,11 @@ void World::update()
 void World::loadMap()
 {
     std::cout << "loading map!" << std::endl;
-    std::cout << "SIZEOF m_blocks: " << sizeof(m_blocks)/1e6 << " MiB" << std::endl;
+    std::cout << "SIZEOF m_blocks: " << sizeof(m_blocks) / 1e6 << " MiB" << std::endl;
     generateMap();
 
     m_player->setPosition(800, 450);
- //   m_view->setCenter(m_player->getPosition());
+//   m_view->setCenter(m_player->getPosition());
 }
 
 void World::generateMap()

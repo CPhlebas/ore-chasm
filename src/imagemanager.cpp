@@ -42,15 +42,13 @@ ImageManager* ImageManager::instance()
     return s_instance;
 }
 
-const sf::Texture& ImageManager::loadTexture( const std::string& filename )
+const sf::Texture& ImageManager::loadTexture(const std::string& filename)
 {
     // Check, whether the image already exists
-    for( std::map<std::string, sf::Texture>::const_iterator it = textures.begin();
+    for (std::map<std::string, sf::Texture>::const_iterator it = textures.begin();
             it != textures.end();
-            ++it)
-    {
-        if( filename == it->first )
-        {
+            ++it) {
+        if (filename == it->first) {
             std::cout << "DEBUG_MESSAGE: " << filename << " using existing texture.\n";
             return it->second;
         }
@@ -60,20 +58,17 @@ const sf::Texture& ImageManager::loadTexture( const std::string& filename )
     sf::Texture texture;
 
     // Search project's main directory
-    if( texture.loadFromFile( filename ) )
-    {
+    if (texture.loadFromFile(filename)) {
         textures[filename] = texture;
         std::cout << "DEBUG_MESSAGE: " << filename << " loading new texture.\n";
         return textures[filename];
     }
 
     // If the image has still not been found, search all registered directories
-    for( std::vector<std::string>::iterator it = resourceDirs.begin();
+    for (std::vector<std::string>::iterator it = resourceDirs.begin();
             it != resourceDirs.end();
-            ++it )
-    {
-        if( texture.loadFromFile( (*it) + filename ) )
-        {
+            ++it) {
+        if (texture.loadFromFile((*it) + filename)) {
             textures[filename] = texture;
             std::cout << "DEBUG_MESSAGE: " << filename << " loading texture.\n";
             return textures[filename];
@@ -86,51 +81,47 @@ const sf::Texture& ImageManager::loadTexture( const std::string& filename )
     return textures[filename];
 }
 
-void ImageManager::deleteTexture( const sf::Texture& texture )
+void ImageManager::deleteTexture(const sf::Texture& texture)
 {
-    for( std::map<std::string, sf::Texture>::const_iterator it = textures.begin();
+    for (std::map<std::string, sf::Texture>::const_iterator it = textures.begin();
             it != textures.end();
-            ++it)
-    {
-        if( &texture == &it->second )
-        {
-            textures.erase( it );
+            ++it) {
+        if (&texture == &it->second) {
+            textures.erase(it);
             return;
         }
     }
 }
 
-void ImageManager::deleteTexture( const std::string& filename )
+void ImageManager::deleteTexture(const std::string& filename)
 {
-    std::map<std::string, sf::Texture>::const_iterator it = textures.find( filename );
-    if( it != textures.end() )
-        textures.erase( it );
+    std::map<std::string, sf::Texture>::const_iterator it = textures.find(filename);
+    if (it != textures.end())
+        textures.erase(it);
 }
 
-void ImageManager::addResourceDir( const std::string& directory )
+void ImageManager::addResourceDir(const std::string& directory)
 {
     // Check whether the path already exists
-    for( std::vector<std::string>::const_iterator it  = resourceDirs.begin();
+    for (std::vector<std::string>::const_iterator it  = resourceDirs.begin();
             it != resourceDirs.end();
-            ++it )
-    {
+            ++it) {
         // The path exists. So it isn't necessary to add id once more.
-        if( directory == (*it) )
+        if (directory == (*it))
             return;
     }
 
     // insert the directory
-    resourceDirs.push_back( directory );
+    resourceDirs.push_back(directory);
 }
 
-void ImageManager::removeResourceDir( const std::string& directory )
+void ImageManager::removeResourceDir(const std::string& directory)
 {
-    for( std::vector<std::string>::iterator it  = resourceDirs.begin();
-            it != resourceDirs.end(); )
-    {
+    for (std::vector<std::string>::iterator it  = resourceDirs.begin();
+            it != resourceDirs.end();) {
         // The path exists. So it isn't necessary to add id once more.
-        if( directory == (*it) )
-            it = resourceDirs.erase( it);
+        if (directory == (*it))
+            it = resourceDirs.erase(it);
         else
             ++it;
     }

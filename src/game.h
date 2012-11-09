@@ -33,7 +33,7 @@ static bool DEBUG_RENDERING = true;
 
 class Game
 {
-  public:
+public:
     Game();
 
     void abort_game(const char* message);

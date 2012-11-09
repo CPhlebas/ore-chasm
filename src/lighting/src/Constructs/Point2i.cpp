@@ -5,24 +5,24 @@ Point2i::Point2i()
 }
 
 Point2i::Point2i(int X, int Y)
-	: x(X), y(Y)
+    : x(X), y(Y)
 {
 }
 
 bool Point2i::operator==(const Point2i &other) const
 {
-	if(x == other.x && y == other.y)
-		return true;
+    if (x == other.x && y == other.y)
+        return true;
 
-	return false;
+    return false;
 }
 
 bool Point2i::operator!=(const Point2i &other) const
 {
-	if(x != other.x || y != other.y)
-		return true;
+    if (x != other.x || y != other.y)
+        return true;
 
-	return false;
+    return false;
 }
 
 

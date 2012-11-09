@@ -18,12 +18,12 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
- class Renderer
-  {
-  public:
+class Renderer
+{
+public:
     Renderer();
     void update();
-  };
+};
 
 
 #endif

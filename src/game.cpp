@@ -100,8 +100,7 @@ void Game::init()
     m_app->setView(*m_view);
 
     m_font = new sf::Font();
-    if (!m_font->loadFromFile("../font/DejaVuSerif.ttf"))
-    {
+    if (!m_font->loadFromFile("../font/DejaVuSerif.ttf")) {
         abort_game("unable to load font");
     }
 
@@ -143,8 +142,7 @@ void Game::tick()
 
     float elapsedTime = 0;
 
-    while (m_app->isOpen())
-    {
+    while (m_app->isOpen()) {
         elapsedTime = clock.restart().asSeconds();
         benchTime -= 1;
         fps = int(1.f / elapsedTime);
@@ -170,8 +168,7 @@ void Game::tick()
         str = ss.str();
         text.setString(str);
 
-        while (m_app->pollEvent(event))
-        {
+        while (m_app->pollEvent(event)) {
 
             // bool LeftKeyDown = Input.isKeyDown(sf::Key::Left);
             // bool RightButtonDown = Input.isMouseButtonDown(sf::Mouse::Right);
@@ -180,8 +177,7 @@ void Game::tick()
 
             m_console->handleEvent(event);
             m_world->handleEvent(event);
-            switch (event.type)
-            {
+            switch (event.type) {
                 // window closed
             case sf::Event::Closed:
                 shutdown();

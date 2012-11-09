@@ -49,7 +49,7 @@ public:
 
     /**
      * Use only to reset the entities position to some other place.
-     * ALL OTHER CASES USE VELOCITY. 
+     * ALL OTHER CASES USE VELOCITY.
      * Upon calling update, it will move it by that vector, as well as integrate
      * gravity.
      * @see setVelocity
