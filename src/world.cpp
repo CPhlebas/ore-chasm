@@ -20,6 +20,7 @@
 #include "block.h"
 
 #include "lighting/src/Light/LightSystem.h"
+#include <SFML/src/SFML/Graphics/stb_image/stb_image.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -160,7 +161,7 @@ void World::handleEvent(const sf::Event& event)
 void World::update()
 {
     //std::cout << "moving player by xDir: " << m_inputXDirection << " yDir: " << m_inputYDirection << std::endl;
-    //FIXME: bring in elapsedTime here ...
+    //FIXME: bring in elapsedTime here ...to calculate player movements accurately
 
     m_player->move(m_inputXDirection, m_inputYDirection);
     m_view->setCenter(m_player->getPosition());
@@ -170,42 +171,38 @@ void World::update()
 //    std::cout << "VIEWPORT: view x: " << center.x << " View y: " << center.y << std::endl;
 
     //consider block map as starting at player pos == 0,0 and going down and to the right-ward
-    int tilesBeforeX = playerPosition.x / 16;
-    //shouldn't change...yet
-    const int tilesBeforeY = playerPosition.y / 16;
+    //tilesBefore{X,Y} is only at the center of the view though..find the whole screen real estate
+    //column
+    int tilesBeforeX = playerPosition.x / WORLD_TILE_SIZE;
+    //row
+    int tilesBeforeY = playerPosition.y / WORLD_TILE_SIZE;
 
-    std::cout << "sending visible tilemap to shader!" << std::endl;
- //   sf::Image image;
-//    image.create(WORLD_ROWCOUNT, WORLD_COLUMNCOUNT, sf::Color::White);
+    //FIXME: USE SCREEN_H, SCREEN_W
+    const int startRow = tilesBeforeX - ((1600/2) / WORLD_TILE_SIZE);
+    const int startColumn = tilesBeforeY - ((800/2) / WORLD_TILE_SIZE);
+    const int endRow = tilesBeforeX + ((1600/2) / WORLD_TILE_SIZE);
+    const int endColumn = tilesBeforeY + ((800/2) / WORLD_TILE_SIZE);
+
+    std::cout << "tilesBeforeX: " << tilesBeforeX << " tilesBeforeY: " << tilesBeforeY << startRow << " startColumn: " << startColumn << " endRow: " << endRow << " endColumn: " <<  endColumn << "\n";
+    std::cout << "sending visible tilemap to shader!" << "\n";
+
+    sf::Image image;
+    //FIXME .size is way toooo big, remember it's just a pixel for each tile.
+    image.create(1600, 800);
 
     // [y*rowlength + x]
-    for (int i = 1; i <= WORLD_RENDERABLE_BLOCKS; ++i) {
-        int type = m_blocks[tilesBeforeY * WORLD_ROWCOUNT + tilesBeforeX].type;
-        Entity *currentBlock = m_renderableBlocks[i - 1];
-
-        const char* texture;
-        switch (type) {
-        case 0:
-            texture = "../textures/dirt.png";
-            break;
-
-        case 1:
-            texture = "../textures/stone.png";
-            break;
-
-        default:
-            texture = "../textures/stone.png";
-//                assert(0);
+    for (int currentColumn = startColumn; currentColumn < endColumn; ++currentColumn) {
+        for (int currentRow = startRow; currentRow < endRow; ++currentRow) {
+            const sf::Color color(m_blocks[currentColumn * WORLD_ROWCOUNT + currentRow].type, 0, 0);
+            image.setPixel(currentRow, currentColumn, color);
+            //std::cout << "currentRow: " << currentRow << " currentColumn: " << currentColumn << std::endl;
         }
-        currentBlock->setTexture(texture);
-
-        currentBlock->setPosition(floor(i / (5 * i)) * 16, floor(i / 500) * 16);
-        std::cout << "iterating, i value: " << i << std::endl;
-
-        ++tilesBeforeX;
     }
-    std::cout << "tilesbeforeX: " << tilesBeforeX << " tilesbeforeY: " << tilesBeforeY << std::endl;
 
+    sf::Texture texture;
+    texture.loadFromImage(image);
+
+    std::cout << "finished sending tilemap to shader!!\n";
 }
 
 void World::loadMap()
