@@ -50,6 +50,13 @@ World::World(sf::RenderWindow *window, sf::View *view)
     m_tileTypesSuperTexture = new sf::Texture();
     m_tileTypesSuperTexture->create(textureSize, textureSize);
 
+    m_tileMapFinalTexture.create(1600, 900);
+    m_tileMapFinalSprite.setTexture(m_tileMapFinalTexture);
+
+    m_shader = new sf::Shader();
+    assert(m_shader->isAvailable()); // if the system doesn't suppor it, we're fucked
+
+
     //FIXME/TODO: use RenderTexture, so we're not slow as all mighty fuck
     sf::Image currentTile;
     bool loaded;
@@ -79,7 +86,7 @@ World::World(sf::RenderWindow *window, sf::View *view)
 
     m_tileTypesSuperImage->saveToFile("TEST.png");
     m_tileTypesSuperTexture->loadFromImage(*m_tileTypesSuperImage);
-    std::cout << "saved to file" << std::endl;
+    m_shader->setParameter("tileTypesSuperTexture", *m_tileTypesSuperTexture);
 
 //    loadMap();
 //
@@ -94,7 +101,6 @@ World::World(sf::RenderWindow *window, sf::View *view)
 ////        assert(0);
 //    }
 
-//TODO:    m_shader.setParameter("texture", );
 
 //   saveMap();
 }
@@ -102,16 +108,14 @@ World::World(sf::RenderWindow *window, sf::View *view)
 void World::render()
 {
 
-    for (int i = 0; i < WORLD_RENDERABLE_BLOCKS; ++i) {
-//        m_renderableBlocks[i].getTexture().
-//        m_window->draw(*m_renderableBlocks[i]);
-//        m_renderableBlocks[i]->render(m_window);
-    }
-
 
     //player drawn on top... since we don't have anything like z-ordering or layering (TODO)
     m_window->draw(*m_player);
     m_player->render(m_window);
+
+    sf::RenderStates state;
+    state.shader = m_shader;
+    m_window->draw(m_tileMapFinalSprite, state);
 }
 
 void World::handleEvent(const sf::Event& event)

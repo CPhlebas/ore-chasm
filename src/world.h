@@ -93,7 +93,14 @@ private:
     sf::View *m_view = nullptr;
     sf::RenderWindow *m_window = nullptr;
 
-    sf::Shader m_shader;
+    sf::Shader *m_shader;
+
+    /**
+     * Final texture that is blitted to screen, with the shader and render states
+     * (for the tilemap)
+     */
+    sf::Texture m_tileMapFinalTexture;
+    sf::Sprite m_tileMapFinalSprite;
 
     /**
      * A super image which is loaded ONLY at init, which is a tilesheet/spritesheet
