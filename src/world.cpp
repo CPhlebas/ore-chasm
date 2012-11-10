@@ -88,7 +88,10 @@ World::World(sf::RenderWindow *window, sf::View *view)
     m_tileTypesSuperTexture->loadFromImage(*m_tileTypesSuperImage);
     m_shader->setParameter("tileTypesSuperTexture", *m_tileTypesSuperTexture);
 
-//    loadMap();
+    loadMap();
+
+
+
 //
 //    for (int i = 0; i < WORLD_RENDERABLE_BLOCKS; ++i) {
 //        m_renderableBlocks[i] = new Entity("../textures/player.png");
@@ -171,34 +174,37 @@ void World::update()
     //shouldn't change...yet
     const int tilesBeforeY = playerPosition.y / 16;
 
+    std::cout << "sending visible tilemap to shader!" << std::endl;
+ //   sf::Image image;
+//    image.create(WORLD_ROWCOUNT, WORLD_COLUMNCOUNT, sf::Color::White);
+
     // [y*rowlength + x]
-//    for (int i = 1; i <= WORLD_RENDERABLE_BLOCKS; ++i) {
-//        int type = m_blocks[tilesBeforeY * WORLD_ROWCOUNT + tilesBeforeX].type;
-//        Entity *currentBlock = m_renderableBlocks[i - 1];
-//
-//        const char* texture;
-//        switch (type) {
-//        case 0:
-//            texture = "../textures/dirt.png";
-//            break;
-//
-//        case 1:
-//            texture = "../textures/stone.png";
-//            break;
-//
-//        default:
-//            texture = "../textures/stone.png";
-////                assert(0);
-//        }
-//        currentBlock->setTexture(texture);
-//
-//        currentBlock->setPosition(floor(i / (5 * i)) * 16, floor(i / 500) * 16);
-//        std::cout << "iterating, i value: " << i << std::endl;
-//
-//        ++tilesBeforeX;
-//    }
-//j0i//
-//    std::cout << "tilesbeforeX: " << tilesBeforeX << " tilesbeforeY: " << tilesBeforeY << std::endl;
+    for (int i = 1; i <= WORLD_RENDERABLE_BLOCKS; ++i) {
+        int type = m_blocks[tilesBeforeY * WORLD_ROWCOUNT + tilesBeforeX].type;
+        Entity *currentBlock = m_renderableBlocks[i - 1];
+
+        const char* texture;
+        switch (type) {
+        case 0:
+            texture = "../textures/dirt.png";
+            break;
+
+        case 1:
+            texture = "../textures/stone.png";
+            break;
+
+        default:
+            texture = "../textures/stone.png";
+//                assert(0);
+        }
+        currentBlock->setTexture(texture);
+
+        currentBlock->setPosition(floor(i / (5 * i)) * 16, floor(i / 500) * 16);
+        std::cout << "iterating, i value: " << i << std::endl;
+
+        ++tilesBeforeX;
+    }
+    std::cout << "tilesbeforeX: " << tilesBeforeX << " tilesbeforeY: " << tilesBeforeY << std::endl;
 
 }
 
