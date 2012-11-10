@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <sstream>
 #include <random>
 #include <assert.h>
 #include <math.h>
@@ -41,7 +42,9 @@ World::World(sf::RenderWindow *window, sf::View *view)
 
     m_player = new Player("../textures/player.png");
 
-    const unsigned short textureSize= WORLD_TILE_TYPE_COUNT * WORLD_TILE_SIZE;
+    const int gridSize = ceil(WORLD_TILE_TYPE_COUNT / 2.0);
+    std::cout << " GRIDSIZE : " << gridSize << std::endl;
+    const unsigned short textureSize = gridSize * WORLD_TILE_SIZE;
     m_tileTypesSuperImage = new sf::Image();
     m_tileTypesSuperImage->create(textureSize, textureSize);
     m_tileTypesSuperTexture = new sf::Texture();
@@ -51,20 +54,32 @@ World::World(sf::RenderWindow *window, sf::View *view)
     sf::Image currentTile;
     bool loaded;
 
-    for (int i = 0; i < WORLD_TILE_TYPE_COUNT; ++i) {
-        loaded = currentTile.loadFromFile(m_blockTextures[i]);
+    unsigned int destX = 0;
+    unsigned int destY = 0;
+    int i = 0;
 
-        //would indicate we couldn't find a tile. obviously, we need that..
-        assert(loaded);
+    for (int columnIndex = 0; columnIndex < gridSize; ++columnIndex) {
+        for (int rowIndex = 0; rowIndex < gridSize; ++rowIndex) {
+            std::cout << "accfessing block texture at i value: " << i << std::endl;
+            loaded = currentTile.loadFromFile(m_blockTextures[i]);
+            //would indicate we couldn't find a tile. obviously, we need that..
+            assert(loaded);
 
-        unsigned int destX = i % WORLD_TILE_TYPE_COUNT;
-        unsigned int destY = i / WORLD_TILE_TYPE_COUNT * WORLD_TILE_TYPE_COUNT;
+            destX = rowIndex * WORLD_TILE_SIZE;
+            destY = columnIndex * WORLD_TILE_SIZE;
+            std::cout << "placing tile at X: " << destX << " y: " << destY << std::endl;
+            m_tileTypesSuperImage->copy(currentTile, destX, destY);
 
-        m_tileTypesSuperImage->copy(currentTile, destX, destY);
+            ++i;
+            if (i >= WORLD_TILE_TYPE_COUNT) {
+                break;
+            }
+        }
     }
 
     m_tileTypesSuperImage->saveToFile("TEST.png");
     m_tileTypesSuperTexture->loadFromImage(*m_tileTypesSuperImage);
+    std::cout << "saved to file" << std::endl;
 
 //    loadMap();
 //
@@ -178,8 +193,8 @@ void World::update()
 //
 //        ++tilesBeforeX;
 //    }
-//
-    std::cout << "tilesbeforeX: " << tilesBeforeX << " tilesbeforeY: " << tilesBeforeY << std::endl;
+//j0i//
+//    std::cout << "tilesbeforeX: " << tilesBeforeX << " tilesbeforeY: " << tilesBeforeY << std::endl;
 
 }
 
