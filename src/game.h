@@ -35,6 +35,7 @@ class Game
 {
 public:
     Game();
+    ~Game();
 
     void abort_game(const char* message);
     void init();

@@ -50,13 +50,14 @@ World::World(sf::RenderWindow *window, sf::View *view)
     m_tileTypesSuperImage->create(textureSize, textureSize);
     m_tileTypesSuperTexture = new sf::Texture();
     m_tileTypesSuperTexture->create(textureSize, textureSize);
+    m_tileMapFinalSprite = new sf::Sprite();
+    m_tileMapFinalTexture = new sf::Texture();
 
-    m_tileMapFinalTexture.create(1600, 900);
-    m_tileMapFinalSprite.setTexture(m_tileMapFinalTexture);
+    m_tileMapFinalTexture->create(1600, 900);
+    m_tileMapFinalSprite->setTexture(*m_tileMapFinalTexture);
 
     m_shader = new sf::Shader();
-    assert(m_shader->isAvailable()); // if the system doesn't suppor it, we're fucked
-
+    assert(m_shader->isAvailable()); // if the system doesn't support it, we're fucked
 
     //FIXME/TODO: use RenderTexture, so we're not slow as all mighty fuck
     sf::Image currentTile;
@@ -102,6 +103,16 @@ World::World(sf::RenderWindow *window, sf::View *view)
     //saveMap();
 }
 
+World::~World()
+{
+    delete m_player;
+    delete m_shader;
+    delete m_tileTypesSuperImage;
+    delete m_tileTypesSuperTexture;
+    delete m_tileMapFinalSprite;
+    delete m_tileMapFinalTexture;
+}
+
 void World::render()
 {
 
@@ -112,7 +123,7 @@ void World::render()
 
     sf::RenderStates state;
     state.shader = m_shader;
-    m_window->draw(m_tileMapFinalSprite, state);
+    m_window->draw(*m_tileMapFinalSprite, state);
 }
 
 void World::handleEvent(const sf::Event& event)

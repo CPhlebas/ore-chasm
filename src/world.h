@@ -49,6 +49,7 @@ class World
 {
 public:
     World(sf::RenderWindow *window, sf::View *view);
+    ~World();
 
     void update();
     void render();
@@ -97,8 +98,8 @@ private:
      * Final texture that is blitted to screen, with the shader and render states
      * (for the tilemap)
      */
-    sf::Texture m_tileMapFinalTexture;
-    sf::Sprite m_tileMapFinalSprite;
+    sf::Texture *m_tileMapFinalTexture;
+    sf::Sprite *m_tileMapFinalSprite;
 
     /**
      * A super image which is loaded ONLY at init, which is a tilesheet/spritesheet

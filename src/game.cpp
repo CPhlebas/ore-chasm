@@ -44,6 +44,15 @@ Game::Game()
 {
 }
 
+Game::~Game()
+{
+    delete m_world;
+    delete m_view;
+    delete m_console;
+    delete m_font;
+    delete m_app;
+}
+
 void Game::abort_game(const char* message)
 {
     printf("%s \n", message);
