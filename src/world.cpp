@@ -177,6 +177,7 @@ void World::update()
     //row
     int tilesBeforeY = playerPosition.y / WORLD_TILE_SIZE;
 
+    //FIXME: only calculate this crap when we move/change tiles
     //FIXME: USE SCREEN_H, SCREEN_W
     const int startRow = tilesBeforeX - ((1600/2) / WORLD_TILE_SIZE);
     const int startColumn = tilesBeforeY - ((800/2) / WORLD_TILE_SIZE);
@@ -187,8 +188,9 @@ void World::update()
     std::cout << "sending visible tilemap to shader!" << "\n";
 
     sf::Image image;
-    //FIXME .size is way toooo big, remember it's just a pixel for each tile.
-    image.create(1600, 800);
+    // only make it as big as we need it, remember this is a pixel representation of the visible
+    // tile map, with the red channel identifying what type of tile it is
+    image.create(endRow - startRow, endColumn - startColumn);
 
     // [y*rowlength + x]
     for (int currentColumn = startColumn; currentColumn < endColumn; ++currentColumn) {
@@ -201,6 +203,8 @@ void World::update()
 
     sf::Texture texture;
     texture.loadFromImage(image);
+
+    m_shader->setParameter("renderableTileMap", texture);
 
     std::cout << "finished sending tilemap to shader!!\n";
 }
