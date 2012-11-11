@@ -91,22 +91,15 @@ World::World(sf::RenderWindow *window, sf::View *view)
 
     loadMap();
 
+    m_shader = new sf::Shader();
+    if (m_shader->loadFromFile("tilerenderer.frag", sf::Shader::Fragment)) {
+        std::cout << "Successfully loaded tilerenderer fragment shader!" << std::endl;
+    } else {
+        std::cout << "failed to load tilerenderer fragment shader!" << std::endl;
+        assert(0);
+    }
 
-
-//
-//    for (int i = 0; i < WORLD_RENDERABLE_BLOCKS; ++i) {
-//        m_renderableBlocks[i] = new Entity("../textures/player.png");
-//    }
-//
-//    if (m_shader.loadFromFile("tilerenderer.frag", sf::Shader::Fragment)) {
-//        std::cout << "Successfully loaded tilerenderer fragment shader!" << std::endl;
-//    } else {
-//        std::cout << "failed to load tilerenderer fragment shader!" << std::endl;
-////        assert(0);
-//    }
-
-
-//   saveMap();
+    //saveMap();
 }
 
 void World::render()
