@@ -67,6 +67,9 @@ World::World(sf::RenderWindow *window, sf::View *view)
     unsigned int destY = 0;
     int i = 0;
 
+    // iterate through each TILE_TYPE in m_blockTextures and create a super
+    // texture out of this which we can pass to the shader as a list of known
+    // tiles.
     for (int columnIndex = 0; columnIndex < gridSize; ++columnIndex) {
         for (int rowIndex = 0; rowIndex < gridSize; ++rowIndex) {
             std::cout << "accfessing block texture at i value: " << i << std::endl;
@@ -122,8 +125,8 @@ void World::render()
     m_player->render(m_window);
 
     sf::RenderStates state;
-    state.shader = m_shader;
-    m_window->draw(*m_tileMapFinalSprite, state);
+//    state.shader = m_shader;
+//    m_window->draw(*m_tileMapFinalSprite, state);
 }
 
 void World::handleEvent(const sf::Event& event)
@@ -188,7 +191,7 @@ void World::update()
     const int endRow = tilesBeforeX + ((1600/2) / WORLD_TILE_SIZE);
     const int endColumn = tilesBeforeY + ((800/2) / WORLD_TILE_SIZE);
 
-    std::cout << "tilesBeforeX: " << tilesBeforeX << " tilesBeforeY: " << tilesBeforeY << startRow << " startColumn: " << startColumn << " endRow: " << endRow << " endColumn: " <<  endColumn << "\n";
+    std::cout << "tilesBeforeX: " << tilesBeforeX << " tilesBeforeY: " << tilesBeforeY << " startRow: " << startRow << " startColumn: " << startColumn << " endRow: " << endRow << " endColumn: " <<  endColumn << "\n";
     std::cout << "sending visible tilemap to shader!" << "\n";
 
     sf::Image image;
@@ -199,17 +202,18 @@ void World::update()
     // [y*rowlength + x]
     for (int currentColumn = startColumn; currentColumn < endColumn; ++currentColumn) {
         for (int currentRow = startRow; currentRow < endRow; ++currentRow) {
+            std::cout << "currentColumn: " << currentColumn << " WORLD_ROWCOUNT: " << WORLD_ROWCOUNT << " currentRow: " << currentRow << "\n";
             const sf::Color color(m_blocks[currentColumn * WORLD_ROWCOUNT + currentRow].type, 0, 0);
             image.setPixel(currentRow, currentColumn, color);
             //std::cout << "currentRow: " << currentRow << " currentColumn: " << currentColumn << std::endl;
         }
     }
-
-    sf::Texture texture;
-    texture.loadFromImage(image);
-
-    m_shader->setParameter("renderableTileMap", texture);
-
+//
+//    sf::Texture texture;
+//    texture.loadFromImage(image);
+//
+//    m_shader->setParameter("renderableTileMap", texture);
+//
     std::cout << "finished sending tilemap to shader!!\n";
 }
 
