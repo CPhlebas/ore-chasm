@@ -1,5 +1,5 @@
-#version 330 compatibility
-#extension GL_EXT_gpu_shader4 : enable
+//#version 330 compatibility
+//#extension GL_EXT_gpu_shader4 : enable
 
 uniform sampler2D tileTypesSuperTexture;
 uniform sampler2D renderableTileMap;
@@ -11,9 +11,9 @@ void main()
   // Get the dimensions of the tiles texture
 //  ivec2 tileTypesSize  = textureSize(tileTypesSuperTexture, 0);
 
-    float factor = 1.0 / (16.0 + 0.001);
-        vec2 pos = floor(gl_TexCoord[0].xy * factor + 0.5) / factor;
-        gl_FragColor = texture2D(tileTypesSuperTexture, pos) * gl_Color;
+  //  float factor = 1.0 / (16.0 + 0.001);
+//        vec2 pos = floor(gl_TexCoord[0].xy * factor + 0.5) / factor;
+ //       gl_FragColor = texture2D(tileTypesSuperTexture, pos) * gl_Color;
 
 //    float factor = 1.0 / (16.0 + 0.001);
 //    vec2 pos = floor(gl_TexCoord[0].xy * factor + 0.5) / factor;

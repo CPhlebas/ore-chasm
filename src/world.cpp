@@ -197,16 +197,26 @@ void World::update()
     sf::Image image;
     // only make it as big as we need it, remember this is a pixel representation of the visible
     // tile map, with the red channel identifying what type of tile it is
+//    image.create(endRow - startRow, endColumn - startColumn);
     image.create(endRow - startRow, endColumn - startColumn);
 
+    int x = 0;
+    int  y = 0;
+
     // [y*rowlength + x]
-    for (int currentColumn = startColumn; currentColumn < endColumn; ++currentColumn) {
-        for (int currentRow = startRow; currentRow < endRow; ++currentRow) {
-            std::cout << "currentColumn: " << currentColumn << " WORLD_ROWCOUNT: " << WORLD_ROWCOUNT << " currentRow: " << currentRow << "\n";
-            const sf::Color color(m_blocks[currentColumn * WORLD_ROWCOUNT + currentRow].type, 0, 0);
-            image.setPixel(currentRow, currentColumn, color);
+    for (int currentRow = startRow; currentRow < (endRow - startRow); ++currentRow) {
+        for (int currentColumn = startColumn; currentColumn < (endColumn - startColumn); ++currentColumn) {
+//            std::cout << "currentColumn: " << currentColumn << " WORLD_ROWCOUNT: " << WORLD_ROWCOUNT << " currentRow: " << currentRow << "\n";
+            const sf::Color color(m_blocks[currentRow * WORLD_ROWCOUNT + currentColumn].type, 0, 0);
+//            std::cout << "setting pixels x: " << x << " y: " << y << "\n";
+            std::cout << "currentrow: " << currentRow << " currentColumn: " << currentColumn << "\n";
+            std::cout << "image size, width: " << image.getSize().x << " height: " << image.getSize().y << "\n";
+            image.setPixel(x, y, sf::Color(0,0,0));
+            ++x;
             //std::cout << "currentRow: " << currentRow << " currentColumn: " << currentColumn << std::endl;
         }
+        ++y;
+        x = 0;
     }
 //
 //    sf::Texture texture;
