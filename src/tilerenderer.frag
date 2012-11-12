@@ -1,8 +1,10 @@
+
+#version 130
 //#version 330 compatibility
 //#extension GL_EXT_gpu_shader4 : enable
 
-uniform sampler2D tileTypesSuperTexture;
-uniform sampler2D renderableTileMap;
+uniform sampler2D tile_types_super_texture;
+uniform sampler2D texture;
 
 #define TILE_SIZE 16.0
 
@@ -15,9 +17,12 @@ void main()
 //        vec2 pos = floor(gl_TexCoord[0].xy * factor + 0.5) / factor;
  //       gl_FragColor = texture2D(tileTypesSuperTexture, pos) * gl_Color;
 
-//    float factor = 1.0 / (16.0 + 0.001);
-//    vec2 pos = floor(gl_TexCoord[0].xy * factor + 0.5) / factor;
-//    gl_FragColor = texture2D(tileTypesSuperTexture, pos) * gl_Color;
+//    ivec2 sizeGraphics = textureSize(tile_types_super_texture, 0);
+
+    gl_FragColor.r = 0;
+    gl_FragColor.b = 255;
+    gl_FragColor.g = 255;
+    gl_FragColor.a = 255;
 }
 
 

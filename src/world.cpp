@@ -91,7 +91,7 @@ World::World(sf::RenderWindow *window, sf::View *view)
 
     m_tileTypesSuperImage->saveToFile("TEST.png");
     m_tileTypesSuperTexture->loadFromImage(*m_tileTypesSuperImage);
-    m_shader->setParameter("tileTypesSuperTexture", *m_tileTypesSuperTexture);
+    m_shader->setParameter("tile_types_super_texture", *m_tileTypesSuperTexture);
 
     loadMap();
 
@@ -125,8 +125,8 @@ void World::render()
     m_player->render(m_window);
 
     sf::RenderStates state;
-//    state.shader = m_shader;
-//    m_window->draw(*m_tileMapFinalSprite, state);
+    state.shader = m_shader;
+    m_window->draw(*m_tileMapFinalSprite, state);
 }
 
 void World::handleEvent(const sf::Event& event)
@@ -191,8 +191,8 @@ void World::update()
     const int endRow = tilesBeforeX + ((1600/2) / WORLD_TILE_SIZE);
     const int endColumn = tilesBeforeY + ((800/2) / WORLD_TILE_SIZE);
 
-    std::cout << "tilesBeforeX: " << tilesBeforeX << " tilesBeforeY: " << tilesBeforeY << " startRow: " << startRow << " startColumn: " << startColumn << " endRow: " << endRow << " endColumn: " <<  endColumn << "\n";
-    std::cout << "sending visible tilemap to shader!" << "\n";
+//    std::cout << "tilesBeforeX: " << tilesBeforeX << " tilesBeforeY: " << tilesBeforeY << " startRow: " << startRow << " startColumn: " << startColumn << " endRow: " << endRow << " endColumn: " <<  endColumn << "\n";
+//    std::cout << "sending visible tilemap to shader!" << "\n";
 
     // only make it as big as we need it, remember this is a pixel representation of the visible
     // tile map, with the red channel identifying what type of tile it is
@@ -210,8 +210,8 @@ void World::update()
 //            std::cout << "currentColumn: " << currentColumn << " WORLD_ROWCOUNT: " << WORLD_ROWCOUNT << " currentRow: " << currentRow << "\n";
             const sf::Color color(m_blocks[currentRow * WORLD_ROWCOUNT + currentColumn].type, 0, 0);
 //            std::cout << "setting pixels x: " << x << " y: " << y << "\n";
-            std::cout << "currentrow: " << currentRow << " currentColumn: " << currentColumn << "\n";
-            std::cout << "image size, width: " << image.getSize().x << " height: " << image.getSize().y << "\n";
+//            std::cout << "currentrow: " << currentRow << " currentColumn: " << currentColumn << "\n";
+//            std::cout << "image size, width: " << image.getSize().x << " height: " << image.getSize().y << "\n";
             image.setPixel(x, y, sf::Color(0,0,0));
             ++x;
         }
@@ -221,8 +221,8 @@ void World::update()
 
     sf::Texture texture;
     texture.loadFromImage(image);
-    m_shader->setParameter("renderableTileMap", texture);
-    std::cout << "finished sending tilemap to shader!!\n";
+    m_shader->setParameter("texture", texture);
+//    std::cout << "finished sending tilemap to shader!!\n";
 }
 
 void World::loadMap()
