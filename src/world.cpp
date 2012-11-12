@@ -194,11 +194,12 @@ void World::update()
     std::cout << "tilesBeforeX: " << tilesBeforeX << " tilesBeforeY: " << tilesBeforeY << " startRow: " << startRow << " startColumn: " << startColumn << " endRow: " << endRow << " endColumn: " <<  endColumn << "\n";
     std::cout << "sending visible tilemap to shader!" << "\n";
 
-    sf::Image image;
     // only make it as big as we need it, remember this is a pixel representation of the visible
     // tile map, with the red channel identifying what type of tile it is
-//    image.create(endRow - startRow, endColumn - startColumn);
-    image.create(endRow - startRow, endColumn - startColumn);
+    sf::Image image;
+    // x is columns..since they move from left to right, rows start at top and move to bottom
+    // (and yes..i confused this fact before, leaving a headache here ;)
+    image.create(endColumn - startColumn, endRow - startRow);
 
     int x = 0;
     int  y = 0;
@@ -213,17 +214,14 @@ void World::update()
             std::cout << "image size, width: " << image.getSize().x << " height: " << image.getSize().y << "\n";
             image.setPixel(x, y, sf::Color(0,0,0));
             ++x;
-            //std::cout << "currentRow: " << currentRow << " currentColumn: " << currentColumn << std::endl;
         }
         ++y;
         x = 0;
     }
-//
-//    sf::Texture texture;
-//    texture.loadFromImage(image);
-//
-//    m_shader->setParameter("renderableTileMap", texture);
-//
+
+    sf::Texture texture;
+    texture.loadFromImage(image);
+    m_shader->setParameter("renderableTileMap", texture);
     std::cout << "finished sending tilemap to shader!!\n";
 }
 
