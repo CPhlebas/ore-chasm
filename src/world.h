@@ -92,29 +92,29 @@ private:
     sf::View *m_view = nullptr;
     sf::RenderWindow *m_window = nullptr;
 
-    sf::Shader *m_shader;
+    sf::Shader m_shader;
 
     /**
      * Final texture that is blitted to screen, with the shader and render states
      * (for the tilemap)
      */
-    sf::Texture *m_tileMapFinalTexture;
-    sf::Sprite *m_tileMapFinalSprite;
+    sf::Texture m_tileMapFinalTexture;
+    sf::Sprite m_tileMapFinalSprite;
 
-    sf::Image *m_tileMapPixelsImage = nullptr;
-    sf::Texture *m_tileMapPixelsTexture = nullptr;
+    sf::Image m_tileMapPixelsImage;
+    sf::Texture m_tileMapPixelsTexture;
 
     /**
      * A super image which is loaded ONLY at init, which is a tilesheet/spritesheet
      * of every tile that is possible. Used for passing it to the tile rendering shader
      * (also at init).
      */
-    sf::Image *m_tileTypesSuperImage = nullptr;
+    sf::Image m_tileTypesSuperImage;
 
     /**
      * What is actually passed to the frag shader.
      */
-    sf::Texture *m_tileTypesSuperTexture = nullptr;
+    sf::Texture m_tileTypesSuperTexture;
 
     float m_inputXDirection = 0.f;
     float m_inputYDirection = 0.f;

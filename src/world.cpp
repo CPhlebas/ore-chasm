@@ -46,20 +46,12 @@ World::World(sf::RenderWindow *window, sf::View *view)
     const int gridSize = ceil(WORLD_TILE_TYPE_COUNT / 2.0);
     std::cout << " GRIDSIZE : " << gridSize << std::endl;
     const unsigned short textureSize = gridSize * WORLD_TILE_SIZE;
-    m_tileTypesSuperImage = new sf::Image();
-    m_tileTypesSuperImage->create(textureSize, textureSize);
-    m_tileTypesSuperTexture = new sf::Texture();
-    m_tileTypesSuperTexture->create(textureSize, textureSize);
-    m_tileMapFinalSprite = new sf::Sprite();
-    m_tileMapFinalTexture = new sf::Texture();
-    m_tileMapPixelsImage = new sf::Image();
-    m_tileMapPixelsTexture = new sf::Texture();
+    m_tileTypesSuperImage.create(textureSize, textureSize);
+    m_tileTypesSuperTexture.create(textureSize, textureSize);
+    m_tileMapFinalTexture.create(1600, 900);
+    m_tileMapFinalSprite.setTexture(m_tileMapFinalTexture);
 
-    m_tileMapFinalTexture->create(1600, 900);
-    m_tileMapFinalSprite->setTexture(*m_tileMapFinalTexture);
-
-    m_shader = new sf::Shader();
-    assert(m_shader->isAvailable()); // if the system doesn't support it, we're fucked
+    assert(m_shader.isAvailable()); // if the system doesn't support it, we're fucked
 
     //FIXME/TODO: use RenderTexture, so we're not slow as all mighty fuck
     sf::Image currentTile;
@@ -82,7 +74,7 @@ World::World(sf::RenderWindow *window, sf::View *view)
             destX = rowIndex * WORLD_TILE_SIZE;
             destY = columnIndex * WORLD_TILE_SIZE;
             std::cout << "placing tile at X: " << destX << " y: " << destY << std::endl;
-            m_tileTypesSuperImage->copy(currentTile, destX, destY);
+            m_tileTypesSuperImage.copy(currentTile, destX, destY);
 
             ++i;
             if (i >= WORLD_TILE_TYPE_COUNT) {
@@ -91,20 +83,19 @@ World::World(sf::RenderWindow *window, sf::View *view)
         }
     }
 
-    m_tileTypesSuperImage->saveToFile("TEST.png");
-    m_tileTypesSuperTexture->loadFromImage(*m_tileTypesSuperImage);
-    m_shader->setParameter("tile_types_super_texture", *m_tileTypesSuperTexture);
+    m_tileTypesSuperImage.saveToFile("TEST.png");
+    m_tileTypesSuperTexture.loadFromImage(m_tileTypesSuperImage);
+    m_shader.setParameter("tile_types_super_texture", m_tileTypesSuperTexture);
 
     loadMap();
 
-    m_shader = new sf::Shader();
-    if (m_shader->loadFromFile("tilerenderer.frag", sf::Shader::Fragment)) {
+    if (m_shader.loadFromFile("tilerenderer.frag", sf::Shader::Fragment)) {
         std::cout << "Successfully loaded tilerenderer fragment shader!" << std::endl;
     } else {
         std::cout << "failed to load tilerenderer fragment shader!" << std::endl;
         assert(0);
     }
-    m_shader->setParameter("screen_size", sf::Vector2f(1600, 900));
+    m_shader.setParameter("screen_size", sf::Vector2f(1600, 900));
 
     //saveMap();
 }
@@ -112,11 +103,6 @@ World::World(sf::RenderWindow *window, sf::View *view)
 World::~World()
 {
     delete m_player;
-    delete m_shader;
-    delete m_tileTypesSuperImage;
-    delete m_tileTypesSuperTexture;
-    delete m_tileMapFinalSprite;
-    delete m_tileMapFinalTexture;
 }
 
 void World::render()
@@ -128,8 +114,8 @@ void World::render()
     m_player->render(m_window);
 
     sf::RenderStates state;
-    state.shader = m_shader;
-    m_window->draw(*m_tileMapFinalSprite, state);
+    state.shader = &m_shader;
+    m_window->draw(m_tileMapFinalSprite, state);
 }
 
 void World::handleEvent(const sf::Event& event)
@@ -202,7 +188,7 @@ void World::update()
     // x is columns..since they move from left to right, rows start at top and move to bottom
     // (and yes..i confused this fact before, leaving a headache here ;)
 //    image.create(endColumn - startColumn, endRow - startRow, sf::Color(255, 0, 0));
-    m_tileMapPixelsImage->create(50, 100, sf::Color(255, 0, 0));
+    m_tileMapPixelsImage.create(50, 100, sf::Color(255, 0, 0));
 
     int x = 0;
     int  y = 0;
@@ -224,8 +210,8 @@ void World::update()
 
 //    image.saveToFile("test999999.png");
 //    std::cout << "image size, width: " << image.getSize().x << " height: " << image.getSize().y << "\n";
-    m_tileMapPixelsTexture->loadFromImage(*m_tileMapPixelsImage);
-    m_shader->setParameter("tilemap_pixels", *m_tileMapPixelsTexture);
+    m_tileMapPixelsTexture.loadFromImage(m_tileMapPixelsImage);
+    m_shader.setParameter("tilemap_pixels", m_tileMapPixelsTexture);
 //    std::cout << "finished sending tilemap to shader!!\n";
 }
 
