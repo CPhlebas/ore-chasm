@@ -102,6 +102,7 @@ World::World(sf::RenderWindow *window, sf::View *view)
         std::cout << "failed to load tilerenderer fragment shader!" << std::endl;
         assert(0);
     }
+    m_shader->setParameter("screen_size", sf::Vector2f(1600, 900));
 
     //saveMap();
 }
@@ -211,17 +212,18 @@ void World::update()
             const sf::Color color(m_blocks[currentRow * WORLD_ROWCOUNT + currentColumn].type, 0, 0);
 //            std::cout << "setting pixels x: " << x << " y: " << y << "\n";
 //            std::cout << "currentrow: " << currentRow << " currentColumn: " << currentColumn << "\n";
-//            std::cout << "image size, width: " << image.getSize().x << " height: " << image.getSize().y << "\n";
-            image.setPixel(x, y, sf::Color(0,0,0));
+            image.setPixel(x, y, sf::Color(150, 0,0));
             ++x;
         }
         ++y;
         x = 0;
     }
 
+    image.saveToFile("test999999.png");
+    std::cout << "image size, width: " << image.getSize().x << " height: " << image.getSize().y << "\n";
     sf::Texture texture;
     texture.loadFromImage(image);
-    m_shader->setParameter("texture", texture);
+    m_shader->setParameter("tilemap_pixels", texture);
 //    std::cout << "finished sending tilemap to shader!!\n";
 }
 

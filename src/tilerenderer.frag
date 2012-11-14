@@ -1,65 +1,52 @@
 #version 130
 
-uniform sampler2D tile_types_super_texture;
-// the texture that we send this shader, which is a pixel-based representation of the current renderable tiles
-uniform sampler2D texture;
+//for a 1600x900 screen, this results in an image of 50x100 with each pixel representing a tile
+uniform sampler2D tilemap_pixels;
+//a runtime generated spritesheet of all tiles we know, each tile being 16x16 (so 32x32 if there are 3 tile types)
+//uniform sampler2D tile_types_super_texture;
+
+//uniform vec2 screen_size;
 
 const float TILE_SIZE = 16.0;
 
 void main()
 {
-  // Get the dimensions of the tiles texture
-//  ivec2 tileTypesSize  = textureSize(tileTypesSuperTexture, 0);
 
-  //  float factor = 1.0 / (16.0 + 0.001);
-//        vec2 pos = floor(gl_TexCoord[0].xy * factor + 0.5) / factor;
- //       gl_FragColor = texture2D(tileTypesSuperTexture, pos) * gl_Color;
+//FIXME:    vec2 screen_size = vec2(1600.0,900.0);
 
+//FIXME:    ivec2 tilemap_pixels_size = textureSize(tilemap_pixels, 0);
 //    ivec2 tilemap_size = textureSize(tile_types_super_texture, 0);
-//    gl_TexCoord[0];
 
-    ivec2 texture_size = textureSize(texture, 0);
-    ivec2 tilemap_size = textureSize(tile_types_super_texture, 0);
+//========================================================================================
 
-//    vec2 screen_coordinates = gl_FragCoord.xy / uniform_target_size;
-//    vec2 middle_position = vec2(0.5, 0.5);
+    // the coordinates of the actual pixel we are setting, between 0, 0 and SCREEN_W, SCREEN_H
+//FIXME    vec2 screen_coordinates = gl_FragCoord.xy / screen_size;
 
-//    float layer_difference = uniform_layer_z - uniform_camera_z;
-//    vec2 perspective_modifier = (screen_coordinates - middle_position) * layer_difference;
- //   screen_coordinates -= perspective_modifier / uniform_target_size * 2;
-
-    vec2 screen_coordinates = gl_FragCoord.xy;
-//    vec4 data = texture2D(tile_types_super_texture, screen_coordinates * TILE_SIZE);
-//    vec4 renderableTiles = texture2D(texture, texture_size);
-
-    // the tile that we are actually rendering
-    vec4 renderableTile = texture2D
+    // find where we are in the pixel-based tile representation map (tilemap_pixels)
+    // (by dividing the screen size by TILE_SIZE...)
+    // xmax = 256, ymax = 256
+//FIXME    vec2 tilemap_pixel_coord = (gl_TexCoord[0].xy * tilemap_pixels_size) ; /// TILE_SIZE;
 
 
-//    vec2 texel_internal = mod(screen_coordinates * vec2(1, -1), TILE_SIZE) / texture_size;
-//    vec2 texture_start = data.rg * texture_size / TILE_SIZE;
-//    gl_FragColor = vec4(renderableTiles.rg + data.rg, 0, 1);//texture2D(uniform_texture, texture_start + texel_internal);
+    // find the pixel (RGBA) values in the tilemap pixel representation that is what we're
+    // currently interested in.
+    vec4 currentTile = texture2D(tilemap_pixels, vec2(0.,0.));//tilemap_pixel_coord);//screen_coordinates );
+
+//    vec2 tileTypePosition = vec2(currentTile.r, 0.);
+ //   vec4 tileData = texture2D(tile_types_super_texture, tileTypePosition);
+
+    gl_FragColor.r = currentTile.r; //tileData;
+
+/*
+    if (0.) {
+        gl_FragColor.b = 1; //tilemap_pixel_coord.y;
+    }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//
-//    gl_FragColor.r = 0;
-//    gl_FragColor.b = 255;
-//    gl_FragColor.g = 255;
-//    gl_FragColor.a = 255;
+*/
+    gl_FragColor.b = 0.; //tilemap_pixel_coord.x;
+    gl_FragColor.g = 1.;
+    gl_FragColor.a = 1.;
 }
 
 
