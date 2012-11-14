@@ -52,6 +52,8 @@ World::World(sf::RenderWindow *window, sf::View *view)
     m_tileTypesSuperTexture->create(textureSize, textureSize);
     m_tileMapFinalSprite = new sf::Sprite();
     m_tileMapFinalTexture = new sf::Texture();
+    m_tileMapPixelsImage = new sf::Image();
+    m_tileMapPixelsTexture = new sf::Texture();
 
     m_tileMapFinalTexture->create(1600, 900);
     m_tileMapFinalSprite->setTexture(*m_tileMapFinalTexture);
@@ -197,14 +199,14 @@ void World::update()
 
     // only make it as big as we need it, remember this is a pixel representation of the visible
     // tile map, with the red channel identifying what type of tile it is
-    sf::Image image;
     // x is columns..since they move from left to right, rows start at top and move to bottom
     // (and yes..i confused this fact before, leaving a headache here ;)
-    image.create(endColumn - startColumn, endRow - startRow);
+//    image.create(endColumn - startColumn, endRow - startRow, sf::Color(255, 0, 0));
+    m_tileMapPixelsImage->create(50, 100, sf::Color(255, 0, 0));
 
     int x = 0;
     int  y = 0;
-
+/*
     // [y*rowlength + x]
     for (int currentRow = startRow; currentRow < (endRow - startRow); ++currentRow) {
         for (int currentColumn = startColumn; currentColumn < (endColumn - startColumn); ++currentColumn) {
@@ -218,12 +220,12 @@ void World::update()
         ++y;
         x = 0;
     }
+    */
 
-    image.saveToFile("test999999.png");
-    std::cout << "image size, width: " << image.getSize().x << " height: " << image.getSize().y << "\n";
-    sf::Texture texture;
-    texture.loadFromImage(image);
-    m_shader->setParameter("tilemap_pixels", texture);
+//    image.saveToFile("test999999.png");
+//    std::cout << "image size, width: " << image.getSize().x << " height: " << image.getSize().y << "\n";
+    m_tileMapPixelsTexture->loadFromImage(*m_tileMapPixelsImage);
+    m_shader->setParameter("tilemap_pixels", *m_tileMapPixelsTexture);
 //    std::cout << "finished sending tilemap to shader!!\n";
 }
 

@@ -101,6 +101,9 @@ private:
     sf::Texture *m_tileMapFinalTexture;
     sf::Sprite *m_tileMapFinalSprite;
 
+    sf::Image *m_tileMapPixelsImage = nullptr;
+    sf::Texture *m_tileMapPixelsTexture = nullptr;
+
     /**
      * A super image which is loaded ONLY at init, which is a tilesheet/spritesheet
      * of every tile that is possible. Used for passing it to the tile rendering shader

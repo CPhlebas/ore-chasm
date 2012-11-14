@@ -45,7 +45,7 @@ void main()
 
 */
     gl_FragColor.b = 0.; //tilemap_pixel_coord.x;
-    gl_FragColor.g = 1.;
+    gl_FragColor.g = 0.;
     gl_FragColor.a = 1.;
 }
 
