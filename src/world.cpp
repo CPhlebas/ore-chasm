@@ -175,10 +175,12 @@ void World::update()
 
     //FIXME: only calculate this crap when we move/change tiles
     //FIXME: USE SCREEN_H, SCREEN_W
-    const int startRow = tilesBeforeX - ((1600/2) / WORLD_TILE_SIZE);
-    const int startColumn = tilesBeforeY - ((800/2) / WORLD_TILE_SIZE);
-    const int endRow = tilesBeforeX + ((1600/2) / WORLD_TILE_SIZE);
-    const int endColumn = tilesBeforeY + ((800/2) / WORLD_TILE_SIZE);
+    const int startRow = tilesBeforeY - ((900/2) / WORLD_TILE_SIZE);
+    const int endRow = tilesBeforeY + ((900/2) / WORLD_TILE_SIZE);
+
+    //columns are our X value, rows the Y
+    const int startColumn = tilesBeforeX - ((1600/2) / WORLD_TILE_SIZE);
+    const int endColumn = tilesBeforeX + ((1600/2) / WORLD_TILE_SIZE);
 
 //    std::cout << "tilesBeforeX: " << tilesBeforeX << " tilesBeforeY: " << tilesBeforeY << " startRow: " << startRow << " startColumn: " << startColumn << " endRow: " << endRow << " endColumn: " <<  endColumn << "\n";
 //    std::cout << "sending visible tilemap to shader!" << "\n";
@@ -187,8 +189,7 @@ void World::update()
     // tile map, with the red channel identifying what type of tile it is
     // x is columns..since they move from left to right, rows start at top and move to bottom
     // (and yes..i confused this fact before, leaving a headache here ;)
-//    image.create(endColumn - startColumn, endRow - startRow, sf::Color(255, 0, 0));
-    m_tileMapPixelsImage.create(50, 100, sf::Color(255, 0, 0));
+    m_tileMapPixelsImage.create(endColumn - startColumn, endRow - startRow, sf::Color(255, 0, 0));
 
     int x = 0;
     int  y = 0;
@@ -209,7 +210,7 @@ void World::update()
     */
 
 //    image.saveToFile("test999999.png");
-//    std::cout << "image size, width: " << image.getSize().x << " height: " << image.getSize().y << "\n";
+    std::cout << "image size, width: " << m_tileMapPixelsImage.getSize().x << " height: " << m_tileMapPixelsImage.getSize().y << "\n";
     m_tileMapPixelsTexture.loadFromImage(m_tileMapPixelsImage);
     m_shader.setParameter("tilemap_pixels", m_tileMapPixelsTexture);
 //    std::cout << "finished sending tilemap to shader!!\n";
