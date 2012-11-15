@@ -16,6 +16,7 @@
  *****************************************************************************/
 
 #include "world.h"
+#include "logging.h"
 
 #include "block.h"
 
@@ -35,6 +36,9 @@
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Window/Keyboard.hpp>
+
+#ifndef NDEBUG
+#endif
 
 World::World(sf::RenderWindow *window, sf::View *view)
 {
