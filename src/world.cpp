@@ -37,9 +37,6 @@
 #include <SFML/Window.hpp>
 #include <SFML/Window/Keyboard.hpp>
 
-#ifndef NDEBUG
-#endif
-
 World::World(sf::RenderWindow *window, sf::View *view)
 {
     m_window = window;
@@ -193,11 +190,11 @@ void World::update()
     // tile map, with the red channel identifying what type of tile it is
     // x is columns..since they move from left to right, rows start at top and move to bottom
     // (and yes..i confused this fact before, leaving a headache here ;)
-    m_tileMapPixelsImage.create(endColumn - startColumn, endRow - startRow, sf::Color(255, 0, 0));
+    m_tileMapPixelsImage.create(endColumn - startColumn, endRow - startRow);
 
     int x = 0;
     int  y = 0;
-/*
+
     // [y*rowlength + x]
     for (int currentRow = startRow; currentRow < (endRow - startRow); ++currentRow) {
         for (int currentColumn = startColumn; currentColumn < (endColumn - startColumn); ++currentColumn) {
@@ -205,13 +202,13 @@ void World::update()
             const sf::Color color(m_blocks[currentRow * WORLD_ROWCOUNT + currentColumn].type, 0, 0);
 //            std::cout << "setting pixels x: " << x << " y: " << y << "\n";
 //            std::cout << "currentrow: " << currentRow << " currentColumn: " << currentColumn << "\n";
-            image.setPixel(x, y, sf::Color(150, 0,0));
+            m_tileMapPixelsImage.setPixel(x, y, color);
             ++x;
         }
         ++y;
         x = 0;
     }
-    */
+
 
 //    image.saveToFile("test999999.png");
     std::cout << "image size, width: " << m_tileMapPixelsImage.getSize().x << " height: " << m_tileMapPixelsImage.getSize().y << "\n";
