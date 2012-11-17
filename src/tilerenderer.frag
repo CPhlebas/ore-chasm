@@ -69,8 +69,8 @@ void main()
   ivec2 sizeGraphics = textureSize(tile_types_super_texture, 0);
 
   ivec2 sizeRatio    = sizeTilemap/sizeGraphics;
-  float tilesPerLine  =sizeGraphics.x/TILE_SIZE;
-  float tilesPerColumn=sizeGraphics.y/TILE_SIZE;
+
+  vec2 tilesPerRowAndColumn = sizeGraphics / TILE_SIZE;
 
   // Compute the internal texel coordinates in the tile (0-31)
   vec2 internalPos=mod(gl_TexCoord[0]*sizeTilemap,TILE_SIZE);       //*sizeRatio;
