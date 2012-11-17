@@ -77,8 +77,7 @@ void main()
 
   // Get the tile index
   vec2 tileIndexPos=gl_TexCoord[0].xy;
-  tileIndexPos.x=tileIndexPos.x/TILE_SIZE;
-  tileIndexPos.y=tileIndexPos.y/TILE_SIZE;
+  tileIndexPos = tileIndexPos / TILE_SIZE;
   vec4 tileIndex = texture2D(tilemap_pixels,tileIndexPos);
 
   // Find the X/Y tile coordinate from the tileIndex for the base texture
