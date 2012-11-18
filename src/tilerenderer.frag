@@ -11,17 +11,17 @@ uniform vec2 screen_size;
 
 vec2 TILE_SIZE = vec2(16.0, 16.0);
 
-in vec4 gl_FragCoord;  // redeclaration that changes nothing is allowed
-    //============================================
-    // GL_ARB_fragment_coord_conventions, to change coord system to top-left
-    // origin vs. bottom left
-
-    // All the following are allowed redeclarations that change behavior
-    layout(origin_upper_left) in vec4 gl_FragCoord;
-    layout(pixel_center_integer) in vec4 gl_FragCoord;
-    layout(origin_upper_left, pixel_center_integer) in vec4 gl_FragCoord;
-    //============================================
-
+//in vec4 gl_FragCoord;  // redeclaration that changes nothing is allowed
+//    //============================================
+//    // GL_ARB_fragment_coord_conventions, to change coord system to top-left
+//    // origin vs. bottom left
+//
+//    // All the following are allowed redeclarations that change behavior
+//    layout(origin_upper_left) in vec4 gl_FragCoord;
+//    layout(pixel_center_integer) in vec4 gl_FragCoord;
+//    layout(origin_upper_left, pixel_center_integer) in vec4 gl_FragCoord;
+//    //============================================
+//
 void main()
 {
 
@@ -41,8 +41,8 @@ void main()
 
     vec2 tileCoordinate;
 //KINSD OF WORKS    tileCoordinate.x = currentPixel.r * TILE_SIZE.x * gl_TexCoord[0].x;
-    tileCoordinate.x = currentPixel.r + (gl_TexCoord[0].x/TILE_SIZE.x);
-    tileCoordinate.y = gl_TexCoord[0].y / TILE_SIZE.y;
+    tileCoordinate.x = currentPixel.r * TILE_SIZE.x;//(currentPixel.r * TILE_SIZE.x) + (screen_coordinates.x / TILE_SIZE.x);//+ (screen_coordinates.x/TILE_SIZE.x);
+    tileCoordinate.y = screen_coordinates.y / (TILE_SIZE.y);
 
     vec4 tileColor = texture2D(tile_types_super_texture, tileCoordinate);
 
@@ -50,5 +50,5 @@ void main()
 
 //    gl_FragColor.b = 0.; //tilemap_pixel_coord.x;
 //    gl_FragColor.g = 0.;
-//    gl_FragColor.a = 1.;
+    gl_FragColor.a = 1.;
 }

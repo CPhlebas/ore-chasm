@@ -226,7 +226,7 @@ void World::update()
         x = 0;
     }
 
-    // image.saveToFile("test999999.png");
+    m_tileMapPixelsImage.saveToFile("tilemap_pixels.png");
     std::cout << "image size, width: " << m_tileMapPixelsImage.getSize().x << " height: " << m_tileMapPixelsImage.getSize().y << "\n";
     m_tileMapPixelsTexture.loadFromImage(m_tileMapPixelsImage);
     m_shader.setParameter("tilemap_pixels", m_tileMapPixelsTexture);
@@ -247,7 +247,8 @@ void World::generateMap()
 {
     std::random_device device;
     std::mt19937 rand(device());
-    std::uniform_int_distribution<> distribution(0, 1);
+    //FIXME: convert to 1, n
+    std::uniform_int_distribution<> distribution(1, 2);
     //std::cout << distribution(rand) << ' ';
 
     sf::Clock clock;
