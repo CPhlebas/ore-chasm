@@ -39,10 +39,14 @@ void main()
     // currently interested in.
     vec4 currentPixel = texture2D(tilemap_pixels, screen_coordinates / TILE_SIZE);
 
-    vec2 tileCoordinate = currentPixel.r * TILE_SIZE * gl_TexCoord[0].xy;
+    vec2 tileCoordinate;
+//KINSD OF WORKS    tileCoordinate.x = currentPixel.r * TILE_SIZE.x * gl_TexCoord[0].x;
+    tileCoordinate.x = currentPixel.r + (gl_TexCoord[0].x/TILE_SIZE.x);
+    tileCoordinate.y = gl_TexCoord[0].y / TILE_SIZE.y;
+
     vec4 tileColor = texture2D(tile_types_super_texture, tileCoordinate);
 
-  gl_FragColor = tileColor;
+    gl_FragColor = tileColor;
 
 //    gl_FragColor.b = 0.; //tilemap_pixel_coord.x;
 //    gl_FragColor.g = 0.;
