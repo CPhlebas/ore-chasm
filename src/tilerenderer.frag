@@ -33,90 +33,18 @@ void main()
 //========================================================================================
 
     // the coordinates of the actual pixel we are setting, between 0, 0 and SCREEN_W, SCREEN_H
-//FIXME: DIVIDE BY 16??
     vec2 screen_coordinates = gl_FragCoord.xy;
- //  screen_size;
-/*
-
-
-//    vec2 tileTypePosition = vec2(currentTile.r, 0.);
- //   vec4 tileData = texture2D(tile_types_super_texture, tileTypePosition);
-
-    gl_FragColor.r = currentTile.r; //tileData;
-*/
-/*
-    vec4 data = texture2D(tilemap_pixels, screen_coordinates);
-
-    //FIXME: texel_internal is WRONG
-    vec2 texel_internal = mod(screen_coordinates * TILE_SIZE * tilemap_pixels_size, TILE_SIZE) / tilemap_size;
-    vec2 texture_start = data.rg * tilemap_size / TILE_SIZE;
-
-    vec4 color = texture2D(tile_types_super_texture, texture_start + texel_internal);
-    gl_FragColor = color;
-*/
- // find where we are in the pixel-based tile representation map (tilemap_pixels)
-    // (by dividing the screen size by TILE_SIZE...)
-
 
     // find the pixel (RGBA) values in the tilemap pixel representation that is what we're
     // currently interested in.
-    vec4 currentTile = texture2D(tilemap_pixels, screen_coordinates / TILE_SIZE);//screen_coordinates );
+    vec4 currentPixel = texture2D(tilemap_pixels, screen_coordinates / TILE_SIZE);
 
-    vec4 tileColor = texture2D(tile_types_super_texture, currentTile.r * TILE_SIZE * gl_TexCoord[0].xy);
+    vec2 tileCoordinate = currentPixel.r * TILE_SIZE * gl_TexCoord[0].xy;
+    vec4 tileColor = texture2D(tile_types_super_texture, tileCoordinate);
 
-  // Blend the base color with the overlay texture
   gl_FragColor = tileColor;
 
 //    gl_FragColor.b = 0.; //tilemap_pixel_coord.x;
 //    gl_FragColor.g = 0.;
 //    gl_FragColor.a = 1.;
 }
-
-
-/*
-  vec2 sizeGraphics = textureSize2D(tileGraphics,0);
-  vec2 sizeRatio    = sizeTilemap/sizeGraphics;
-  float tilesPerLine  =sizeGraphics.x/TILE_SIZE;
-  float tilesPerColumn=sizeGraphics.y/TILE_SIZE;
-
-  // Compute the internal texel coordinates in the tile (0-31)
-  vec2 internalPos=mod(gl_TexCoord[0]*sizeTilemap,TILE_SIZE);       //*sizeRatio;
-
-  // Get the tile index
-  vec2 tileIndexPos=gl_TexCoord[0].xy;
-  tileIndexPos.x=tileIndexPos.x/TILE_SIZE;
-  tileIndexPos.y=tileIndexPos.y/TILE_SIZE;
-  vec4 tileIndex = texture2D(tilemap,tileIndexPos);
-
-  // Find the X/Y tile coordinate from the tileIndex for the base texture
-  float index=tileIndex.a*256.0;
-
-  vec2 baseTilePos;
-  baseTilePos.x=(TILE_SIZE/sizeGraphics.x)*floor(mod(index,tilesPerLine));
-  baseTilePos.y=(TILE_SIZE/sizeGraphics.y)*floor(index/tilesPerLine);
-  vec4 baseColor=texture2D(tileGraphics,internalPos/sizeGraphics+baseTilePos);
-
-  // Find the X/Y tile coordinate from the tileIndex for the overlay texture
-  index=tileIndex.r*256.0;
-  vec2 overlayTilePos;
-  overlayTilePos.x=(TILE_SIZE/sizeGraphics.x)*floor(mod(index,tilesPerLine));
-  overlayTilePos.y=(TILE_SIZE/sizeGraphics.y)*floor(index/tilesPerLine);
-  vec4 overlayColor=texture2D(tileOverlayGraphics,internalPos/sizeGraphics+overlayTilePos);
-
-  // Find the values for the shadow texture
-  index=tileIndex.g*256.0;
-  vec2 shadowTilePos;
-  shadowTilePos.x=(TILE_SIZE/sizeGraphics.x)*floor(mod(index,tilesPerLine));
-  shadowTilePos.y=(TILE_SIZE/sizeGraphics.y)*floor(index/tilesPerLine);
-  vec4 shadowColor=texture2D(tileShadowGraphics,internalPos/sizeGraphics+shadowTilePos);
-
-  // Blend the base color with the overlay texture
-  gl_FragColor = baseColor*(1-overlayColor.a) + overlayColor*overlayColor.a;
-
-  if (shadowColor.a)
-  {
-    gl_FragColor/=2;
-  }
-  gl_FragColor.a=1;
-*/
-
