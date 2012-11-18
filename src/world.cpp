@@ -44,11 +44,17 @@ World::World(sf::RenderWindow *window, sf::View *view)
 
     m_player = new Player("../textures/player.png");
 
+    /*
     const int gridSize = ceil(WORLD_TILE_TYPE_COUNT / 2.0);
     std::cout << " GRIDSIZE : " << gridSize << std::endl;
     const unsigned short textureSize = gridSize * WORLD_TILE_SIZE;
     m_tileTypesSuperImage.create(textureSize, textureSize);
     m_tileTypesSuperTexture.create(textureSize, textureSize);
+    */
+
+    m_tileTypesSuperImage.create(WORLD_TILE_SIZE * WORLD_TILE_TYPE_COUNT, WORLD_TILE_SIZE);
+    m_tileTypesSuperTexture.create(WORLD_TILE_SIZE * WORLD_TILE_TYPE_COUNT, WORLD_TILE_SIZE);
+
     m_tileMapFinalTexture.create(1600, 900);
     m_tileMapFinalSprite.setTexture(m_tileMapFinalTexture);
 
@@ -60,8 +66,9 @@ World::World(sf::RenderWindow *window, sf::View *view)
 
     unsigned int destX = 0;
     unsigned int destY = 0;
-    int i = 0;
 
+/*
+ TODO: for when we hit the 256 tile limit ... hopefully that won't happen for a while :)
     // iterate through each TILE_TYPE in m_blockTextures and create a super
     // texture out of this which we can pass to the shader as a list of known
     // tiles.
@@ -82,6 +89,16 @@ World::World(sf::RenderWindow *window, sf::View *view)
                 break;
             }
         }
+    }
+*/
+
+    for (int i = 0; i < WORLD_TILE_TYPE_COUNT; ++i) {
+        loaded = currentTile.loadFromFile(m_blockTextures[i]);
+        //would indicate we couldn't find a tile. obviously, we need that..
+        assert(loaded);
+
+        destX = i * WORLD_TILE_SIZE;
+        m_tileTypesSuperImage.copy(currentTile, destX, destY);
     }
 
     m_tileTypesSuperImage.saveToFile("TEST.png");
@@ -183,8 +200,8 @@ void World::update()
     const int startColumn = tilesBeforeX - ((1600/2) / WORLD_TILE_SIZE);
     const int endColumn = tilesBeforeX + ((1600/2) / WORLD_TILE_SIZE);
 
-//    std::cout << "tilesBeforeX: " << tilesBeforeX << " tilesBeforeY: " << tilesBeforeY << " startRow: " << startRow << " startColumn: " << startColumn << " endRow: " << endRow << " endColumn: " <<  endColumn << "\n";
-//    std::cout << "sending visible tilemap to shader!" << "\n";
+    // std::cout << "tilesBeforeX: " << tilesBeforeX << " tilesBeforeY: " << tilesBeforeY << " startRow: " << startRow << " startColumn: " << startColumn << " endRow: " << endRow << " endColumn: " <<  endColumn << "\n";
+    // std::cout << "sending visible tilemap to shader!" << "\n";
 
     // only make it as big as we need it, remember this is a pixel representation of the visible
     // tile map, with the red channel identifying what type of tile it is
@@ -198,10 +215,10 @@ void World::update()
     // [y*rowlength + x]
     for (int currentRow = startRow; currentRow < (endRow - startRow); ++currentRow) {
         for (int currentColumn = startColumn; currentColumn < (endColumn - startColumn); ++currentColumn) {
-//            std::cout << "currentColumn: " << currentColumn << " WORLD_ROWCOUNT: " << WORLD_ROWCOUNT << " currentRow: " << currentRow << "\n";
+            // std::cout << "currentColumn: " << currentColumn << " WORLD_ROWCOUNT: " << WORLD_ROWCOUNT << " currentRow: " << currentRow << "\n";
             const sf::Color color(m_blocks[currentRow * WORLD_ROWCOUNT + currentColumn].type, 0, 0);
-//            std::cout << "setting pixels x: " << x << " y: " << y << "\n";
-//            std::cout << "currentrow: " << currentRow << " currentColumn: " << currentColumn << "\n";
+            // std::cout << "setting pixels x: " << x << " y: " << y << "\n";
+            // std::cout << "currentrow: " << currentRow << " currentColumn: " << currentColumn << "\n";
             m_tileMapPixelsImage.setPixel(x, y, color);
             ++x;
         }
@@ -209,12 +226,11 @@ void World::update()
         x = 0;
     }
 
-
-//    image.saveToFile("test999999.png");
+    // image.saveToFile("test999999.png");
     std::cout << "image size, width: " << m_tileMapPixelsImage.getSize().x << " height: " << m_tileMapPixelsImage.getSize().y << "\n";
     m_tileMapPixelsTexture.loadFromImage(m_tileMapPixelsImage);
     m_shader.setParameter("tilemap_pixels", m_tileMapPixelsTexture);
-//    std::cout << "finished sending tilemap to shader!!\n";
+    // std::cout << "finished sending tilemap to shader!!\n";
 }
 
 void World::loadMap()
