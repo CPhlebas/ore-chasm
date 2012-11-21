@@ -93,7 +93,8 @@ World::World(sf::RenderWindow *window, sf::View *view)
 */
 
     for (int i = 0; i < WORLD_TILE_TYPE_COUNT; ++i) {
-        loaded = currentTile.loadFromFile(m_blockTextures[i]);
+        //FIXME: use i, not hardcode dirt
+        loaded = currentTile.loadFromFile(m_blockTextures[0]);
         //would indicate we couldn't find a tile. obviously, we need that..
         assert(loaded);
 
@@ -103,7 +104,6 @@ World::World(sf::RenderWindow *window, sf::View *view)
 
     m_tileTypesSuperImage.saveToFile("TEST.png");
     m_tileTypesSuperTexture.loadFromImage(m_tileTypesSuperImage);
-    m_shader.setParameter("tile_types_super_texture", m_tileTypesSuperTexture);
 
     loadMap();
 
@@ -114,6 +114,7 @@ World::World(sf::RenderWindow *window, sf::View *view)
         assert(0);
     }
     m_shader.setParameter("screen_size", sf::Vector2f(1600, 900));
+    m_shader.setParameter("tile_types_super_texture", m_tileTypesSuperTexture);
 
     //saveMap();
 }
@@ -131,9 +132,11 @@ void World::render()
     m_window->draw(*m_player);
     m_player->render(m_window);
 
+    m_window->setView(m_window->getDefaultView());
     sf::RenderStates state;
     state.shader = &m_shader;
     m_window->draw(m_tileMapFinalSprite, state);
+    m_window->setView(*m_view);
 }
 
 void World::handleEvent(const sf::Event& event)
