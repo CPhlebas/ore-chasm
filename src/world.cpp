@@ -94,7 +94,7 @@ World::World(sf::RenderWindow *window, sf::View *view)
 
     for (int i = 0; i < WORLD_TILE_TYPE_COUNT; ++i) {
         //FIXME: use i, not hardcode dirt
-        loaded = currentTile.loadFromFile(m_blockTextures[0]);
+        loaded = currentTile.loadFromFile(m_blockTextures[i]);
         //would indicate we couldn't find a tile. obviously, we need that..
         assert(loaded);
 

@@ -38,7 +38,7 @@ void main()
 
     // find the pixel (RGBA) values in the tilemap pixel representation that is what we're
     // currently interested in.
-//    vec4 currentPixel = texture2D(tilemap_pixels, screen_coordinates / TILE_SIZE);
+    vec4 currentPixel = texture2D(tilemap_pixels, screen_coordinates / TILE_SIZE);
     vec2 tileCoordinate;
 //KINSD OF WORKS
 //tileCoordinate.x = currentPixel.r * TILE_SIZE.x * gl_TexCoord[0].x;
@@ -47,10 +47,10 @@ void main()
  //   tileCoordinate.y = 1;//screen_coordinates.y / (TILE_SIZE.y*2);
 //currentPixel.r * 256.0 * screen_coordinates.y * TILE_SIZE.x
 
-tileCoordinate.x = 8. / tilemap_size.x;//* 16. + 2.;
-tileCoordinate.y = 8. / tilemap_size.y;//currentPixel.r;
+tileCoordinate.x = currentPixel.r * 16. * 255. + screen_coordinates.x/tilemap_size.x; //* 16. + 2.;
+tileCoordinate.y = currentPixel.r / tilemap_size.y;//currentPixel.r;
 
-    vec4 tileColor = texture2D(tile_types_super_texture, tileCoordinate);
+    vec4 tileColor = texture2D(tile_types_super_texture, tileCoordinate / tilemap_size);
 
     gl_FragColor = tileColor;
 //    gl_FragColor = currentPixel;
