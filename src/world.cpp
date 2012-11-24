@@ -132,13 +132,14 @@ World::~World()
 
 void World::render()
 {
-    //player drawn on top... since we don't have anything like z-ordering or layering (TODO)
-    m_window->draw(*m_player);
-    m_player->render(m_window);
 
     sf::RenderStates state;
     state.shader = &m_shader;
     m_window->draw(m_tileMapFinalSprite, state);
+
+    //player drawn on top... since we don't have anything like z-ordering or layering (TODO)
+    m_window->draw(*m_player);
+    m_player->render(m_window);
 }
 
 void World::handleEvent(const sf::Event& event)
@@ -205,8 +206,14 @@ void World::update()
     const int startColumn = tilesBeforeX - ((1600/2) / WORLD_TILE_SIZE);
     const int endColumn = tilesBeforeX + ((1600/2) / WORLD_TILE_SIZE);
 
-    std::cout << "FIXME, WENT NEGATIVE!!";
-    assert(std::abs(startColumn) == startColumn);
+    if (std::abs(startColumn) != startColumn) {
+        std::cout << "FIXME, WENT INTO NEGATIVE COLUMN!!";
+        assert(0);
+    } else if (std::abs(startRow) != startRow) {
+        std::cout << "FIXME, WENT INTO NEGATIVE ROW!!";
+        assert(0);
+    }
+
     // std::cout << "tilesBeforeX: " << tilesBeforeX << " tilesBeforeY: " << tilesBeforeY << " startRow: " << startRow << " startColumn: " << startColumn << " endRow: " << endRow << " endColumn: " <<  endColumn << "\n";
     // std::cout << "sending visible tilemap to shader!" << "\n";
 
