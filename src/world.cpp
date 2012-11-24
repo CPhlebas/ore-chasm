@@ -132,17 +132,13 @@ World::~World()
 
 void World::render()
 {
-
-
     //player drawn on top... since we don't have anything like z-ordering or layering (TODO)
     m_window->draw(*m_player);
     m_player->render(m_window);
 
- ///////   m_window->setView(m_window->getDefaultView());
     sf::RenderStates state;
     state.shader = &m_shader;
     m_window->draw(m_tileMapFinalSprite, state);
-//    m_window->setView(*m_view);
 }
 
 void World::handleEvent(const sf::Event& event)

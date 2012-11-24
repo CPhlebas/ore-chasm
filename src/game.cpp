@@ -264,8 +264,8 @@ void Game::tick()
 
         m_app->draw(text);
 
-        m_app->setView(*m_view);
         m_world->render();
+        m_app->setView(*m_view);
 
         m_app->popGLStates();
 
