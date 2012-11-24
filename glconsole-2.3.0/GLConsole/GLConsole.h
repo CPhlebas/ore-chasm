@@ -22,6 +22,7 @@
 
 #include <deque>
 #include <string>
+#include <memory>
 
 
 
@@ -292,7 +293,7 @@ private:
     int           m_nCommandNum;
     GLFont*       m_pGLFont;
 
-    sf::Font *m_font;
+    std::unique_ptr<sf::Font> m_font;
     sf::RenderWindow *m_window;
 
     // Text colors
@@ -496,7 +497,7 @@ inline void GLConsole::Init()
     int lineLoc = 0;
     //printf("lineloc to load sf::Texts for..: %d\n", lineLoc);
     for (int i = 0; i < numberOfLines; ++i) {
-        sf::Text *text = new sf::Text();
+        std::unique_ptr<sf::Text> text = new sf::Text();
         text->setFont(*m_font);
         text->setCharacterSize(12);
         //start at bottom, as RenderText does it too

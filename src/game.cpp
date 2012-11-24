@@ -260,18 +260,18 @@ void Game::tick()
 
         m_app->clear(sf::Color(0, 255, 0));
 
-        m_app->setView(m_app->getDefaultView());
+//        m_app->setView(m_app->getDefaultView());
 
         m_app->draw(text);
 
         m_world->render();
-        m_app->setView(*m_view);
+ //       m_app->setView(*m_view);
 
         m_app->popGLStates();
 
-        m_app->setView(m_app->getDefaultView());
+   //     m_app->setView(m_app->getDefaultView());
         m_console->RenderConsole();
-        m_app->setView(*m_view);
+  //      m_app->setView(*m_view);
 
         // always after rendering!
         m_app->display();
@@ -282,4 +282,5 @@ void Game::tick()
 void Game::shutdown()
 {
     m_app->close();
+    delete m_app;
 }

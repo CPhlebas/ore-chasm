@@ -135,11 +135,11 @@ void World::render()
     //FIXME: NEEDED?
     m_tileMapFinalSprite.setTexture(m_tileMapFinalTexture);
 
-    m_window->setView(m_window->getDefaultView());
+ //   m_window->setView(m_window->getDefaultView());
     sf::RenderStates state;
     state.shader = &m_shader;
     m_window->draw(m_tileMapFinalSprite, state);
-    m_window->setView(*m_view);
+//    m_window->setView(*m_view);
 
     //player drawn on top... since we don't have anything like z-ordering or layering (TODO)
     m_window->draw(*m_player);
@@ -196,10 +196,12 @@ void World::update()
     //FIXME: bring in elapsedTime here ...to calculate player movements accurately
 
     m_player->move(m_inputXDirection, m_inputYDirection);
-    m_view->setCenter(m_player->getPosition());
+//    m_view->setCenter(m_player->getPosition());
+
 
 //    std::cout << "VIEWPORT: view x: " << center.x << " View y: " << center.y << std::endl;
     const sf::Vector2f playerPosition = m_player->getPosition();
+//    std::cout << "player pos x : " << playerPosition.x << " view pos x: " << m_view->getCenter().x << "\n";
 //    std::cout << "VIEWPORT: view x: " << center.x << " View y: " << center.y << std::endl;
 
     //consider block map as starting at player pos == 0,0 and going down and to the right-ward
@@ -238,6 +240,11 @@ void World::update()
     int x = 0;
     int  y = 0;
 
+
+    if (m_player->getPosition().x > 1000) {
+//        std::cout << "image size, width: " << m_tileMapPixelsImage.getSize().x << " height: " << m_tileMapPixelsImage.getSize().y << "\n" << "startcolumn: " << startColumn << " end column: " << endColumn << "\n";
+    }
+
     // [y*rowlength + x]
     for (int currentRow = startRow; currentRow < (endRow - startRow); ++currentRow) {
         for (int currentColumn = startColumn; currentColumn < (endColumn - startColumn); ++currentColumn) {
@@ -252,11 +259,13 @@ void World::update()
         x = 0;
     }
 
-    std::cout << "image size, width: " << m_tileMapPixelsImage.getSize().x << " height: " << m_tileMapPixelsImage.getSize().y << "\n" << "startcolumn: " << startColumn << " end column: " << endColumn << "\n";
+
+ //   std::cout << "image size, width: " << m_tileMapPixelsImage.getSize().x << " height: " << m_tileMapPixelsImage.getSize().y << "\n" << "startcolumn: " << startColumn << " end column: " << endColumn << "\n";
     m_tileMapPixelsTexture.loadFromImage(m_tileMapPixelsImage);
     m_tileMapPixelsTexture.bind();
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
 
     m_shader.setParameter("tilemap_pixels", m_tileMapPixelsTexture);
     // std::cout << "finished sending tilemap to shader!!\n";
