@@ -132,6 +132,8 @@ World::~World()
 
 void World::render()
 {
+    //FIXME: NEEDED?
+    m_tileMapFinalSprite.setTexture(m_tileMapFinalTexture);
 
     sf::RenderStates state;
     state.shader = &m_shader;
@@ -176,6 +178,14 @@ void World::handleEvent(const sf::Event& event)
         }
         break;
     }
+
+    /*
+    std::stringstream ss;
+    std::string str;
+    ss << "tilemap_pixels_" << rand() << ".png";
+    str = ss.str();
+    m_tileMapPixelsImage.saveToFile(str.c_str());
+    */
 }
 
 void World::update()
@@ -240,12 +250,12 @@ void World::update()
         x = 0;
     }
 
-    m_tileMapPixelsImage.saveToFile("tilemap_pixels.png");
-    std::cout << "image size, width: " << m_tileMapPixelsImage.getSize().x << " height: " << m_tileMapPixelsImage.getSize().y << "\n";
+    std::cout << "image size, width: " << m_tileMapPixelsImage.getSize().x << " height: " << m_tileMapPixelsImage.getSize().y << "\n" << "startcolumn: " << startColumn << " end column: " << endColumn << "\n";
     m_tileMapPixelsTexture.loadFromImage(m_tileMapPixelsImage);
     m_tileMapPixelsTexture.bind();
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
     m_shader.setParameter("tilemap_pixels", m_tileMapPixelsTexture);
     // std::cout << "finished sending tilemap to shader!!\n";
 }
