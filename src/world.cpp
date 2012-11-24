@@ -54,8 +54,14 @@ World::World(sf::RenderWindow *window, sf::View *view)
 
     m_tileTypesSuperImage.create(WORLD_TILE_SIZE * WORLD_TILE_TYPE_COUNT, WORLD_TILE_SIZE);
     m_tileTypesSuperTexture.create(WORLD_TILE_SIZE * WORLD_TILE_TYPE_COUNT, WORLD_TILE_SIZE);
+    m_tileTypesSuperTexture.bind();
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
     m_tileMapFinalTexture.create(1600, 900);
+    m_tileMapFinalTexture.bind();
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     m_tileMapFinalSprite.setTexture(m_tileMapFinalTexture);
 
     assert(m_shader.isAvailable()); // if the system doesn't support it, we're fucked
@@ -232,6 +238,9 @@ void World::update()
     m_tileMapPixelsImage.saveToFile("tilemap_pixels.png");
     std::cout << "image size, width: " << m_tileMapPixelsImage.getSize().x << " height: " << m_tileMapPixelsImage.getSize().y << "\n";
     m_tileMapPixelsTexture.loadFromImage(m_tileMapPixelsImage);
+    m_tileMapPixelsTexture.bind();
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     m_shader.setParameter("tilemap_pixels", m_tileMapPixelsTexture);
     // std::cout << "finished sending tilemap to shader!!\n";
 }
