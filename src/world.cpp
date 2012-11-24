@@ -138,11 +138,11 @@ void World::render()
     m_window->draw(*m_player);
     m_player->render(m_window);
 
-    m_window->setView(m_window->getDefaultView());
+ ///////   m_window->setView(m_window->getDefaultView());
     sf::RenderStates state;
     state.shader = &m_shader;
     m_window->draw(m_tileMapFinalSprite, state);
-    m_window->setView(*m_view);
+//    m_window->setView(*m_view);
 }
 
 void World::handleEvent(const sf::Event& event)
@@ -209,6 +209,8 @@ void World::update()
     const int startColumn = tilesBeforeX - ((1600/2) / WORLD_TILE_SIZE);
     const int endColumn = tilesBeforeX + ((1600/2) / WORLD_TILE_SIZE);
 
+    std::cout << "FIXME, WENT NEGATIVE!!";
+    assert(std::abs(startColumn) == startColumn);
     // std::cout << "tilesBeforeX: " << tilesBeforeX << " tilesBeforeY: " << tilesBeforeY << " startRow: " << startRow << " startColumn: " << startColumn << " endRow: " << endRow << " endColumn: " <<  endColumn << "\n";
     // std::cout << "sending visible tilemap to shader!" << "\n";
 
@@ -260,7 +262,7 @@ void World::generateMap()
     std::random_device device;
     std::mt19937 rand(device());
     //FIXME: convert to 1, n
-    std::uniform_int_distribution<> distribution(1, 2);
+    std::uniform_int_distribution<> distribution(0, 2);
     //std::cout << distribution(rand) << ' ';
 
     sf::Clock clock;

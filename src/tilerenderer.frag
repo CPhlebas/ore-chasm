@@ -7,30 +7,30 @@ uniform sampler2D tile_types_super_texture;
 
 //uniform vec2 screen_size;
 
-vec2 TILE_SIZE = vec2(16.0, 16.0);
+ivec2 TILE_SIZE = ivec2(16, 16);
 
 
 void main()
 {
-    vec2 screen_size = vec2(1600.0,900.0);
+    ivec2 screen_size = ivec2(1600.0,900.0);
 
     //ivec2 tilemap_pixels_size = textureSize(tilemap_pixels, 0);
     ivec2 tilemap_size = textureSize(tile_types_super_texture, 0);
 
 //========================================================================================
 
-    vec2 screen_coordinates = gl_FragCoord.xy / screen_size;
+    ivec2 screen_coordinates = ivec2(gl_FragCoord.x, gl_FragCoord.y);
 
     // find the pixel (RGBA) values in the tilemap pixel representation that is what we're
     // currently interested in.
-    vec4 currentPixel = texture2D(tilemap_pixels, screen_coordinates);
-    vec2 tileCoordinate;
-
-    tileCoordinate.x = (currentPixel.r * 255.0) + (screen_coordinates.x/16);//currentPixel.r * 255. * (screen_coordinates.x*16);
-    tileCoordinate.y = 1/screen_size.y;//screen_coordinates.y;// * TILE_SIZE.y;
+    vec4 currentPixel = texelFetch(tilemap_pixels, screen_coordinates / TILE_SIZE, 0);
+    ivec2 tileCoordinate;
+ tileCoordinate.x = (ivec4(currentPixel * 255).r)*16 + (screen_coordinates.x % 16);
+//    tileCoordinate.x = ivec4(currentPixel * 255).r  * (screen_coordinates.x % 16);//currentPixel.r * 255. * (screen_coordinates.x*16);
+    tileCoordinate.y = screen_coordinates.y % 16;//screen_coordinates.y;// * TILE_SIZE.y;
 
     //FIXME: use texelfetch instead
-    vec4 tileColor = texture2D(tile_types_super_texture, tileCoordinate);
+    vec4 tileColor = texelFetch(tile_types_super_texture, tileCoordinate, 0);
 
     gl_FragColor = tileColor;
 }
