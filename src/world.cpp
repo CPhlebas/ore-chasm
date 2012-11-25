@@ -112,6 +112,7 @@ World::World(sf::RenderWindow *window, sf::View *view)
     m_tileTypesSuperTexture.loadFromImage(m_tileTypesSuperImage);
 
     loadMap();
+//FIXME:    saveMap();
 
     if (m_shader.loadFromFile("tilerenderer.frag", sf::Shader::Fragment)) {
         std::cout << "Successfully loaded tilerenderer fragment shader!" << std::endl;
@@ -228,7 +229,9 @@ void World::update()
         assert(0);
     }
 
-    // std::cout << "tilesBeforeX: " << tilesBeforeX << " tilesBeforeY: " << tilesBeforeY << " startRow: " << startRow << " startColumn: " << startColumn << " endRow: " << endRow << " endColumn: " <<  endColumn << "\n";
+    if (playerPosition.x > 1200) {
+    std::cout << "tilesBeforeX: " << tilesBeforeX << " tilesBeforeY: " << tilesBeforeY << " startRow: " << startRow << " startColumn: " << startColumn << " endRow: " << endRow << " endColumn: " <<  endColumn << "\n";
+    }
     // std::cout << "sending visible tilemap to shader!" << "\n";
 
     // only make it as big as we need it, remember this is a pixel representation of the visible
@@ -240,21 +243,15 @@ void World::update()
     int x = 0;
     int  y = 0;
 
-
-
     // [y*rowlength + x]
-    for (int currentRow = startRow; currentRow < (endRow - startRow); ++currentRow) {
-        for (int currentColumn = startColumn; currentColumn < (endColumn - startColumn); ++currentColumn) {
+    for (int currentRow = startRow; currentRow < (endRow); ++currentRow) {
+        for (int currentColumn = startColumn; currentColumn < (endColumn); ++currentColumn) {
             // std::cout << "currentColumn: " << currentColumn << " WORLD_ROWCOUNT: " << WORLD_ROWCOUNT << " currentRow: " << currentRow << "\n";
 
-            const int index = currentRow * WORLD_ROWCOUNT + currentColumn;
+            const int index = currentColumn * WORLD_ROWCOUNT + currentRow;
             assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
 
             const sf::Color color(m_blocks[index].type, 0, 0);
-
-            if (m_player->getPosition().x > 1000) {
-                std::cout << "image size, width: " << m_tileMapPixelsImage.getSize().x << " height: " << m_tileMapPixelsImage.getSize().y << "\n" << "startcolumn: " << startColumn << " end column: " << endColumn << "\n";
-            }
 
             // std::cout << "setting pixels x: " << x << " y: " << y << "\n";
             // std::cout << "currentrow: " << currentRow << " currentColumn: " << currentColumn << "\n";
@@ -313,18 +310,17 @@ void World::saveMap()
     sf::Image image;
     image.create(WORLD_ROWCOUNT, WORLD_COLUMNCOUNT, sf::Color::White);
 
-    sf::Color color;
-
+    sf::Color color(0, 0, 0, 255);
     sf::Clock clock;
 
     for (int row = 0; row < WORLD_ROWCOUNT; ++row) {
         for (int column = 0; column < WORLD_COLUMNCOUNT; ++column) {
-//            color.r = m_blocks[column * WORLD_ROWCOUNT + row].type;
+            color.r = m_blocks[column * WORLD_ROWCOUNT + row].type;
             image.setPixel(row, column, color);
         }
     }
 
-    bool saved = image.saveToFile("../../saves/level1.png");
+    bool saved = image.saveToFile("levelsave.png");
     assert(saved);
 
     const int elapsedTime = clock.getElapsedTime().asMilliseconds();
