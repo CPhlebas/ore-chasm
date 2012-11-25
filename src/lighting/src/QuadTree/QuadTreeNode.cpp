@@ -2,6 +2,7 @@
 
 #include "QuadTree.h"
 
+#include <list>
 #include <assert.h>
 
 namespace qdt

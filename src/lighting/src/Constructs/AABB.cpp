@@ -1,5 +1,6 @@
 #include "AABB.h"
 
+#include <math.h>
 #include <SFML/OpenGL.hpp>
 
 AABB::AABB()

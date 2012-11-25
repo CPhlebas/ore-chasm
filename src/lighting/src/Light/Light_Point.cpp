@@ -22,7 +22,7 @@
 #include "Light_Point.h"
 #include "ShadowFin.h"
 
-#include "../Utils.h
+#include "../Utils.h"
 
 #include <assert.h>
 

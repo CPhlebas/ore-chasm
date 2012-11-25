@@ -701,8 +701,6 @@ void LightSystem::RenderLights()
 
                 // Render the current light
                 pLight->RenderLightSolidPortion();
-
-                m_lightAttenuationShader.unbind();
             } else
                 // Render the current light
                 pLight->RenderLightSolidPortion();

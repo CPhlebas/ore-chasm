@@ -123,6 +123,9 @@ World::World(sf::RenderWindow *window, sf::View *view)
     m_shader.setParameter("screen_size", sf::Vector2f(1600, 900));
     m_shader.setParameter("tile_types_super_texture", m_tileTypesSuperTexture);
 
+    AABB box(Vec2f(0.0f, 0.0f), Vec2f(1600.0f, 900.0f));
+    m_lightingSystem = new ltbl::LightSystem(box, m_window, "", "");
+
     //saveMap();
 }
 

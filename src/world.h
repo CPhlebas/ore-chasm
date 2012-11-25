@@ -20,6 +20,7 @@
 
 #include "block.h"
 #include "player.h"
+#include "lighting/src/Light/LightSystem.h"
 
 #include <stdlib.h>
 #include <SFML/Graphics/Shader.hpp>
@@ -87,6 +88,8 @@ private:
     Block m_blocks[WORLD_ROWCOUNT * WORLD_COLUMNCOUNT];
 
     Player *m_player = nullptr;
+
+    ltbl::LightSystem *m_lightingSystem = nullptr;
 
     //FIXME: just a ptr to the game.cpp one :(  same with window
     sf::View *m_view = nullptr;

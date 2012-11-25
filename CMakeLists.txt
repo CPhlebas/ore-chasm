@@ -11,11 +11,12 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 
     #  cmake has this annoying fucking bug that took me a while to figure out how i can use clang: http://www.cmake.org/pipermail/cmake/2011-February/042629.html
 
-    set(CMAKE_CXX_FLAGS "-std=c++11 -O0 -Wall -Wno-unused-variable -Wno-unused-function -funroll-loops -Woverloaded-virtual -g3 -ggdb -ftrapv -fverbose-asm -Wextra -Wfloat-equal -Winit-self -Wuninitialized -Werror-implicit-function-declaration -Wundef -Wshadow  -Wpointer-arith -Wcast-align -Wstrict-overflow=5 -Wwrite-strings -Wswitch-default -Wconversion -Wno-switch -Wunreachable-code -Wformat=2 -fstack-check -Wdouble-promotion")
-    set(CMAKE_C_FLAGS "-Wall -Wno-unused-variable -Wno-unused-function -funroll-loops -fexpensive-optimizations -g3 -ggdb")
+    set(CMAKE_CXX_FLAGS "-std=c++11 -O0 -g3 -fpermissive")
+# -Wall -Wno-unused-variable -Wno-unused-function -funroll-loops -Woverloaded-virtual -g3 -ggdb -ftrapv -fverbose-asm -Wextra -Wfloat-equal -Winit-self -Wuninitialized -Werror-implicit-function-declaration -Wundef -Wshadow  -Wpointer-arith -Wcast-align -Wstrict-overflow=5 -Wwrite-strings -Wswitch-default -Wconversion -Wno-switch -Wunreachable-code -Wformat=2 -fstack-check -Wdouble-promotion
+    set(CMAKE_C_FLAGS "-Wall -Wno-unused-variable -Wno-unused-function -fpermissive -funroll-loops -fexpensive-optimizations -g3 -ggdb")
 else(CMAKE_BUILD_TYPE STREQUAL "")
     set(CMAKE_CXX_FLAGS "-std=c++11 -O2 -Wall -Wno-unused-variable -Wno-unused-function -fexpensive-optimizations -Woverloaded-virtual")
-    set(CMAKE_C_FLAGS "-O2 -Wall -Wno-unused-variable -Wno-unused-function -funroll-loops -fexpensive-optimizations")
+    set(CMAKE_C_FLAGS "-O2 -Wall -Wno-unused-variable -Wno-unused-function -fexpensive-optimizations")
 endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
 
 # (you can also set it on the command line: -D CMAKE_BUILD_TYPE=Release)
@@ -62,7 +63,21 @@ src/renderer.cpp
 src/renderable.cpp
 src/entity.cpp
 src/block.cpp
-src/lighting/
+src/lighting/src/Utils.cpp
+src/lighting/src/Constructs/AABB.cpp
+src/lighting/src/Constructs/Color3f.cpp
+src/lighting/src/Constructs/Point2i.cpp
+src/lighting/src/Constructs/Vec2f.cpp
+src/lighting/src/Light/ConvexHull.cpp
+src/lighting/src/Light/EmissiveLight.cpp
+src/lighting/src/Light/Light.cpp
+src/lighting/src/Light/Light_Point.cpp
+src/lighting/src/Light/LightSystem.cpp
+src/lighting/src/Light/ShadowFin.cpp
+src/lighting/src/QuadTree/QuadTree.cpp
+src/lighting/src/QuadTree/QuadTreeNode.cpp
+src/lighting/src/QuadTree/QuadTreeOccupant.cpp
+src/lighting/src/QuadTree/StaticQuadTree.cpp
 )
 
 #YAML, needed later

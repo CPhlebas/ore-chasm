@@ -3,6 +3,7 @@
 #include "QuadTreeNode.h"
 #include "QuadTree.h"
 
+#include <list>
 #include <SFML/OpenGL.hpp>
 
 namespace qdt
