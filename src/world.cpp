@@ -241,15 +241,21 @@ void World::update()
     int  y = 0;
 
 
-    if (m_player->getPosition().x > 1000) {
-//        std::cout << "image size, width: " << m_tileMapPixelsImage.getSize().x << " height: " << m_tileMapPixelsImage.getSize().y << "\n" << "startcolumn: " << startColumn << " end column: " << endColumn << "\n";
-    }
 
     // [y*rowlength + x]
     for (int currentRow = startRow; currentRow < (endRow - startRow); ++currentRow) {
         for (int currentColumn = startColumn; currentColumn < (endColumn - startColumn); ++currentColumn) {
             // std::cout << "currentColumn: " << currentColumn << " WORLD_ROWCOUNT: " << WORLD_ROWCOUNT << " currentRow: " << currentRow << "\n";
-            const sf::Color color(m_blocks[currentRow * WORLD_ROWCOUNT + currentColumn].type, 0, 0);
+
+            const int index = currentRow * WORLD_ROWCOUNT + currentColumn;
+            assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
+
+            const sf::Color color(m_blocks[index].type, 0, 0);
+
+            if (m_player->getPosition().x > 1000) {
+                std::cout << "image size, width: " << m_tileMapPixelsImage.getSize().x << " height: " << m_tileMapPixelsImage.getSize().y << "\n" << "startcolumn: " << startColumn << " end column: " << endColumn << "\n";
+            }
+
             // std::cout << "setting pixels x: " << x << " y: " << y << "\n";
             // std::cout << "currentrow: " << currentRow << " currentColumn: " << currentColumn << "\n";
             m_tileMapPixelsImage.setPixel(x, y, color);
