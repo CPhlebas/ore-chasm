@@ -229,9 +229,6 @@ void World::update()
         assert(0);
     }
 
-    if (playerPosition.x > 1200) {
-    std::cout << "tilesBeforeX: " << tilesBeforeX << " tilesBeforeY: " << tilesBeforeY << " startRow: " << startRow << " startColumn: " << startColumn << " endRow: " << endRow << " endColumn: " <<  endColumn << "\n";
-    }
     // std::cout << "sending visible tilemap to shader!" << "\n";
 
     // only make it as big as we need it, remember this is a pixel representation of the visible
@@ -262,8 +259,7 @@ void World::update()
         x = 0;
     }
 
-
- //   std::cout << "image size, width: " << m_tileMapPixelsImage.getSize().x << " height: " << m_tileMapPixelsImage.getSize().y << "\n" << "startcolumn: " << startColumn << " end column: " << endColumn << "\n";
+//   std::cout << "image size, width: " << m_tileMapPixelsImage.getSize().x << " height: " << m_tileMapPixelsImage.getSize().y << "\n" << "startcolumn: " << startColumn << " end column: " << endColumn << "\n";
     m_tileMapPixelsTexture.loadFromImage(m_tileMapPixelsImage);
     m_tileMapPixelsTexture.bind();
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
