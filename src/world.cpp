@@ -20,9 +20,6 @@
 
 #include "block.h"
 
-#include "lighting/src/Light/LightSystem.h"
-#include <SFML/src/SFML/Graphics/stb_image/stb_image.h>
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -36,6 +33,7 @@
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Window/Keyboard.hpp>
+#include <CVars/CVar.h>
 
 World::World(sf::RenderWindow *window, sf::View *view)
 {
@@ -123,9 +121,6 @@ World::World(sf::RenderWindow *window, sf::View *view)
     m_shader.setParameter("screen_size", sf::Vector2f(1600, 900));
     m_shader.setParameter("tile_types_super_texture", m_tileTypesSuperTexture);
 
-    AABB box(Vec2f(0.0f, 0.0f), Vec2f(1600.0f, 900.0f));
-    m_lightingSystem = new ltbl::LightSystem(box, m_window, "", "");
-
     //saveMap();
 }
 
@@ -139,11 +134,9 @@ void World::render()
     //FIXME: NEEDED?
     m_tileMapFinalSprite.setTexture(m_tileMapFinalTexture);
 
- //   m_window->setView(m_window->getDefaultView());
     sf::RenderStates state;
     state.shader = &m_shader;
     m_window->draw(m_tileMapFinalSprite, state);
-//    m_window->setView(*m_view);
 
     //player drawn on top... since we don't have anything like z-ordering or layering (TODO)
     m_window->draw(*m_player);
@@ -292,7 +285,6 @@ void World::generateMap()
     //std::cout << distribution(rand) << ' ';
 
     sf::Clock clock;
-
     for (int row = 0; row < WORLD_ROWCOUNT; ++row) {
         for (int column = 0; column < WORLD_COLUMNCOUNT; ++column) {
             m_blocks[column * WORLD_ROWCOUNT + row].type = distribution(rand);

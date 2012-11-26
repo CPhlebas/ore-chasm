@@ -158,7 +158,6 @@ void Game::tick()
 
         // recheck the max, good amount of time passed
         if (benchTime <= 0) {
-            m_console->Printf("bench time elapsed");
             maxFps = fps;
             minFps = maxFps;
             benchTime = MAX_BENCH;
@@ -173,7 +172,7 @@ void Game::tick()
         }
 
         ss.str("");
-        ss << "Framerate: " << fps << " Min: " << minFps << " Max: " << maxFps << " elapsedTime: " << elapsedTime;
+        ss << "Framerate: " << fps << " Min: " << minFps << " Max: " << maxFps << " elapsedTime: " << elapsedTime << " **** F3 for console";
         str = ss.str();
         text.setString(str);
 
@@ -250,10 +249,11 @@ void Game::tick()
             //          }
         }
 
-        m_world->update();
+        if (!m_console->IsOpen()) {
+            m_world->update();
+        }
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 
         m_app->pushGLStates();
 //        m_view->move(500 * xDir * elapsedTime, 500* yDir * elapsedTime);
@@ -262,9 +262,9 @@ void Game::tick()
 
 //        m_app->setView(m_app->getDefaultView());
 
-        m_app->draw(text);
 
         m_world->render();
+        m_app->draw(text);
  //       m_app->setView(*m_view);
 
         m_app->popGLStates();
