@@ -26,8 +26,8 @@ void main()
     vec4 currentPixel = texelFetch(tilemap_pixels, screen_coordinates / TILE_SIZE, 0);
 
     ivec2 tileCoordinate;
-    tileCoordinate.x = (int(currentPixel.r * 255.0) ) * 16 + (screen_coordinates.x % 16);
-    tileCoordinate.y = screen_coordinates.y % 16;
+    tileCoordinate.x = (int(currentPixel.r * 255.0) ) * TILE_SIZE.x + (screen_coordinates.x % TILE_SIZE.x);
+    tileCoordinate.y = screen_coordinates.y % TILE_SIZE.y;
 
     vec4 tileColor = texelFetch(tile_types_super_texture, tileCoordinate, 0);
 
