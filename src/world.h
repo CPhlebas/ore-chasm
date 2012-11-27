@@ -27,9 +27,9 @@
 #include <SFML/Graphics/Texture.hpp>
 
 //height
-static const unsigned short WORLD_ROWCOUNT = 8400;
+static constexpr unsigned short WORLD_ROWCOUNT = 8400;
 //width
-static const unsigned short WORLD_COLUMNCOUNT = 2400;
+static constexpr unsigned short WORLD_COLUMNCOUNT = 2400;
 /*
  e.g. [ ] [ ] [ ] [ ] [ ]  ... 8400
         [ ] [ ] [ ] [ ] [ ]  ... 8400
@@ -42,9 +42,9 @@ static const unsigned short WORLD_COLUMNCOUNT = 2400;
 */
 
 // height is the same as width (they're square)
-static const unsigned char WORLD_TILE_SIZE = 16;
+static constexpr unsigned char WORLD_TILE_SIZE = 16;
 //NOTE: update this when you update m_blockTextures
-static const unsigned short WORLD_TILE_TYPE_COUNT = 4;
+static constexpr unsigned short WORLD_TILE_TYPE_COUNT = 4;
 
 class World
 {
