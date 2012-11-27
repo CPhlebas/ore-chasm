@@ -141,6 +141,32 @@ void World::render()
     //player drawn on top... since we don't have anything like z-ordering or layering (TODO)
     m_window->draw(*m_player);
     m_player->render(m_window);
+
+    const sf::Vector2i mousePos = sf::Mouse::getPosition();
+    const sf::Vector2f playerPosition = m_player->getPosition();
+
+    sf::Vector2f diffVect;
+    diffVect.x = mousePos.x - playerPosition.x;
+    diffVect.y = mousePos.y - playerPosition.y;
+
+    const double angle = atan2(diffVect.y, diffVect.x);
+    const float newX = playerPosition.x + cos(angle) * Player::blockPickingRadius;
+    const float newY= playerPosition.y  + sin(angle) * Player::blockPickingRadius;
+    const sf::Vector2f newVect = sf::Vector2f(newX, newY);
+
+    sf::VertexArray line(sf::Lines,2);
+    line.append(sf::Vertex(playerPosition));
+    line.append(sf::Vertex(newVect));
+    m_window->draw(line);
+
+    const float radius = 10.0f;
+    sf::CircleShape crosshair = sf::CircleShape(radius);
+    crosshair.setPosition(newVect);
+    crosshair.setFillColor(sf::Color::Transparent);
+    crosshair.setOutlineColor(sf::Color::Red);
+    crosshair.setOutlineThickness(2.0f);
+    crosshair.setOrigin(radius, radius);
+    m_window->draw(crosshair);
 }
 
 void World::handleEvent(const sf::Event& event)
@@ -193,11 +219,10 @@ void World::update()
     //FIXME: bring in elapsedTime here ...to calculate player movements accurately
 
     m_player->move(m_inputXDirection, m_inputYDirection);
+
+    const sf::Vector2f playerPosition = m_player->getPosition();
 //    m_view->setCenter(m_player->getPosition());
 
-
-//    std::cout << "VIEWPORT: view x: " << center.x << " View y: " << center.y << std::endl;
-    const sf::Vector2f playerPosition = m_player->getPosition();
 //    std::cout << "player pos x : " << playerPosition.x << " view pos x: " << m_view->getCenter().x << "\n";
 //    std::cout << "VIEWPORT: view x: " << center.x << " View y: " << center.y << std::endl;
 

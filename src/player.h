@@ -32,8 +32,14 @@ public:
      */
     Player(const char* texture);
 
+    // radius indicating how many pixels out the player can pick
+    // blocks
+    static const float blockPickingRadius = 50.0f;
+
+    void render(sf::RenderWindow *window);
+
 private:
-    int health = 100;
+    unsigned char health = 100;
 };
 
 

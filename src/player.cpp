@@ -23,3 +23,17 @@ Player::Player(const char* texture) : Entity(texture)
 {
 //TODO:    setCenter();
 }
+
+void Player::render(sf::RenderWindow* window)
+{
+
+    Renderable::render(window);
+
+    sf::CircleShape circle = sf::CircleShape(Player::blockPickingRadius);
+    circle.setPosition(getPosition());
+    circle.setOrigin(Player::blockPickingRadius, Player::blockPickingRadius);
+    circle.setFillColor(sf::Color::Transparent);
+    circle.setOutlineColor(sf::Color::Red);
+    circle.setOutlineThickness(1.0f);
+    window->draw(circle);
+}
