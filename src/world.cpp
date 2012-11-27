@@ -19,6 +19,7 @@
 #include "logging.h"
 
 #include "block.h"
+#include "game.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -56,7 +57,7 @@ World::World(sf::RenderWindow *window, sf::View *view)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-    m_tileMapFinalTexture.create(1600, 900);
+    m_tileMapFinalTexture.create(SCREEN_W, SCREEN_H);
     m_tileMapFinalTexture.bind();
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -106,11 +107,10 @@ World::World(sf::RenderWindow *window, sf::View *view)
         m_tileTypesSuperImage.copy(currentTile, destX, destY);
     }
 
-    m_tileTypesSuperImage.saveToFile("TEST.png");
     m_tileTypesSuperTexture.loadFromImage(m_tileTypesSuperImage);
 
     loadMap();
-//FIXME:    saveMap();
+    //FIXME: saveMap();
 
     if (m_shader.loadFromFile("tilerenderer.frag", sf::Shader::Fragment)) {
         std::cout << "Successfully loaded tilerenderer fragment shader!" << std::endl;
@@ -118,10 +118,11 @@ World::World(sf::RenderWindow *window, sf::View *view)
         std::cout << "failed to load tilerenderer fragment shader!" << std::endl;
         assert(0);
     }
-    m_shader.setParameter("screen_size", sf::Vector2f(1600, 900));
+
+    //FIXME: hardcoding :(
+    //m_shader.setParameter("TILE_SIZE", WORLD_TILE_SIZE, WORLD_TILE_SIZE);
     m_shader.setParameter("tile_types_super_texture", m_tileTypesSuperTexture);
 
-    //saveMap();
 }
 
 World::~World()
@@ -254,12 +255,12 @@ void World::generatePixelTileMap()
 
     //FIXME: only calculate this crap when we move/change tiles
     //FIXME: USE SCREEN_H, SCREEN_W
-    const int startRow = tilesBeforeY - ((900/2) / WORLD_TILE_SIZE);
-    const int endRow = tilesBeforeY + ((900/2) / WORLD_TILE_SIZE);
+    const int startRow = tilesBeforeY - ((SCREEN_H / 2) / WORLD_TILE_SIZE);
+    const int endRow = tilesBeforeY + ((SCREEN_H / 2) / WORLD_TILE_SIZE);
 
     //columns are our X value, rows the Y
-    const int startColumn = tilesBeforeX - ((1600/2) / WORLD_TILE_SIZE);
-    const int endColumn = tilesBeforeX + ((1600/2) / WORLD_TILE_SIZE);
+    const int startColumn = tilesBeforeX - ((SCREEN_W / 2) / WORLD_TILE_SIZE);
+    const int endColumn = tilesBeforeX + ((SCREEN_W / 2) / WORLD_TILE_SIZE);
 
     if (std::abs(startColumn) != startColumn) {
         std::cout << "FIXME, WENT INTO NEGATIVE COLUMN!!";

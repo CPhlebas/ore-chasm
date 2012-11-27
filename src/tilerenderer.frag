@@ -5,19 +5,14 @@ uniform sampler2D tilemap_pixels;
 //a runtime generated spritesheet of all tiles we know, each tile being 16x16 (so 48x16 if there are 3 tile types)
 uniform sampler2D tile_types_super_texture;
 
-//uniform vec2 screen_size;
-
+//FIXME: stop hardcoding ..
 ivec2 TILE_SIZE = ivec2(16, 16);
 
 
 void main()
 {
-//    ivec2 screen_size = ivec2(1600,900);
 
-    //ivec2 tilemap_pixels_size = textureSize(tilemap_pixels, 0);
     ivec2 tilemap_size = textureSize(tile_types_super_texture, 0);
-
-//========================================================================================
 
     ivec2 screen_coordinates = ivec2(gl_FragCoord.x, gl_FragCoord.y);
 

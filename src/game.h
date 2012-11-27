@@ -28,6 +28,10 @@
 
 #include <GLConsole/GLConsole.h>
 
+//1600
+static int SCREEN_W = 1600;
+//900
+static int SCREEN_H = 900;
 
 static bool DEBUG_RENDERING = true;
 
@@ -43,8 +47,6 @@ public:
     void shutdown();
 
     const float FPS = 60.0;
-    const int SCREEN_W = 1600;
-    const int SCREEN_H = 900;
 
 private:
     World *m_world = nullptr;
