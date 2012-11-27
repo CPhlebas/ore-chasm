@@ -142,7 +142,7 @@ void World::render()
     m_window->draw(*m_player);
     m_player->render(m_window);
 
-    const sf::Vector2i mousePos = sf::Mouse::getPosition();
+    const sf::Vector2i mousePos = sf::Mouse::getPosition(*m_window);
     const sf::Vector2f playerPosition = m_player->getPosition();
 
     sf::Vector2f diffVect;
