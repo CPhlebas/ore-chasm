@@ -258,7 +258,7 @@ void Game::tick()
         m_app->pushGLStates();
 //        m_view->move(500 * xDir * elapsedTime, 500* yDir * elapsedTime);
 
-        m_app->clear(sf::Color(0, 255, 0));
+        m_app->clear(sf::Color(255, 255, 255));
 
 //        m_app->setView(m_app->getDefaultView());
 

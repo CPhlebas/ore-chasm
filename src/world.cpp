@@ -306,7 +306,7 @@ void World::generateMap()
     std::random_device device;
     std::mt19937 rand(device());
     //FIXME: convert to 1, n
-    std::uniform_int_distribution<> distribution(0, 2);
+    std::uniform_int_distribution<> distribution(0, 3);
     //std::cout << distribution(rand) << ' ';
 
     sf::Clock clock;

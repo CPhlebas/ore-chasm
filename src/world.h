@@ -44,7 +44,7 @@ static const unsigned short WORLD_COLUMNCOUNT = 2400;
 // height is the same as width (they're square)
 static const unsigned char WORLD_TILE_SIZE = 16;
 //NOTE: update this when you update m_blockTextures
-static const unsigned short WORLD_TILE_TYPE_COUNT = 3;
+static const unsigned short WORLD_TILE_TYPE_COUNT = 4;
 
 class World
 {
@@ -61,19 +61,23 @@ public:
 
     /**
      * Determines the health and texture of the Block.
+     * NOTE: MUST be in sync with index of m_blockTextures
      */
     enum BlockType {
-        Dirt = 0,
-        Stone
+        Null = 0,
+        Dirt,
+        Stone,
+        Grass
     };
 
     /**
      * Coincides with BlockType (and goes in order.
      * The enum BlockType acts as index for this.
      * NOTE: update TILE_TYPE_COUNT when this gets something
-     * added to it.
+     * added to it, as well as BlockType.
      */
     const char* const m_blockTextures[WORLD_TILE_TYPE_COUNT] {
+        "../textures/null.png",
         "../textures/dirt.png",
         "../textures/stone.png",
         "../textures/grass.png"
