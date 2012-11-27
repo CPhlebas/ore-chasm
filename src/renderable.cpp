@@ -44,28 +44,19 @@ void Renderable::setTexture(const char* texture)
 
 void Renderable::render(sf::RenderWindow* window)
 {
-    sf::Vector2u size = sf::Sprite::getTexture()->getSize();
-    sf::Vector2f rectSize(size.x, size.y);
-    sf::Vector2f pos = sf::Sprite::getPosition();
+    const sf::Vector2u size = sf::Sprite::getTexture()->getSize();
+    const sf::Vector2f rectSize(size.x, size.y);
+    const sf::Vector2f pos = sf::Sprite::getPosition();
+    const sf::IntRect rect = getTextureRect();
+    const sf::Vector2f center = sf::Vector2f(rect.width * 0.5, rect.height * 0.5);
 
     sf::RectangleShape outline;
     outline.setSize(rectSize);
     outline.setOutlineColor(sf::Color::Green);
-    outline.setOutlineThickness(1);
-    outline.setPosition(pos);
+    outline.setOutlineThickness(1.0f);
     outline.setFillColor(sf::Color(0, 0, 0, 0));
-
-    sf::VertexArray line1(sf::LinesStrip, 2);
-    line1[0].position = sf::Vector2f(pos.x, pos.y);
-    line1[1].position = sf::Vector2f(pos.x + rectSize.x, pos.y + rectSize.y);
-
-    sf::VertexArray line2(sf::LinesStrip, 2);
-    line2[0].position = sf::Vector2f(pos.x + rectSize.x, pos.y);
-    line2[1].position = sf::Vector2f(pos.x, pos.y + rectSize.y);
-
-
+    outline.setPosition(pos);
+    outline.setOrigin(center);
 
     window->draw(outline);
-    window->draw(line1);
-    window->draw(line2);
 }

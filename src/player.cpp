@@ -22,6 +22,9 @@
 Player::Player(const char* texture) : Entity(texture)
 {
 //TODO:    setCenter();
+    sf::IntRect rect = Renderable::getTextureRect();
+    sf::Vector2f center = sf::Vector2f(rect.width * 0.5, rect.height * 0.5);
+    setOrigin(center);
 }
 
 void Player::render(sf::RenderWindow* window)
