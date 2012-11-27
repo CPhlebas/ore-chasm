@@ -21,17 +21,16 @@
 
 Player::Player(const char* texture) : Entity(texture)
 {
-//TODO:    setCenter();
-    sf::IntRect rect = Renderable::getTextureRect();
-    sf::Vector2f center = sf::Vector2f(rect.width * 0.5, rect.height * 0.5);
+    const sf::IntRect rect = Renderable::getTextureRect();
+    const sf::Vector2f center = sf::Vector2f(rect.width * 0.5, rect.height * 0.5);
     setOrigin(center);
 }
 
 void Player::render(sf::RenderWindow* window)
 {
-
     Renderable::render(window);
 
+    //debug drawing for the radius that is within the player's reach to "pick"
     sf::CircleShape circle = sf::CircleShape(Player::blockPickingRadius);
     circle.setPosition(getPosition());
     circle.setOrigin(Player::blockPickingRadius, Player::blockPickingRadius);
