@@ -57,6 +57,9 @@ public:
 
     void loadMap();
 
+    void calculateAttackPosition();
+    void generatePixelTileMap();
+
     void handleEvent(const sf::Event& event);
 
     /**
@@ -125,6 +128,8 @@ private:
 
     float m_inputXDirection = 0.f;
     float m_inputYDirection = 0.f;
+
+    sf::Vector2f m_positionToAttack;
 
     /**
      * From scratch, create a randomly generated tileset and store it in our array

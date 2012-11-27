@@ -142,31 +142,23 @@ void World::render()
     m_window->draw(*m_player);
     m_player->render(m_window);
 
-    const sf::Vector2i mousePos = sf::Mouse::getPosition(*m_window);
+    // ==================== draw debug =====================
     const sf::Vector2f playerPosition = m_player->getPosition();
 
-    sf::Vector2f diffVect;
-    diffVect.x = mousePos.x - playerPosition.x;
-    diffVect.y = mousePos.y - playerPosition.y;
-
-    const double angle = atan2(diffVect.y, diffVect.x);
-    const float newX = playerPosition.x + cos(angle) * Player::blockPickingRadius;
-    const float newY= playerPosition.y  + sin(angle) * Player::blockPickingRadius;
-    const sf::Vector2f newVect = sf::Vector2f(newX, newY);
-
-    sf::VertexArray line(sf::Lines,2);
+    sf::VertexArray line(sf::Lines, 2);
     line.append(sf::Vertex(playerPosition));
-    line.append(sf::Vertex(newVect));
+    line.append(sf::Vertex(m_positionToAttack));
     m_window->draw(line);
 
     const float radius = 10.0f;
     sf::CircleShape crosshair = sf::CircleShape(radius);
-    crosshair.setPosition(newVect);
+    crosshair.setPosition(m_positionToAttack);
     crosshair.setFillColor(sf::Color::Transparent);
     crosshair.setOutlineColor(sf::Color::Red);
     crosshair.setOutlineThickness(2.0f);
     crosshair.setOrigin(radius, radius);
     m_window->draw(crosshair);
+    // ==================================================
 }
 
 void World::handleEvent(const sf::Event& event)
@@ -220,12 +212,29 @@ void World::update()
 
     m_player->move(m_inputXDirection, m_inputYDirection);
 
+    calculateAttackPosition();
+    generatePixelTileMap();
+}
+
+void World::calculateAttackPosition()
+{
     const sf::Vector2f playerPosition = m_player->getPosition();
-//    m_view->setCenter(m_player->getPosition());
 
-//    std::cout << "player pos x : " << playerPosition.x << " view pos x: " << m_view->getCenter().x << "\n";
-//    std::cout << "VIEWPORT: view x: " << center.x << " View y: " << center.y << std::endl;
+    const sf::Vector2i mousePos = sf::Mouse::getPosition(*m_window);
 
+    sf::Vector2f diffVect;
+    diffVect.x = mousePos.x - playerPosition.x;
+    diffVect.y = mousePos.y - playerPosition.y;
+
+    const double angle = atan2(diffVect.y, diffVect.x);
+    const float newX = playerPosition.x + cos(angle) * Player::blockPickingRadius;
+    const float newY= playerPosition.y  + sin(angle) * Player::blockPickingRadius;
+    m_positionToAttack = sf::Vector2f(newX, newY);
+}
+
+void World::generatePixelTileMap()
+{
+    const sf::Vector2f playerPosition = m_player->getPosition();
     //consider block map as starting at player pos == 0,0 and going down and to the right-ward
     //tilesBefore{X,Y} is only at the center of the view though..find the whole screen real estate
     //column
@@ -290,6 +299,7 @@ void World::update()
     m_shader.setParameter("tilemap_pixels", m_tileMapPixelsTexture);
     // std::cout << "finished sending tilemap to shader!!\n";
 }
+
 
 void World::loadMap()
 {
