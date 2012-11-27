@@ -59,6 +59,7 @@ public:
 
     void calculateAttackPosition();
     void generatePixelTileMap();
+    void performAttack();
 
     void handleEvent(const sf::Event& event);
 
@@ -129,6 +130,9 @@ private:
     float m_inputXDirection = 0.f;
     float m_inputYDirection = 0.f;
 
+    /**
+     * In client window coordinates (relative)
+     */
     sf::Vector2f m_positionToAttack;
 
     /**

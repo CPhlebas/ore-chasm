@@ -213,6 +213,7 @@ void World::update()
     m_player->move(m_inputXDirection, m_inputYDirection);
 
     calculateAttackPosition();
+    performAttack();
     generatePixelTileMap();
 }
 
@@ -230,6 +231,15 @@ void World::calculateAttackPosition()
     const float newX = playerPosition.x + cos(angle) * Player::blockPickingRadius;
     const float newY= playerPosition.y  + sin(angle) * Player::blockPickingRadius;
     m_positionToAttack = sf::Vector2f(newX, newY);
+}
+
+void World::performAttack()
+{
+    const int column = int(m_positionToAttack.x / WORLD_TILE_SIZE);
+    const int row = (m_positionToAttack.y / WORLD_TILE_SIZE);
+
+    const int index = column * WORLD_ROWCOUNT + row;
+    m_blocks[index].type = 0;
 }
 
 void World::generatePixelTileMap()
