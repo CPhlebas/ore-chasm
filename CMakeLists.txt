@@ -23,25 +23,14 @@ endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 message("PATH: " + ${CMAKE_MODULE_PATH})
 # Set version information in a config.h file
-set (BOX2D_DIR "${CMAKE_SOURCE_DIR}/cmake_modules")
 set(buildarrhea_VERSION_MAJOR 0)
 set(buildarrhea_VERSION_MINOR 1)
 
-find_package( BOX2D REQUIRED)
 find_package( GLUT REQUIRED )
 find_package( GLU REQUIRED )
 find_package( OpenGL REQUIRED )
-find_package( CVARS REQUIRED)
 
-if (NOT CVARS_FOUND)
-    message(FATAL_ERROR "Could not find CVARS (for quake console).")
-endif()
-
-if (NOT BOX2D_FOUND)
-    message(FATAL_ERROR "Could not find Box2D physics library.")
-endif()
-
-include_directories( ${CMAKE_SOURCE_DIR} ${BOX2D_INCLUDE_DIR} ${GLUT_INCLUDE_DIR} ${CVARS_INCLUDE_DIR} )
+include_directories( ${CMAKE_SOURCE_DIR} ${GLUT_INCLUDE_DIR} )
 
 configure_file(
   "${PROJECT_SOURCE_DIR}/config.h.in"
@@ -91,9 +80,6 @@ include(FindPkgConfig)
 #add_executable(${EXECUTABLE_NAME} ${SOURCES})
 #target_link_libraries(${EXECUTABLE_NAME} ${yaml-cpp_LIBRARIES})
 #
-if (NOT BOX2D_FOUND)
-  message(FATAL_ERROR "Could not find Box2D library.")
-endif()
 
 add_executable(${EXECUTABLE_NAME} ${SRC})
 
@@ -102,9 +88,10 @@ find_package(SFML 2.0 REQUIRED system window graphics audio) #network
 if (NOT SFML_FOUND)
     message(FATAL_ERROR "Could not find SFML.")
 endif()
-                                                                    INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR} ${GLUT_INCLUDE_DIR} )
-include_directories(${SFML_INCLUDE_DIR} ${CVARS_INCLUDE_DIR} ${BOX2D_INCLUDE_DIR})
-target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES} ${CVARS_LIBRARIES} ${GLUT_LIBRARIES} ${GLU_LIBRARIES} ${OPENGL_LIBRARIES} ${BOX2D_LIBRARIES} )
+
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR} ${GLUT_INCLUDE_DIR} )
+include_directories(${SFML_INCLUDE_DIR} )
+target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES} ${GLUT_LIBRARIES} ${GLU_LIBRARIES} ${OPENGL_LIBRARIES})
 
 
 # CPack packaging

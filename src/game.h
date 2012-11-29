@@ -26,8 +26,6 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Font.hpp>
 
-#include <GLConsole/GLConsole.h>
-
 //1600
 static int SCREEN_W = 1600;
 //900
@@ -50,7 +48,6 @@ public:
 
 private:
     World *m_world = nullptr;
-    GLConsole *m_console = nullptr;
     sf::RenderWindow *m_app = nullptr;
     sf::View *m_view = nullptr;
     sf::Font *m_font = nullptr;

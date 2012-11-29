@@ -31,15 +31,6 @@
 #include <SFML/Config.hpp>
 #include <SFML/OpenGL.hpp>
 
-#include <Box2D/Box2D.h>
-
-#include <GLConsole/GLConsole.h>
-//A CVar version of std::vector
-#include <CVars/CVarVectorIO.h>
-//A CVar version of std::map
-#include <CVars/CVarMapIO.h>
-
-
 Game::Game()
 {
 }
@@ -48,7 +39,6 @@ Game::~Game()
 {
     delete m_world;
     delete m_view;
-    delete m_console;
     delete m_font;
     delete m_app;
 }
@@ -116,9 +106,6 @@ void Game::init()
     ImageManager* manager = ImageManager::instance();
     manager->addResourceDir("../textures");
 
-    m_console = new GLConsole(m_app);
-    m_console->Init();
-
     m_world = new World(m_app, m_view);
 
     tick();
@@ -172,7 +159,7 @@ void Game::tick()
         }
 
         ss.str("");
-        ss << "Framerate: " << fps << " Min: " << minFps << " Max: " << maxFps << " elapsedTime: " << elapsedTime << " **** F3 for console";
+        ss << "Framerate: " << fps << " Min: " << minFps << " Max: " << maxFps << " elapsedTime: " << elapsedTime << "";
         str = ss.str();
         text.setString(str);
 
@@ -183,7 +170,6 @@ void Game::tick()
             // unsigned int MouseX = Input.getMouseX();
             // unsigned int MouseY = Input.getMouseY();
 
-            m_console->handleEvent(event);
             m_world->handleEvent(event);
             switch (event.type) {
                 // window closed
@@ -193,19 +179,9 @@ void Game::tick()
 
                 // key pressed
             case sf::Event::KeyPressed:
-                if (!m_console->IsOpen()) {
                     if (event.key.code == sf::Keyboard::Escape) {
                         shutdown();
                     }
-                } else {
-                }
-
-                // traditional tilde used in every game/console, except without shift ;)
-                //HACK FIXME: currently bound to F3 because tilde/accent isn't exposed?
-                if (event.key.code == sf::Keyboard::F3) {
-                    std::cout << "TAB HIT, TOGGLING CONSOLE" << std::endl;
-                    m_console->ToggleConsole();
-                }
 
                 if (event.key.code == sf::Keyboard::Escape) {
                     shutdown();
@@ -213,10 +189,6 @@ void Game::tick()
                 break;
 
             case sf::Event::KeyReleased:
-                if (!m_console->IsOpen()) {
-
-                } else {
-                }
                 break;
 
             case sf::Event::MouseMoved:
@@ -249,9 +221,7 @@ void Game::tick()
             //          }
         }
 
-        if (!m_console->IsOpen()) {
-            m_world->update();
-        }
+        m_world->update();
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -270,7 +240,6 @@ void Game::tick()
         m_app->popGLStates();
 
    //     m_app->setView(m_app->getDefaultView());
-        m_console->RenderConsole();
   //      m_app->setView(*m_view);
 
         // always after rendering!
