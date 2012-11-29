@@ -34,7 +34,6 @@
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Window/Keyboard.hpp>
-#include <CVars/CVar.h>
 
 World::World(sf::RenderWindow *window, sf::View *view)
 {
