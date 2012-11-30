@@ -149,12 +149,12 @@ void World::render()
     // ==================== draw debug =====================
     sf::VertexArray line(sf::Lines, 2);
     line.append(sf::Vertex(viewportCenter()));
-    line.append(sf::Vertex(m_vectorToAttack));
+    line.append(sf::Vertex(m_relativeVectorToAttack));
     m_window->draw(line);
 
     const float radius = 10.0f;
     sf::CircleShape crosshair = sf::CircleShape(radius);
-    crosshair.setPosition(m_vectorToAttack);
+    crosshair.setPosition(m_relativeVectorToAttack);
     crosshair.setFillColor(sf::Color::Transparent);
     crosshair.setOutlineColor(sf::Color::Red);
     crosshair.setOutlineThickness(2.0f);
@@ -239,13 +239,16 @@ void World::calculateAttackPosition()
     const double angle = atan2(diffVect.y, diffVect.x);
     const float newX = _viewportCenter.x + cos(angle) * Player::blockPickingRadius;
     const float newY= _viewportCenter.y  + sin(angle) * Player::blockPickingRadius;
-    m_vectorToAttack = sf::Vector2f(newX, newY);
+    m_relativeVectorToAttack = sf::Vector2f(newX, newY);
 }
 
 void World::performAttack()
 {
-    const int column = int(m_vectorToAttack.x / WORLD_TILE_SIZE);
-    const int row = (m_vectorToAttack.y / WORLD_TILE_SIZE);
+    sf::Vector2f viewPosition;
+    viewPosition.x = m_view->getCenter().x - viewportCenter().x;
+    viewPosition.y = m_view->getCenter().y - viewportCenter().y;
+    const int column = int((m_relativeVectorToAttack.x + viewPosition.x) / WORLD_TILE_SIZE);
+    const int row = int((m_relativeVectorToAttack.y + viewPosition.y) / WORLD_TILE_SIZE);
 
     const int index = column * WORLD_ROWCOUNT + row;
     m_blocks[index].type = 0;

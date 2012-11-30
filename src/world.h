@@ -140,7 +140,7 @@ private:
     /**
      * In client window coordinates (relative)
      */
-    sf::Vector2f m_vectorToAttack;
+    sf::Vector2f m_relativeVectorToAttack;
 
     /**
      * Same as above, but used for knowing which tile in the array to attack
