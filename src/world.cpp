@@ -138,27 +138,30 @@ void World::render()
     state.shader = &m_shader;
     m_window->draw(m_tileMapFinalSprite, state);
 
+    m_window->setView(*m_view);
+
     //player drawn on top... since we don't have anything like z-ordering or layering (TODO)
     m_window->draw(*m_player);
     m_player->render(m_window);
 
-    // ==================== draw debug =====================
-    const sf::Vector2f playerPosition = m_player->getPosition();
+    m_window->setView(m_window->getDefaultView());
 
+    // ==================== draw debug =====================
     sf::VertexArray line(sf::Lines, 2);
-    line.append(sf::Vertex(playerPosition));
-    line.append(sf::Vertex(m_positionToAttack));
+    line.append(sf::Vertex(viewportCenter()));
+    line.append(sf::Vertex(m_vectorToAttack));
     m_window->draw(line);
 
     const float radius = 10.0f;
     sf::CircleShape crosshair = sf::CircleShape(radius);
-    crosshair.setPosition(m_positionToAttack);
+    crosshair.setPosition(m_vectorToAttack);
     crosshair.setFillColor(sf::Color::Transparent);
     crosshair.setOutlineColor(sf::Color::Red);
     crosshair.setOutlineThickness(2.0f);
     crosshair.setOrigin(radius, radius);
     m_window->draw(crosshair);
     // ==================================================
+
 }
 
 void World::handleEvent(const sf::Event& event)
@@ -211,32 +214,38 @@ void World::update()
     //FIXME: bring in elapsedTime here ...to calculate player movements accurately
 
     m_player->move(m_inputXDirection, m_inputYDirection);
+    m_view->setCenter(m_player->getPosition());
 
     calculateAttackPosition();
     performAttack();
     generatePixelTileMap();
 }
 
+sf::Vector2f World::viewportCenter() const
+{
+    return sf::Vector2f(SCREEN_W * 0.5, SCREEN_H * 0.5);
+}
+
 void World::calculateAttackPosition()
 {
-    const sf::Vector2f playerPosition = m_player->getPosition();
+    const sf::Vector2f _viewportCenter = viewportCenter();
 
     const sf::Vector2i mousePos = sf::Mouse::getPosition(*m_window);
 
     sf::Vector2f diffVect;
-    diffVect.x = mousePos.x - playerPosition.x;
-    diffVect.y = mousePos.y - playerPosition.y;
+    diffVect.x = mousePos.x - _viewportCenter.x;
+    diffVect.y = mousePos.y - _viewportCenter.y;
 
     const double angle = atan2(diffVect.y, diffVect.x);
-    const float newX = playerPosition.x + cos(angle) * Player::blockPickingRadius;
-    const float newY= playerPosition.y  + sin(angle) * Player::blockPickingRadius;
-    m_positionToAttack = sf::Vector2f(newX, newY);
+    const float newX = _viewportCenter.x + cos(angle) * Player::blockPickingRadius;
+    const float newY= _viewportCenter.y  + sin(angle) * Player::blockPickingRadius;
+    m_vectorToAttack = sf::Vector2f(newX, newY);
 }
 
 void World::performAttack()
 {
-    const int column = int(m_positionToAttack.x / WORLD_TILE_SIZE);
-    const int row = (m_positionToAttack.y / WORLD_TILE_SIZE);
+    const int column = int(m_vectorToAttack.x / WORLD_TILE_SIZE);
+    const int row = (m_vectorToAttack.y / WORLD_TILE_SIZE);
 
     const int index = column * WORLD_ROWCOUNT + row;
     m_blocks[index].type = 0;
@@ -254,12 +263,12 @@ void World::generatePixelTileMap()
 
     //FIXME: only calculate this crap when we move/change tiles
     //FIXME: USE SCREEN_H, SCREEN_W
-    const int startRow = tilesBeforeY - ((SCREEN_H / 2) / WORLD_TILE_SIZE);
-    const int endRow = tilesBeforeY + ((SCREEN_H / 2) / WORLD_TILE_SIZE);
+    const int startRow = tilesBeforeY - ((SCREEN_H * 0.5) / WORLD_TILE_SIZE);
+    const int endRow = tilesBeforeY + ((SCREEN_H * 0.5) / WORLD_TILE_SIZE);
 
     //columns are our X value, rows the Y
-    const int startColumn = tilesBeforeX - ((SCREEN_W / 2) / WORLD_TILE_SIZE);
-    const int endColumn = tilesBeforeX + ((SCREEN_W / 2) / WORLD_TILE_SIZE);
+    const int startColumn = tilesBeforeX - ((SCREEN_W * 0.5) / WORLD_TILE_SIZE);
+    const int endColumn = tilesBeforeX + ((SCREEN_W * 0.5) / WORLD_TILE_SIZE);
 
     if (std::abs(startColumn) != startColumn) {
         std::cout << "FIXME, WENT INTO NEGATIVE COLUMN!!";

@@ -95,7 +95,6 @@ void Game::init()
     std::cout << "version:" << settings.majorVersion << "." << settings.minorVersion << std::endl;
 
     m_view = new sf::View(sf::FloatRect(0, 0, SCREEN_W, SCREEN_H));
-    //TODO    m_view->SetCenter();
     m_app->setView(*m_view);
 
     m_font = new sf::Font();
@@ -106,6 +105,7 @@ void Game::init()
     ImageManager* manager = ImageManager::instance();
     manager->addResourceDir("../textures");
 
+    // World takes ownership of m_view
     m_world = new World(m_app, m_view);
 
     tick();
@@ -221,8 +221,6 @@ void Game::tick()
             //          }
         }
 
-        m_world->update();
-
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         m_app->pushGLStates();
@@ -230,21 +228,17 @@ void Game::tick()
 
         m_app->clear(sf::Color(0, 0, 0));
 
-//        m_app->setView(m_app->getDefaultView());
-
-
+        m_world->update();
+        // render methods *must* exit by setting back to the default view
+        // (if they set it to a different view at the beginning of the call)
         m_world->render();
+
         m_app->draw(text);
- //       m_app->setView(*m_view);
 
         m_app->popGLStates();
 
-   //     m_app->setView(m_app->getDefaultView());
-  //      m_app->setView(*m_view);
-
         // always after rendering!
         m_app->display();
-
     }
 }
 

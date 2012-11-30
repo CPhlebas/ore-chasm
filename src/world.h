@@ -57,6 +57,13 @@ public:
 
     void loadMap();
 
+    /**
+     * FIXME: presently only calculates the center of the screen according to resolution.
+     * i'm not sure how zooming will be affected with this..i don't *think* it would. but verify
+     * if this is ideal or not
+     * NOTE: doesn't *actually* use m_view->getViewport, just a simple SCREEN_W,H / 2
+     */
+    sf::Vector2f viewportCenter() const;
     void calculateAttackPosition();
     void generatePixelTileMap();
     void performAttack();
@@ -133,7 +140,12 @@ private:
     /**
      * In client window coordinates (relative)
      */
-    sf::Vector2f m_positionToAttack;
+    sf::Vector2f m_vectorToAttack;
+
+    /**
+     * Same as above, but used for knowing which tile in the array to attack
+     */
+    sf::Vector2f m_absoluteVectorToAttack;
 
     /**
      * From scratch, create a randomly generated tileset and store it in our array
