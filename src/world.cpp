@@ -196,6 +196,8 @@ void World::handleEvent(const sf::Event& event)
         if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
             m_inputYDirection = 0.f;
         }
+    case sf::Event::MouseButtonPressed:
+        performBlockAttack();
         break;
     }
 
@@ -217,7 +219,6 @@ void World::update()
     m_view->setCenter(m_player->getPosition());
 
     //calculateAttackPosition();
-    performBlockAttack();
     generatePixelTileMap();
 }
 
@@ -260,6 +261,8 @@ void World::performBlockAttack()
 
     */
 
+    //FIXME: this function needs a lot of help. it's just a copy from pixelmap generation
+    //so make it so it doesn't iterate over the whole visible screen but just the blockPickingRadius size.
     const int radius = Player::blockPickingRadius / Block::blockSize;
 
     /*
@@ -297,6 +300,7 @@ void World::performBlockAttack()
             if (row == attackY && column == attackX) {
 //            if (row == (200/Block::blockSize) && column == (200 / Block::blockSize)) {
                 index = column * WORLD_ROWCOUNT + row;
+                std::cout << "del index: " << index << "\n";
                 assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
                 m_blocks[index].type = 0;
                 break;
