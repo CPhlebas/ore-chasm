@@ -29,6 +29,9 @@ public:
      */
     void update();
 
+    // height is the same as width (they're square)
+    static constexpr unsigned char blockSize = 16;
+
     /**
      * 0-255, 0 obviously meaning this block is marked as to be destroyed.
      * higher values are for more "difficult" to break block types. e.g. sand has a very low number.

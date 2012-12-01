@@ -45,13 +45,13 @@ World::World(sf::RenderWindow *window, sf::View *view)
     /*
     const int gridSize = ceil(WORLD_TILE_TYPE_COUNT / 2.0);
     std::cout << " GRIDSIZE : " << gridSize << std::endl;
-    const unsigned short textureSize = gridSize * WORLD_TILE_SIZE;
+    const unsigned short textureSize = gridSize * Block::blockSize;
     m_tileTypesSuperImage.create(textureSize, textureSize);
     m_tileTypesSuperTexture.create(textureSize, textureSize);
     */
 
-    m_tileTypesSuperImage.create(WORLD_TILE_SIZE * WORLD_TILE_TYPE_COUNT, WORLD_TILE_SIZE);
-    m_tileTypesSuperTexture.create(WORLD_TILE_SIZE * WORLD_TILE_TYPE_COUNT, WORLD_TILE_SIZE);
+    m_tileTypesSuperImage.create(Block::blockSize * WORLD_TILE_TYPE_COUNT, Block::blockSize);
+    m_tileTypesSuperTexture.create(Block::blockSize * WORLD_TILE_TYPE_COUNT, Block::blockSize);
     m_tileTypesSuperTexture.bind();
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -83,8 +83,8 @@ World::World(sf::RenderWindow *window, sf::View *view)
             //would indicate we couldn't find a tile. obviously, we need that..
             assert(loaded);
 
-            destX = rowIndex * WORLD_TILE_SIZE;
-            destY = columnIndex * WORLD_TILE_SIZE;
+            destX = rowIndex * Block::blockSize;
+            destY = columnIndex * Block::blockSize;
             std::cout << "placing tile at X: " << destX << " y: " << destY << std::endl;
             m_tileTypesSuperImage.copy(currentTile, destX, destY);
 
@@ -102,7 +102,7 @@ World::World(sf::RenderWindow *window, sf::View *view)
         //would indicate we couldn't find a tile. obviously, we need that..
         assert(loaded);
 
-        destX = i * WORLD_TILE_SIZE;
+        destX = i * Block::blockSize;
         m_tileTypesSuperImage.copy(currentTile, destX, destY);
     }
 
@@ -119,7 +119,7 @@ World::World(sf::RenderWindow *window, sf::View *view)
     }
 
     //FIXME: hardcoding :(
-    //m_shader.setParameter("TILE_SIZE", WORLD_TILE_SIZE, WORLD_TILE_SIZE);
+    //m_shader.setParameter("TILE_SIZE", Block::blockSize, Block::blockSize);
     m_shader.setParameter("tile_types_super_texture", m_tileTypesSuperTexture);
 
 }
@@ -252,21 +252,57 @@ void World::performBlockAttack()
 //    std::cout << "viewportcenter" << " viewportcenter y: " << viewportCenter().y << " view->getcenter() y: " << viewCenter.y << "\n";
     viewPosition.x = viewCenter.x - viewportCenter().x;
     viewPosition.y = viewCenter.y - viewportCenter().y;
-    const int column = int((m_relativeVectorToAttack.x + viewPosition.x) / WORLD_TILE_SIZE);
-    const int row = int((m_relativeVectorToAttack.y + viewPosition.y) / WORLD_TILE_SIZE);
+    const int column = int((m_relativeVectorToAttack.x + viewPosition.x) / Block::blockSize);
+    const int row = int((m_relativeVectorToAttack.y + viewPosition.y) / Block::blockSize);
 //    std::cout << "relativevector y: " << m_relativeVectorToAttack.y << " view position y: " << viewPosition.y << "\n";
 
     const int index = column * WORLD_ROWCOUNT + row;
     */
 
-    const int startRow = (m_player->getPosition().y / WORLD_TILE_SIZE);
+    const int radius = Player::blockPickingRadius / Block::blockSize;
+    /*
+    const int startRow = (m_player->getPosition().y / Block::blockSize) - radius;
+    const int startColumn = (m_player->getPosition().x / Block::blockSize) - radius;
+    const int endRow = (m_player->getPosition().y / Block::blockSize) + radius;
+    const int endColumn = (m_player->getPosition().x / Block::blockSize) + radius;
+    */
+
+    const int attackX = (int) m_relativeVectorToAttack.x / Block::blockSize;
+    const int attackY = (int) m_relativeVectorToAttack.y / Block::blockSize;
+
+
+    const sf::Vector2f playerPosition = m_player->getPosition();
+    //consider block map as starting at player pos == 0,0 and going down and to the right-ward
+    //tilesBefore{X,Y} is only at the center of the view though..find the whole screen real estate
+    //column
+    int tilesBeforeX = playerPosition.x / Block::blockSize;
+    //row
+    int tilesBeforeY = playerPosition.y / Block::blockSize;
+
+    //FIXME: only calculate this crap when we move/change tiles
+    //FIXME: USE SCREEN_H, SCREEN_W
+    const int startRow = tilesBeforeY - ((SCREEN_H * 0.5) / Block::blockSize);
+    const int endRow = tilesBeforeY + ((SCREEN_H * 0.5) / Block::blockSize);
+
+    //columns are our X value, rows the Y
+    const int startColumn = tilesBeforeX - ((SCREEN_W * 0.5) / Block::blockSize);
+    const int endColumn = tilesBeforeX + ((SCREEN_W * 0.5) / Block::blockSize);
+
+    int index = 0;
+
     for (int row = startRow; row < endRow; ++row) {
         for (int column = startColumn; column < endColumn; ++column) {
+            if (row == attackY && column == attackX) {
+//            if (row == (200/Block::blockSize) && column == (200 / Block::blockSize)) {
+                index = column * WORLD_ROWCOUNT + row;
+                assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
+                m_blocks[index].type = 0;
+                std::cout << "FOUND! index: " << index << " row: " << row << " col: " << column << "\n";
+              break;
+            }
         }
     }
 
-    std::cout << "deleting index. col: " << column << " row: " << row << "\n";
-    m_blocks[index].type = 0;
 }
 
 void World::generatePixelTileMap()
@@ -275,18 +311,18 @@ void World::generatePixelTileMap()
     //consider block map as starting at player pos == 0,0 and going down and to the right-ward
     //tilesBefore{X,Y} is only at the center of the view though..find the whole screen real estate
     //column
-    int tilesBeforeX = playerPosition.x / WORLD_TILE_SIZE;
+    int tilesBeforeX = playerPosition.x / Block::blockSize;
     //row
-    int tilesBeforeY = playerPosition.y / WORLD_TILE_SIZE;
+    int tilesBeforeY = playerPosition.y / Block::blockSize;
 
     //FIXME: only calculate this crap when we move/change tiles
     //FIXME: USE SCREEN_H, SCREEN_W
-    const int startRow = tilesBeforeY - ((SCREEN_H * 0.5) / WORLD_TILE_SIZE);
-    const int endRow = tilesBeforeY + ((SCREEN_H * 0.5) / WORLD_TILE_SIZE);
+    const int startRow = tilesBeforeY - ((SCREEN_H * 0.5) / Block::blockSize);
+    const int endRow = tilesBeforeY + ((SCREEN_H * 0.5) / Block::blockSize);
 
     //columns are our X value, rows the Y
-    const int startColumn = tilesBeforeX - ((SCREEN_W * 0.5) / WORLD_TILE_SIZE);
-    const int endColumn = tilesBeforeX + ((SCREEN_W * 0.5) / WORLD_TILE_SIZE);
+    const int startColumn = tilesBeforeX - ((SCREEN_W * 0.5) / Block::blockSize);
+    const int endColumn = tilesBeforeX + ((SCREEN_W * 0.5) / Block::blockSize);
 
     if (std::abs(startColumn) != startColumn) {
         std::cout << "FIXME, WENT INTO NEGATIVE COLUMN!!";
@@ -353,7 +389,7 @@ void World::generateMap()
     std::random_device device;
     std::mt19937 rand(device());
     //FIXME: convert to 1, n
-    std::uniform_int_distribution<> distribution(0, 3);
+    std::uniform_int_distribution<> distribution(1, 3);
     //std::cout << distribution(rand) << ' ';
 
     sf::Clock clock;

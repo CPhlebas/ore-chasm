@@ -41,8 +41,6 @@ static constexpr unsigned short WORLD_COLUMNCOUNT = 2400;
 
 */
 
-// height is the same as width (they're square)
-static constexpr unsigned char WORLD_TILE_SIZE = 16;
 //NOTE: update this when you update m_blockTextures
 static constexpr unsigned short WORLD_TILE_TYPE_COUNT = 4;
 
