@@ -216,7 +216,7 @@ void World::update()
     m_player->move(m_inputXDirection, m_inputYDirection);
     m_view->setCenter(m_player->getPosition());
 
-    calculateAttackPosition();
+    //calculateAttackPosition();
     performBlockAttack();
     generatePixelTileMap();
 }
@@ -226,9 +226,10 @@ sf::Vector2f World::viewportCenter() const
     return sf::Vector2f(SCREEN_W * 0.5, SCREEN_H * 0.5);
 }
 
+//FIXME: unused..will be used for shooting and such. not for block breaking.
 void World::calculateAttackPosition()
 {
-    const sf::Vector2f _viewportCenter = viewportCenter();
+/*    const sf::Vector2f _viewportCenter = viewportCenter();
 
     const sf::Vector2i mousePos = sf::Mouse::getPosition(*m_window);
 
@@ -240,6 +241,7 @@ void World::calculateAttackPosition()
     const float newX = _viewportCenter.x + cos(angle) * Player::blockPickingRadius;
     const float newY= _viewportCenter.y  + sin(angle) * Player::blockPickingRadius;
     m_relativeVectorToAttack = sf::Vector2f(newX, newY);
+*/
 }
 
 void World::performBlockAttack()
@@ -256,20 +258,20 @@ void World::performBlockAttack()
     const int row = int((m_relativeVectorToAttack.y + viewPosition.y) / Block::blockSize);
 //    std::cout << "relativevector y: " << m_relativeVectorToAttack.y << " view position y: " << viewPosition.y << "\n";
 
-    const int index = column * WORLD_ROWCOUNT + row;
     */
 
     const int radius = Player::blockPickingRadius / Block::blockSize;
+
     /*
     const int startRow = (m_player->getPosition().y / Block::blockSize) - radius;
     const int startColumn = (m_player->getPosition().x / Block::blockSize) - radius;
     const int endRow = (m_player->getPosition().y / Block::blockSize) + radius;
     const int endColumn = (m_player->getPosition().x / Block::blockSize) + radius;
     */
+    sf::Vector2i mouse = sf::Mouse::getPosition(*m_window);
 
-    const int attackX = (int) m_relativeVectorToAttack.x / Block::blockSize;
-    const int attackY = (int) m_relativeVectorToAttack.y / Block::blockSize;
-
+    const int attackX = mouse.x / int(Block::blockSize);
+    const int attackY = mouse.y / int(Block::blockSize);
 
     const sf::Vector2f playerPosition = m_player->getPosition();
     //consider block map as starting at player pos == 0,0 and going down and to the right-ward
@@ -297,8 +299,7 @@ void World::performBlockAttack()
                 index = column * WORLD_ROWCOUNT + row;
                 assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
                 m_blocks[index].type = 0;
-                std::cout << "FOUND! index: " << index << " row: " << row << " col: " << column << "\n";
-              break;
+                break;
             }
         }
     }
