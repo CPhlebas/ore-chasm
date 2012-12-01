@@ -147,14 +147,16 @@ void World::render()
     m_window->setView(m_window->getDefaultView());
 
     // ==================== draw debug =====================
-    sf::VertexArray line(sf::Lines, 2);
+/*    sf::VertexArray line(sf::Lines, 2);
     line.append(sf::Vertex(viewportCenter()));
     line.append(sf::Vertex(m_relativeVectorToAttack));
     m_window->draw(line);
+    */
 
+    const sf::Vector2i mouse = sf::Mouse::getPosition(*m_window);
     const float radius = 10.0f;
     sf::CircleShape crosshair = sf::CircleShape(radius);
-    crosshair.setPosition(m_relativeVectorToAttack);
+    crosshair.setPosition(sf::Vector2f(mouse.x, mouse.y));
     crosshair.setFillColor(sf::Color::Transparent);
     crosshair.setOutlineColor(sf::Color::Red);
     crosshair.setOutlineThickness(2.0f);
