@@ -8,7 +8,6 @@ uniform sampler2D tile_types_super_texture;
 //FIXME: stop hardcoding ..
 ivec2 TILE_SIZE = ivec2(16, 16);
 
-
 void main()
 {
 

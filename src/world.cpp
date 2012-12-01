@@ -369,6 +369,10 @@ void World::generatePixelTileMap()
         x = 0;
     }
 
+    //FIXME: hugely fucking expensive..fix the above loops so we *generate* it upside down
+    // or...change the shader to calculate it properly
+    m_tileMapPixelsImage.flipVertically();
+
 //   std::cout << "image size, width: " << m_tileMapPixelsImage.getSize().x << " height: " << m_tileMapPixelsImage.getSize().y << "\n" << "startcolumn: " << startColumn << " end column: " << endColumn << "\n";
     m_tileMapPixelsTexture.loadFromImage(m_tileMapPixelsImage);
     m_tileMapPixelsTexture.bind();
