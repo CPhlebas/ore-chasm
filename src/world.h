@@ -66,7 +66,7 @@ public:
     sf::Vector2f viewportCenter() const;
     void calculateAttackPosition();
     void generatePixelTileMap();
-    void performAttack();
+    void performBlockAttack();
 
     void handleEvent(const sf::Event& event);
 

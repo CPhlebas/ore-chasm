@@ -217,7 +217,7 @@ void World::update()
     m_view->setCenter(m_player->getPosition());
 
     calculateAttackPosition();
-    performAttack();
+    performBlockAttack();
     generatePixelTileMap();
 }
 
@@ -242,15 +242,30 @@ void World::calculateAttackPosition()
     m_relativeVectorToAttack = sf::Vector2f(newX, newY);
 }
 
-void World::performAttack()
+void World::performBlockAttack()
 {
+//    std::cout << "relative vector to attack x: " << (int)m_relativeVectorToAttack.x << " y: " << (int)m_relativeVectorToAttack.y << "\n";
+/*
+    const sf::Vector2f viewCenter = m_view->getCenter();
+
     sf::Vector2f viewPosition;
-    viewPosition.x = m_view->getCenter().x - viewportCenter().x;
-    viewPosition.y = m_view->getCenter().y - viewportCenter().y;
+//    std::cout << "viewportcenter" << " viewportcenter y: " << viewportCenter().y << " view->getcenter() y: " << viewCenter.y << "\n";
+    viewPosition.x = viewCenter.x - viewportCenter().x;
+    viewPosition.y = viewCenter.y - viewportCenter().y;
     const int column = int((m_relativeVectorToAttack.x + viewPosition.x) / WORLD_TILE_SIZE);
     const int row = int((m_relativeVectorToAttack.y + viewPosition.y) / WORLD_TILE_SIZE);
+//    std::cout << "relativevector y: " << m_relativeVectorToAttack.y << " view position y: " << viewPosition.y << "\n";
 
     const int index = column * WORLD_ROWCOUNT + row;
+    */
+
+    const int startRow = (m_player->getPosition().y / WORLD_TILE_SIZE);
+    for (int row = startRow; row < endRow; ++row) {
+        for (int column = startColumn; column < endColumn; ++column) {
+        }
+    }
+
+    std::cout << "deleting index. col: " << column << " row: " << row << "\n";
     m_blocks[index].type = 0;
 }
 
@@ -293,8 +308,8 @@ void World::generatePixelTileMap()
     int  y = 0;
 
     // [y*rowlength + x]
-    for (int currentRow = startRow; currentRow < (endRow); ++currentRow) {
-        for (int currentColumn = startColumn; currentColumn < (endColumn); ++currentColumn) {
+    for (int currentRow = startRow; currentRow < endRow; ++currentRow) {
+        for (int currentColumn = startColumn; currentColumn < endColumn; ++currentColumn) {
             // std::cout << "currentColumn: " << currentColumn << " WORLD_ROWCOUNT: " << WORLD_ROWCOUNT << " currentRow: " << currentRow << "\n";
 
             const int index = currentColumn * WORLD_ROWCOUNT + currentRow;
