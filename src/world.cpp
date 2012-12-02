@@ -251,10 +251,11 @@ void World::calculateAttackPosition()
 */
 }
 
+//FIXME: this function needs a lot of help. it's just a copy from pixelmap generation
+//so make it so it doesn't iterate over the whole visible screen but just the blockPickingRadius size.
 void World::performBlockAttack()
 {
-//    std::cout << "relative vector to attack x: " << (int)m_relativeVectorToAttack.x << " y: " << (int)m_relativeVectorToAttack.y << "\n";
-/*
+    /*
     const sf::Vector2f viewCenter = m_view->getCenter();
 
     sf::Vector2f viewPosition;
@@ -265,33 +266,31 @@ void World::performBlockAttack()
     const int row = int((m_relativeVectorToAttack.y + viewPosition.y) / Block::blockSize);
 //    std::cout << "relativevector y: " << m_relativeVectorToAttack.y << " view position y: " << viewPosition.y << "\n";
 
-    */
-
-    //FIXME: this function needs a lot of help. it's just a copy from pixelmap generation
-    //so make it so it doesn't iterate over the whole visible screen but just the blockPickingRadius size.
-    const int radius = Player::blockPickingRadius / Block::blockSize;
-
-    /*
     const int startRow = (m_player->getPosition().y / Block::blockSize) - radius;
     const int startColumn = (m_player->getPosition().x / Block::blockSize) - radius;
     const int endRow = (m_player->getPosition().y / Block::blockSize) + radius;
     const int endColumn = (m_player->getPosition().x / Block::blockSize) + radius;
     */
-    sf::Vector2i mouse = sf::Mouse::getPosition(*m_window);
 
-    const int attackX = mouse.x / int(Block::blockSize);
-    const int attackY = mouse.y / int(Block::blockSize);
+    const int radius = Player::blockPickingRadius / Block::blockSize;
+
+    sf::Vector2i mouse = sf::Mouse::getPosition(*m_window);
+    mouse.x /= int(Block::blockSize);
+    mouse.y /= int(Block::blockSize);
+
+    int attackX = mouse.x + (m_view->getCenter().x - SCREEN_W * 0.5) / Block::blockSize;
+    int attackY = mouse.y + (m_view->getCenter().y - SCREEN_H * 0.5) / Block::blockSize;
 
     const sf::Vector2f playerPosition = m_player->getPosition();
+
     //consider block map as starting at player pos == 0,0 and going down and to the right-ward
     //tilesBefore{X,Y} is only at the center of the view though..find the whole screen real estate
+    // which is why startRow etc add and subtract half the screen
     //column
     int tilesBeforeX = playerPosition.x / Block::blockSize;
     //row
     int tilesBeforeY = playerPosition.y / Block::blockSize;
 
-    //FIXME: only calculate this crap when we move/change tiles
-    //FIXME: USE SCREEN_H, SCREEN_W
     const int startRow = tilesBeforeY - ((SCREEN_H * 0.5) / Block::blockSize);
     const int endRow = tilesBeforeY + ((SCREEN_H * 0.5) / Block::blockSize);
 
@@ -304,16 +303,15 @@ void World::performBlockAttack()
     for (int row = startRow; row < endRow; ++row) {
         for (int column = startColumn; column < endColumn; ++column) {
             if (row == attackY && column == attackX) {
-//            if (row == (200/Block::blockSize) && column == (200 / Block::blockSize)) {
                 index = column * WORLD_ROWCOUNT + row;
-                std::cout << "del index: " << index << "\n";
                 assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
                 m_blocks[index].type = 0;
-                break;
+                return;
             }
         }
     }
 
+    std::cout << "ERROR: " << " no block found to attack?" << "\n";
 }
 
 void World::generatePixelTileMap()
@@ -327,7 +325,6 @@ void World::generatePixelTileMap()
     int tilesBeforeY = playerPosition.y / Block::blockSize;
 
     //FIXME: only calculate this crap when we move/change tiles
-    //FIXME: USE SCREEN_H, SCREEN_W
     const int startRow = tilesBeforeY - ((SCREEN_H * 0.5) / Block::blockSize);
     const int endRow = tilesBeforeY + ((SCREEN_H * 0.5) / Block::blockSize);
 
