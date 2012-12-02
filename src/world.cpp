@@ -97,7 +97,6 @@ World::World(sf::RenderWindow *window, sf::View *view)
 */
 
     for (int i = 0; i < WORLD_TILE_TYPE_COUNT; ++i) {
-        //FIXME: use i, not hardcode dirt
         loaded = currentTile.loadFromFile(m_blockTextures[i]);
         //would indicate we couldn't find a tile. obviously, we need that..
         assert(loaded);
@@ -206,19 +205,10 @@ void World::handleEvent(const sf::Event& event)
         }
         break;
     }
-
-    /*
-    std::stringstream ss;
-    std::string str;
-    ss << "tilemap_pixels_" << rand() << ".png";
-    str = ss.str();
-    m_tileMapPixelsImage.saveToFile(str.c_str());
-    */
 }
 
 void World::update()
 {
-    //std::cout << "moving player by xDir: " << m_inputXDirection << " yDir: " << m_inputYDirection << std::endl;
     //FIXME: bring in elapsedTime here ...to calculate player movements accurately
 
     m_player->move(m_inputXDirection, m_inputYDirection);
@@ -340,8 +330,6 @@ void World::generatePixelTileMap()
         assert(0);
     }
 
-    // std::cout << "sending visible tilemap to shader!" << "\n";
-
     // only make it as big as we need it, remember this is a pixel representation of the visible
     // tile map, with the red channel identifying what type of tile it is
     // x is columns..since they move from left to right, rows start at top and move to bottom
@@ -354,15 +342,12 @@ void World::generatePixelTileMap()
     // [y*rowlength + x]
     for (int currentRow = startRow; currentRow < endRow; ++currentRow) {
         for (int currentColumn = startColumn; currentColumn < endColumn; ++currentColumn) {
-            // std::cout << "currentColumn: " << currentColumn << " WORLD_ROWCOUNT: " << WORLD_ROWCOUNT << " currentRow: " << currentRow << "\n";
 
             const int index = currentColumn * WORLD_ROWCOUNT + currentRow;
             assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
 
             const sf::Color color(m_blocks[index].type, 0, 0);
 
-            // std::cout << "setting pixels x: " << x << " y: " << y << "\n";
-            // std::cout << "currentrow: " << currentRow << " currentColumn: " << currentColumn << "\n";
             m_tileMapPixelsImage.setPixel(x, y, color);
             ++x;
         }
@@ -374,7 +359,6 @@ void World::generatePixelTileMap()
     // or...change the shader to calculate it properly
     m_tileMapPixelsImage.flipVertically();
 
-//   std::cout << "image size, width: " << m_tileMapPixelsImage.getSize().x << " height: " << m_tileMapPixelsImage.getSize().y << "\n" << "startcolumn: " << startColumn << " end column: " << endColumn << "\n";
     m_tileMapPixelsTexture.loadFromImage(m_tileMapPixelsImage);
     m_tileMapPixelsTexture.bind();
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -382,7 +366,6 @@ void World::generatePixelTileMap()
 
 
     m_shader.setParameter("tilemap_pixels", m_tileMapPixelsTexture);
-    // std::cout << "finished sending tilemap to shader!!\n";
 }
 
 
@@ -393,7 +376,6 @@ void World::loadMap()
     generateMap();
 
     m_player->setPosition(800, 450);
-//   m_view->setCenter(m_player->getPosition());
 }
 
 void World::generateMap()
@@ -402,7 +384,6 @@ void World::generateMap()
     std::mt19937 rand(device());
     //FIXME: convert to 1, n
     std::uniform_int_distribution<> distribution(1, 3);
-    //std::cout << distribution(rand) << ' ';
 
     sf::Clock clock;
     for (int row = 0; row < WORLD_ROWCOUNT; ++row) {
