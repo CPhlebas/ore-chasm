@@ -26,6 +26,7 @@
 #include <SFML/Graphics/Shader.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
+class CloudSystem;
 //height
 static constexpr unsigned short WORLD_ROWCOUNT = 8400;
 //width
@@ -102,7 +103,7 @@ private:
 
     Player *m_player = nullptr;
 
-    ltbl::LightSystem *m_lightingSystem = nullptr;
+    CloudSystem *m_cloudSystem = nullptr;
 
     //FIXME: just a ptr to the game.cpp one :(  same with window
     sf::View *m_view = nullptr;
@@ -139,11 +140,6 @@ private:
      * In client window coordinates (relative)
      */
     sf::Vector2f m_relativeVectorToAttack;
-
-    /**
-     * Same as above, but used for knowing which tile in the array to attack
-     */
-    sf::Vector2f m_absoluteVectorToAttack;
 
     /**
      * From scratch, create a randomly generated tileset and store it in our array

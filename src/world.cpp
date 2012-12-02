@@ -20,6 +20,7 @@
 
 #include "block.h"
 #include "game.h"
+#include "cloudsystem.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -121,15 +122,20 @@ World::World(sf::RenderWindow *window, sf::View *view)
     //m_shader.setParameter("TILE_SIZE", Block::blockSize, Block::blockSize);
     m_shader.setParameter("tile_types_super_texture", m_tileTypesSuperTexture);
 
+    m_cloudSystem = new CloudSystem(m_window);
 }
 
 World::~World()
 {
     delete m_player;
+    delete m_cloudSystem;
 }
 
 void World::render()
 {
+    //clouds should be at the near bottommost layer
+    m_cloudSystem->render();
+
     //FIXME: NEEDED?
     m_tileMapFinalSprite.setTexture(m_tileMapFinalTexture);
 
@@ -209,6 +215,8 @@ void World::handleEvent(const sf::Event& event)
 
 void World::update()
 {
+    m_cloudSystem->update();
+
     //FIXME: bring in elapsedTime here ...to calculate player movements accurately
 
     m_player->move(m_inputXDirection, m_inputYDirection);
