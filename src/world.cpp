@@ -201,7 +201,9 @@ void World::handleEvent(const sf::Event& event)
         break;
 
     case sf::Event::MouseButtonPressed:
-        performBlockAttack();
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+            performBlockAttack();
+        }
         break;
     }
 
