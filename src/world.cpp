@@ -198,6 +198,7 @@ void World::handleEvent(const sf::Event& event)
         if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
             m_inputYDirection = 0.f;
         }
+        break;
     case sf::Event::MouseButtonPressed:
         performBlockAttack();
         break;

@@ -174,17 +174,13 @@ void Game::tick()
             switch (event.type) {
                 // window closed
             case sf::Event::Closed:
-                shutdown();
+                goto shutdown;
                 break;
 
                 // key pressed
             case sf::Event::KeyPressed:
-                    if (event.key.code == sf::Keyboard::Escape) {
-                        shutdown();
-                    }
-
                 if (event.key.code == sf::Keyboard::Escape) {
-                    shutdown();
+                    goto shutdown;
                 }
                 break;
 
@@ -240,10 +236,14 @@ void Game::tick()
         // always after rendering!
         m_app->display();
     }
+
+shutdown:
+    shutdown();
 }
 
 void Game::shutdown()
 {
     m_app->close();
     delete m_app;
+    exit(0);
 }
