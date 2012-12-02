@@ -31,11 +31,10 @@ void Player::render(sf::RenderWindow* window)
     Renderable::render(window);
 
     //debug drawing for the radius that is within the player's reach to "pick"
-    sf::CircleShape circle = sf::CircleShape(Player::blockPickingRadius);
-    circle.setPosition(getPosition());
-    circle.setOrigin(Player::blockPickingRadius, Player::blockPickingRadius);
-    circle.setFillColor(sf::Color::Transparent);
-    circle.setOutlineColor(sf::Color::Red);
-    circle.setOutlineThickness(1.0f);
-    window->draw(circle);
+    sf::RectangleShape rect = sf::RectangleShape(sf::Vector2f(Player::blockPickingRadius, Player::blockPickingRadius));
+    rect.setPosition(getPosition().x - Player::blockPickingRadius * 0.5, getPosition().y - Player::blockPickingRadius * 0.5);
+    rect.setFillColor(sf::Color::Transparent);
+    rect.setOutlineColor(sf::Color::Red);
+    rect.setOutlineThickness(1.0f);
+    window->draw(rect);
 }
