@@ -262,11 +262,21 @@ void World::performBlockAttack()
     const int endColumn = (m_player->getPosition().x / Block::blockSize) + radius;
     */
 
-    const int radius = Player::blockPickingRadius / Block::blockSize;
-
     sf::Vector2i mouse = sf::Mouse::getPosition(*m_window);
+
+    // if the attempted block pick location is out of range, do nothing.
+    if (mouse.x < m_view->getCenter().x - Player::blockPickingRadius ||
+        mouse.x > m_view->getCenter().x + Player::blockPickingRadius ||
+        mouse.y < m_view->getCenter().y - Player::blockPickingRadius ||
+        mouse.y > m_view->getCenter().y + Player::blockPickingRadius) {
+        std::cout << "attack vector out of range of block picking radius" << "\n";
+        return;
+    }
+
     mouse.x /= int(Block::blockSize);
     mouse.y /= int(Block::blockSize);
+
+    const int radius = Player::blockPickingRadius / Block::blockSize;
 
     int attackX = mouse.x + (m_view->getCenter().x - SCREEN_W * 0.5) / Block::blockSize;
     int attackY = mouse.y + (m_view->getCenter().y - SCREEN_H * 0.5) / Block::blockSize;
