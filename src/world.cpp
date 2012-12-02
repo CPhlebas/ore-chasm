@@ -264,11 +264,15 @@ void World::performBlockAttack()
 
     sf::Vector2i mouse = sf::Mouse::getPosition(*m_window);
 
+    //FIXME: eventually will need to make this go to the players center
+    // can we divide player pos by half of screen h/w ?
+    sf::Vector2i center = sf::Vector2i(SCREEN_W * 0.5, SCREEN_H * 0.5);
+
     // if the attempted block pick location is out of range, do nothing.
-    if (mouse.x < m_view->getCenter().x - Player::blockPickingRadius ||
-        mouse.x > m_view->getCenter().x + Player::blockPickingRadius ||
-        mouse.y < m_view->getCenter().y - Player::blockPickingRadius ||
-        mouse.y > m_view->getCenter().y + Player::blockPickingRadius) {
+    if (mouse.x < center.x - Player::blockPickingRadius ||
+        mouse.x > center.x + Player::blockPickingRadius ||
+        mouse.y < center.y - Player::blockPickingRadius ||
+        mouse.y > center.y + Player::blockPickingRadius) {
         std::cout << "attack vector out of range of block picking radius" << "\n";
         return;
     }

@@ -35,7 +35,7 @@ public:
 
     // radius indicating how many pixels out the player can pick
     // blocks
-    static constexpr float blockPickingRadius = Block::blockSize * 10.0f;
+    static constexpr float blockPickingRadius = Block::blockSize * 8.0f;
 
     void render(sf::RenderWindow *window);
 

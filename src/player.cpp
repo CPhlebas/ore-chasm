@@ -31,8 +31,8 @@ void Player::render(sf::RenderWindow* window)
     Renderable::render(window);
 
     //debug drawing for the radius that is within the player's reach to "pick"
-    sf::RectangleShape rect = sf::RectangleShape(sf::Vector2f(Player::blockPickingRadius, Player::blockPickingRadius));
-    rect.setPosition(getPosition().x - Player::blockPickingRadius * 0.5, getPosition().y - Player::blockPickingRadius * 0.5);
+    sf::RectangleShape rect = sf::RectangleShape(sf::Vector2f(Player::blockPickingRadius * 2.0f, Player::blockPickingRadius * 2.0f));
+    rect.setPosition(getPosition().x - Player::blockPickingRadius, getPosition().y - Player::blockPickingRadius);
     rect.setFillColor(sf::Color::Transparent);
     rect.setOutlineColor(sf::Color::Red);
     rect.setOutlineThickness(1.0f);
