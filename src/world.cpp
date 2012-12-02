@@ -402,19 +402,29 @@ void World::loadMap()
 
 void World::generateMap()
 {
+    sf::Clock stopwatch;
+
     std::random_device device;
     std::mt19937 rand(device());
     //FIXME: convert to 1, n
     std::uniform_int_distribution<> distribution(1, 3);
 
-    sf::Clock clock;
-    for (int row = 0; row < WORLD_ROWCOUNT; ++row) {
+    int lastRow = 0;
+
+    // 200 rows of "sky"
+    for (; lastRow < 200; ++lastRow) {
         for (int column = 0; column < WORLD_COLUMNCOUNT; ++column) {
-            m_blocks[column * WORLD_ROWCOUNT + row].type = distribution(rand);
+            m_blocks[column * WORLD_ROWCOUNT + lastRow].type = 0;
         }
     }
 
-    const int elapsedTime = clock.getElapsedTime().asMilliseconds();
+    for (; lastRow < WORLD_ROWCOUNT; ++lastRow) {
+        for (int column = 0; column < WORLD_COLUMNCOUNT; ++column) {
+            m_blocks[column * WORLD_ROWCOUNT + lastRow].type = distribution(rand);
+        }
+    }
+
+    const int elapsedTime = stopwatch.getElapsedTime().asMilliseconds();
     std::cout << "Time taken for map generation: " << elapsedTime << " Milliseconds" << std::endl;
 }
 
