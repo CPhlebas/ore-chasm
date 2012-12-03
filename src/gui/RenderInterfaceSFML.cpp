@@ -87,7 +87,7 @@ sf::RenderWindow *RocketSFMLRenderer::GetWindow()
 void RocketSFMLRenderer::Resize()
 {
 	MyWindow->setActive(true);
-	MyWindow->preserveOpenGLStates(true);
+//FIXME: what in its place?	MyWindow->preserveOpenGLStates(true);
 
 	static sf::View View;
         View.setSize((float)MyWindow->getSize().x, (float)MyWindow->getSize().y);
@@ -132,9 +132,9 @@ void RocketSFMLRenderer::RenderGeometry(Rocket::Core::Vertex* vertices, int num_
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	sf::Image *image = (sf::Image *)texture;
-
 	if(image)
 	{
+////            sf::Texture *texture
 //FIXME:?		image->Bind();
 	}
 	else
@@ -322,14 +322,16 @@ bool RocketSFMLRenderer::GenerateTexture(Rocket::Core::TextureHandle& texture_ha
 	MyWindow->setActive();
 
 	sf::Image *image = new sf::Image();
+        image->create(source_dimensions.x, source_dimensions.y, source);
 
-	if(!image->LoadFromPixels(source_dimensions.x, source_dimensions.y, source))
-	{
-		delete image;
-
-		return false;
-	};
-
+        //FIXME: not sure how to do this....i can't find an equvialent
+//	if(!image->LoadFromPixels(source_dimensions.x, source_dimensions.y, source))
+//	{
+//		delete image;
+//
+//		return false;
+//	};
+//
 	texture_handle = (Rocket::Core::TextureHandle)image;
 
 	return true;
