@@ -306,7 +306,7 @@ Rocket::Core::Input::KeyIdentifier RocketSFMLSystemInterface::TranslateKey(sf::K
 
 float RocketSFMLSystemInterface::GetElapsedTime()
 {
-	return timer.getElapsedTime();
+	return timer.getElapsedTime().asMilliseconds();
 };
 
 bool RocketSFMLSystemInterface::LogMessage(Rocket::Core::Log::Type type, const Rocket::Core::String& message)
