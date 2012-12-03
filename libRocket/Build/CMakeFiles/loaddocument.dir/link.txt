@@ -1,0 +1,1 @@
+/usr/bin/c++   -O3 -DNDEBUG    CMakeFiles/loaddocument.dir/home/sreich/buildarrhea/libRocket/Samples/basic/loaddocument/src/main.cpp.o  -o loaddocument -rdynamic libshell.so libRocketControls.so.1.2.1 libRocketDebugger.so.1.2.1 libRocketCore.so.1.2.1 -lfreetype -lGLU -lGL -lSM -lICE -lX11 -lXext -lSM -lICE -lX11 -lXext -Wl,-rpath,/home/sreich/buildarrhea/libRocket/Build: 

@@ -26,11 +26,12 @@ message("PATH: " + ${CMAKE_MODULE_PATH})
 set(buildarrhea_VERSION_MAJOR 0)
 set(buildarrhea_VERSION_MINOR 1)
 
+find_package( LibRocket REQUIRED )
 find_package( GLUT REQUIRED )
 find_package( GLU REQUIRED )
 find_package( OpenGL REQUIRED )
 
-include_directories( ${CMAKE_SOURCE_DIR} ${GLUT_INCLUDE_DIR} )
+include_directories( ${CMAKE_SOURCE_DIR} ${GLUT_INCLUDE_DIR} ${LIBROCKET_INCLUDE_DIR})
 
 configure_file(
   "${PROJECT_SOURCE_DIR}/config.h.in"
@@ -70,6 +71,12 @@ src/lighting/src/QuadTree/QuadTreeOccupant.cpp
 src/lighting/src/QuadTree/StaticQuadTree.cpp
 )
 
+set(GUI_SRCS
+src/gui/RenderInterfaceSFML.cpp
+src/gui/SystemInterfaceSFML.cpp
+src/gui/ShellFileInterface.cpp
+)
+
 #YAML, needed later
 ## pkg-config-based library
 include(FindPkgConfig)
@@ -82,7 +89,7 @@ include(FindPkgConfig)
 #target_link_libraries(${EXECUTABLE_NAME} ${yaml-cpp_LIBRARIES})
 #
 
-add_executable(${EXECUTABLE_NAME} ${SRC})
+add_executable(${EXECUTABLE_NAME} ${SRC} ${GUI_SRCS})
 
 find_package(SFML 2.0 REQUIRED system window graphics audio) #network
 
@@ -92,7 +99,7 @@ endif()
 
 INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR} ${GLUT_INCLUDE_DIR} )
 include_directories(${SFML_INCLUDE_DIR} )
-target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES} ${GLUT_LIBRARIES} ${GLU_LIBRARIES} ${OPENGL_LIBRARIES})
+target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES} ${GLUT_LIBRARIES} ${GLU_LIBRARIES} ${OPENGL_LIBRARIES} ${LIBROCKET_LIBRARIES})
 
 
 # CPack packaging
@@ -108,6 +115,7 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/src/)
 # Install target
 install(DIRECTORY textures/ DESTINATION "textures") #FILES_MATCHING PATTERN "*")
 install(DIRECTORY font/ DESTINATION "font") #FILES_MATCHING PATTERN "*")
+install(DIRECTORY gui/ DESTINATION "gui")
 
 install(DIRECTORY src/ DESTINATION bin FILES_MATCHING PATTERN "*.frag" )
 install(TARGETS ${EXECUTABLE_NAME} DESTINATION bin)

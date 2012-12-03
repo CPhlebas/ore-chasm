@@ -26,6 +26,17 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Font.hpp>
 
+class ShellFileInterface;
+namespace Rocket {
+    namespace Core {
+        class Context;
+        class ElementDocument;
+    }
+}
+
+class RocketSFMLRenderer;
+class RocketSFMLSystemInterface;
+
 //1600
 static int SCREEN_W = 1600;
 //900
@@ -51,6 +62,11 @@ private:
     sf::RenderWindow *m_app = nullptr;
     sf::View *m_view = nullptr;
     sf::Font *m_font = nullptr;
+    RocketSFMLRenderer *m_renderer = nullptr;
+    RocketSFMLSystemInterface *m_systemInterface = nullptr;
+    Rocket::Core::Context *m_context = nullptr;
+    Rocket::Core::ElementDocument *m_document = nullptr;
+    ShellFileInterface *m_fileInterface = nullptr;
 };
 
 

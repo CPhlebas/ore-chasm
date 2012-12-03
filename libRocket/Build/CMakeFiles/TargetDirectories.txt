@@ -1,0 +1,9 @@
+/home/sreich/buildarrhea/libRocket/Build/CMakeFiles/RocketControls.dir
+/home/sreich/buildarrhea/libRocket/Build/CMakeFiles/RocketCore.dir
+/home/sreich/buildarrhea/libRocket/Build/CMakeFiles/RocketDebugger.dir
+/home/sreich/buildarrhea/libRocket/Build/CMakeFiles/customlog.dir
+/home/sreich/buildarrhea/libRocket/Build/CMakeFiles/drag.dir
+/home/sreich/buildarrhea/libRocket/Build/CMakeFiles/invaders.dir
+/home/sreich/buildarrhea/libRocket/Build/CMakeFiles/loaddocument.dir
+/home/sreich/buildarrhea/libRocket/Build/CMakeFiles/shell.dir
+/home/sreich/buildarrhea/libRocket/Build/CMakeFiles/treeview.dir

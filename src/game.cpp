@@ -18,6 +18,8 @@
 #include "game.h"
 #include "imagemanager.h"
 #include "entity.h"
+#include "gui/RenderInterfaceSFML.h"
+#include "gui/ShellFileInterface.h"
 
 #include <iostream>
 #include <sstream>
@@ -30,6 +32,10 @@
 #include <SFML/Window.hpp>
 #include <SFML/Config.hpp>
 #include <SFML/OpenGL.hpp>
+
+#include <Rocket/Core.h>
+#include <Rocket/Debugger/Debugger.h>
+#include <Rocket/Core/Input.h>
 
 Game::Game()
 {
@@ -104,6 +110,11 @@ void Game::init()
 
     ImageManager* manager = ImageManager::instance();
     manager->addResourceDir("../textures");
+
+    m_renderer = new RocketSFMLRenderer();
+
+    m_fileInterface = new ShellFileInterface("../gui/");
+    
 
     // World takes ownership of m_view
     m_world = new World(m_app, m_view);
