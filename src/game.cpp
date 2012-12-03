@@ -137,7 +137,7 @@ void Game::init()
     bool rendererInit = Rocket::Debugger::Initialise(m_context);
     assert(rendererInit);
     m_document = m_context->LoadDocument("demo.rml");
-
+    assert(m_document);
     m_document->Show();
     m_document->RemoveReference();
 
@@ -275,6 +275,7 @@ void Game::tick()
 
         // always after rendering!
         m_app->display();
+        m_context->Update();
     }
 
 shutdown:

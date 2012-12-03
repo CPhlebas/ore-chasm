@@ -6,11 +6,22 @@ ELSE(LIBROCKET_INCLUDE_DIR AND LIBROCKET_LIBRARIES)
 
   INCLUDE(FindPackageHandleStandardArgs)
 
-  SET(ROCKET_FIND_PATHS
-        ${DTENTITY_EXT_DEP}/include
-        ${DTENTITY_EXT_DEP}/lib
-  )
-  FIND_PATH(LIBROCKET_INCLUDE_DIR Rocket/Core.h PATHS ${ROCKET_FIND_PATHS})
+#  SET(ROCKET_FIND_PATHS
+#        ${DTENTITY_EXT_DEP}/include
+#        ${DTENTITY_EXT_DEP}/lib
+#  )
+
+find_path(LIBROCKET_INCLUDE_DIR Rocket/Core.h
+          PATH_SUFFIXES include
+          PATHS
+          /usr/local/
+          /usr/
+          /sw          # Fink
+          /opt/local/  # DarwinPorts
+          /opt/csw/    # Blastwave
+          /opt/)
+
+#  FIND_PATH(LIBROCKET_INCLUDE_DIR Rocket/Core.h PATHS ${ROCKET_FIND_PATHS})
 
   FIND_LIBRARY(LIBROCKET_CORE_LIBRARY RocketCore "${ROCKET_FIND_PATHS}")
   FIND_LIBRARY(LIBROCKET_CONTROLS_LIBRARY RocketControls "${ROCKET_FIND_PATHS}")

@@ -31,7 +31,12 @@ find_package( GLUT REQUIRED )
 find_package( GLU REQUIRED )
 find_package( OpenGL REQUIRED )
 
-include_directories( ${CMAKE_SOURCE_DIR} ${GLUT_INCLUDE_DIR} ${LIBROCKET_INCLUDE_DIR})
+message("libRocket include dir: " + ${LIBROCKET_INCLUDE_DIR})
+message("libRocket core lib dir: " + ${LIBROCKET_CORE_LIBRARY})
+message("libRocket controls lib dir: " + ${LIBROCKET_CONTROLS_LIBRARY})
+message("libRocket debug lib dir: " + ${LIBROCKET_DEBUGGER_LIBRARY})
+
+include_directories( ${CMAKE_SOURCE_DIR} ${GLUT_INCLUDE_DIR})
 
 configure_file(
   "${PROJECT_SOURCE_DIR}/config.h.in"
@@ -98,7 +103,7 @@ if (NOT SFML_FOUND)
 endif()
 
 INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR} ${GLUT_INCLUDE_DIR} )
-include_directories(${SFML_INCLUDE_DIR} )
+include_directories(${SFML_INCLUDE_DIR}  ${LIBROCKET_INCLUDE_DIR})
 target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES} ${GLUT_LIBRARIES} ${GLU_LIBRARIES} ${OPENGL_LIBRARIES} ${LIBROCKET_CORE_LIBRARY} ${LIBROCKET_CONTROLS_LIBRARY} ${LIBROCKET_DEBUGGER_LIBRARY})
 
 # CPack packaging
