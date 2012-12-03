@@ -59,6 +59,8 @@ public:
 	};
 };
 
+#else
+#warning "DAFUQ??? GLEE NOT ENABLED! we kind of need this kthxbai"
 #endif
 
 struct RocketSFMLRendererVertex
@@ -74,8 +76,7 @@ RocketSFMLRenderer::RocketSFMLRenderer()
 void RocketSFMLRenderer::SetWindow(sf::RenderWindow *Window)
 {
 	MyWindow = Window;
-
-        resize();
+        Resize();
 };
 
 sf::RenderWindow *RocketSFMLRenderer::GetWindow()
@@ -97,13 +98,13 @@ void RocketSFMLRenderer::Resize()
 	glOrtho(0, MyWindow->getSize().x, MyWindow->getSize().y, 0, -1, 1);
 	glMatrixMode(GL_MODELVIEW);
 
-	glViewport(0, 0, MyWindow->getSize.x, MyWindow->getSize().y);
+	glViewport(0, 0, MyWindow->getSize().x, MyWindow->getSize().y);
 };
 
 // Called by Rocket when it wants to render geometry that it does not wish to optimise.
 void RocketSFMLRenderer::RenderGeometry(Rocket::Core::Vertex* vertices, int num_vertices, int* indices, int num_indices, const Rocket::Core::TextureHandle texture, const Rocket::Core::Vector2f& translation)
 {
-	MyWindow->SetActive();
+	MyWindow->setActive();
 
 	glPushMatrix();
 	glTranslatef(translation.x, translation.y, 0);
@@ -160,7 +161,7 @@ Rocket::Core::CompiledGeometryHandle RocketSFMLRenderer::CompileGeometry(Rocket:
 																		   const Rocket::Core::TextureHandle texture)
 {
 #ifdef ENABLE_GLEE
-	MyWindow->SetActive();
+	MyWindow->setActive();
 
 	if(!GLEE_VERSION_2_0)
 		return (Rocket::Core::CompiledGeometryHandle) NULL;
@@ -201,7 +202,7 @@ Rocket::Core::CompiledGeometryHandle RocketSFMLRenderer::CompileGeometry(Rocket:
 void RocketSFMLRenderer::RenderCompiledGeometry(Rocket::Core::CompiledGeometryHandle geometry, const Rocket::Core::Vector2f& translation)
 {
 #ifdef ENABLE_GLEE
-	MyWindow->SetActive();
+	MyWindow->setActive();
 
 	RocketSFMLRendererGeometryHandler *RealGeometry = (RocketSFMLRendererGeometryHandler *)geometry;
 

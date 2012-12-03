@@ -25,7 +25,7 @@
  *
  */
 
-#include <ShellFileInterface.h>
+#include "ShellFileInterface.h"
 #include <stdio.h>
 
 ShellFileInterface::ShellFileInterface(const Rocket::Core::String& root) : root(root)

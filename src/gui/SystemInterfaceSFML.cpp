@@ -46,7 +46,7 @@ int RocketSFMLSystemInterface::GetKeyModifiers(sf::Window *Window)
 	return Modifiers;
 };
 
-Rocket::Core::Input::KeyIdentifier RocketSFMLSystemInterface::TranslateKey(sf::Keyboard::Code Key)
+Rocket::Core::Input::KeyIdentifier RocketSFMLSystemInterface::TranslateKey(sf::Keyboard::Key Key)
 {
 	switch(Key)
 	{
