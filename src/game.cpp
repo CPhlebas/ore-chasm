@@ -136,7 +136,8 @@ void Game::init()
 
     bool rendererInit = Rocket::Debugger::Initialise(m_context);
     assert(rendererInit);
-    m_document = m_context->LoadDocument("demo.rml");
+    Rocket::Debugger::SetVisible(true);
+    m_document = m_context->LoadDocument("main_menu.rml");
     assert(m_document);
     m_document->Show();
     m_document->RemoveReference();
@@ -201,6 +202,7 @@ void Game::tick()
         str = ss.str();
         text.setString(str);
 
+        sf::Vector2i mouse;
         while (m_app->pollEvent(event)) {
 
             // bool LeftKeyDown = Input.isKeyDown(sf::Key::Left);
@@ -215,6 +217,10 @@ void Game::tick()
                 goto shutdown;
                 break;
 
+            case sf::Event::Resized:
+                m_renderer->Resize();
+                break;
+
                 // key pressed
             case sf::Event::KeyPressed:
                 if (event.key.code == sf::Keyboard::Escape) {
@@ -226,8 +232,8 @@ void Game::tick()
                 break;
 
             case sf::Event::MouseMoved:
-                // std::cout << "new mouse x: " << event.mouseMove.x << std::endl;
-                // std::cout << "new mouse y: " << event.mouseMove.y << std::endl;
+                mouse = sf::Mouse::getPosition(*m_app);
+                m_context->ProcessMouseMove(mouse.x, mouse.y, m_systemInterface->GetKeyModifiers(m_app));
                 break;
 
             case sf::Event::GainedFocus:
@@ -257,22 +263,22 @@ void Game::tick()
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        m_app->pushGLStates();
+     ////   m_app->pushGLStates();
 //        m_view->move(500 * xDir * elapsedTime, 500* yDir * elapsedTime);
 
         m_app->clear(sf::Color(0, 0, 0));
 
-        m_world->update();
+//        m_world->update();
         // render methods *must* exit by setting back to the default view
         // (if they set it to a different view at the beginning of the call)
-        m_world->render();
+ //       m_world->render();
 
-        m_app->draw(text);
+  //      m_app->draw(text);
 
-        m_app->popGLStates();
+   //     m_app->popGLStates();
 
+        m_renderer->Resize();
         m_context->Render();
-
         // always after rendering!
         m_app->display();
         m_context->Update();

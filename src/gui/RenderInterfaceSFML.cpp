@@ -104,54 +104,32 @@ void RocketSFMLRenderer::Resize()
 // Called by Rocket when it wants to render geometry that it does not wish to optimise.
 void RocketSFMLRenderer::RenderGeometry(Rocket::Core::Vertex* vertices, int num_vertices, int* indices, int num_indices, const Rocket::Core::TextureHandle texture, const Rocket::Core::Vector2f& translation)
 {
-	MyWindow->setActive();
-
-	glPushMatrix();
-	glTranslatef(translation.x, translation.y, 0);
-
-	std::vector<Rocket::Core::Vector2f> Positions(num_vertices);
-	std::vector<Rocket::Core::Colourb> Colors(num_vertices);
-	std::vector<Rocket::Core::Vector2f> TexCoords(num_vertices);
-
-	for(int  i = 0; i < num_vertices; i++)
-	{
-		Positions[i] = vertices[i].position;
-		Colors[i] = vertices[i].colour;
-		TexCoords[i] = vertices[i].tex_coord;
-	};
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_COLOR_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-	glVertexPointer(2, GL_FLOAT, 0, &Positions[0]);
-	glColorPointer(4, GL_UNSIGNED_BYTE, 0, &Colors[0]);
-	glTexCoordPointer(2, GL_FLOAT, 0, &TexCoords[0]);
-
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	sf::Image *image = (sf::Image *)texture;
-	if(image)
-	{
-////            sf::Texture *texture
-//FIXME:?		image->Bind();
-	}
-	else
-	{
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		glBindTexture(GL_TEXTURE_2D, 0);
-	};
-
-	glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, indices);
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_COLOR_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
-	glColor4f(1, 1, 1, 1);
-
-	glPopMatrix();
+    
+    
+    MyWindow->setView(MyWindow->getDefaultView());
+    
+    MyWindow->pushGLStates();
+    
+    sf::VertexArray v(sf::Triangles, num_indices);
+    for(int j = 0; j < num_indices; j++){ //iterate indices
+        int i = indices[j]; //i is the vertex position.
+        v[j].position = sf::Vector2f(vertices[i].position.x, vertices[i].position.y);
+        v[j].color = sf::Color(vertices[i].colour.red,vertices[i].colour.green,vertices[i].colour.blue, vertices[i].colour.alpha);
+        if(texture){
+            v[j].texCoords = sf::Vector2f(vertices[i].tex_coord.x*((sf::Texture*)texture)->getSize().x, vertices[i].tex_coord.y*((sf::Texture*)texture)->getSize().y);
+        }
+        
+    }
+    sf::RenderStates *states = new sf::RenderStates();
+    states->blendMode = sf::BlendAlpha;
+    states->texture = (sf::Texture*)texture;
+    states->transform = sf::Transform::Identity;
+    states->transform.translate(translation.x, translation.y);
+    
+    
+    MyWindow->draw(v, *states);
+    
+    MyWindow->popGLStates();
 }
 
 // Called by Rocket when it wants to compile geometry it believes will be static for the forseeable future.		
@@ -299,19 +277,19 @@ bool RocketSFMLRenderer::LoadTexture(Rocket::Core::TextureHandle& texture_handle
 	file_interface->Read(buffer, buffer_size, file_handle);
 	file_interface->Close(file_handle);
 
-	sf::Image *image = new sf::Image();
+        sf::Texture *texture = new sf::Texture();
 
-	if(!image->loadFromMemory(buffer, buffer_size))
+	if(!texture->loadFromMemory(buffer, buffer_size))
 	{
 		delete buffer;
-		delete image;
+		delete texture;
 
 		return false;
 	};
 	delete buffer;
 
-	texture_handle = (Rocket::Core::TextureHandle) image;
-	texture_dimensions = Rocket::Core::Vector2i(image->getSize().x, image->getSize().y);
+	texture_handle = (Rocket::Core::TextureHandle) texture;
+	texture_dimensions = Rocket::Core::Vector2i(texture->getSize().x, texture->getSize().y);
 
 	return true;
 }
@@ -321,9 +299,9 @@ bool RocketSFMLRenderer::GenerateTexture(Rocket::Core::TextureHandle& texture_ha
 {
 	MyWindow->setActive();
 
-	sf::Image *image = new sf::Image();
-        image->create(source_dimensions.x, source_dimensions.y, source);
-
+        sf::Texture *texture = new sf::Texture();
+        texture->create(source_dimensions.x, source_dimensions.y);
+        texture->update(source);
         //FIXME: not sure how to do this....i can't find an equvialent
 //	if(!image->LoadFromPixels(source_dimensions.x, source_dimensions.y, source))
 //	{
@@ -332,7 +310,7 @@ bool RocketSFMLRenderer::GenerateTexture(Rocket::Core::TextureHandle& texture_ha
 //		return false;
 //	};
 //
-	texture_handle = (Rocket::Core::TextureHandle)image;
+	texture_handle = (Rocket::Core::TextureHandle) texture;
 
 	return true;
 }
@@ -342,5 +320,5 @@ void RocketSFMLRenderer::ReleaseTexture(Rocket::Core::TextureHandle texture_hand
 {
 	MyWindow->setActive();
 
-	delete (sf::Image *)texture_handle;
+	delete (sf::Texture *)texture_handle;
 }
