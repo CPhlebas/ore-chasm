@@ -18,14 +18,16 @@
 #include "game.h"
 #include "imagemanager.h"
 #include "entity.h"
+
 #include "gui/RenderInterfaceSFML.h"
 #include "gui/ShellFileInterface.h"
+#include "gui/SystemInterfaceSFML.h"
 
 #include <iostream>
 #include <sstream>
 #include <string>
 #include <stdio.h>
-#include <stdlib.h>
+#include <assert.h>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
@@ -111,10 +113,35 @@ void Game::init()
     ImageManager* manager = ImageManager::instance();
     manager->addResourceDir("../textures");
 
+    // -------------------------------------------------- GUI ------------------------------------------
     m_renderer = new RocketSFMLRenderer();
-
+    m_systemInterface = new RocketSFMLSystemInterface();
     m_fileInterface = new ShellFileInterface("../gui/");
-    
+
+    m_renderer->SetWindow(m_app);
+
+    Rocket::Core::SetFileInterface(m_fileInterface);
+    Rocket::Core::SetRenderInterface(m_renderer);
+    Rocket::Core::SetSystemInterface(m_systemInterface);
+
+    bool coreInit = Rocket::Core::Initialise();
+    assert(coreInit);
+
+    Rocket::Core::FontDatabase::LoadFontFace("Delicious-Bold.otf");
+    Rocket::Core::FontDatabase::LoadFontFace("Delicious-BoldItalic.otf");
+    Rocket::Core::FontDatabase::LoadFontFace("Delicious-Italic.otf");
+    Rocket::Core::FontDatabase::LoadFontFace("Delicious-Roman.otf");
+
+    m_context = Rocket::Core::CreateContext("default", Rocket::Core::Vector2i(m_app->getSize().x, m_app->getSize().y));
+
+    bool rendererInit = Rocket::Debugger::Initialise(m_context);
+    assert(rendererInit);
+    m_document = m_context->LoadDocument("demo.rml");
+
+    m_document->Show();
+    m_document->RemoveReference();
+
+    //-------------------------------------------------GUI---------------------------------------------------
 
     // World takes ownership of m_view
     m_world = new World(m_app, m_view);
@@ -243,6 +270,8 @@ void Game::tick()
         m_app->draw(text);
 
         m_app->popGLStates();
+
+        m_context->Render();
 
         // always after rendering!
         m_app->display();
