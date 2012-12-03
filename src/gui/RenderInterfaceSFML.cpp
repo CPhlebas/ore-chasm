@@ -75,7 +75,7 @@ void RocketSFMLRenderer::SetWindow(sf::RenderWindow *Window)
 {
 	MyWindow = Window;
 
-	Resize();
+        resize();
 };
 
 sf::RenderWindow *RocketSFMLRenderer::GetWindow()
@@ -85,19 +85,19 @@ sf::RenderWindow *RocketSFMLRenderer::GetWindow()
 
 void RocketSFMLRenderer::Resize()
 {
-	MyWindow->SetActive(true);
-	MyWindow->PreserveOpenGLStates(true);
+	MyWindow->setActive(true);
+	MyWindow->preserveOpenGLStates(true);
 
 	static sf::View View;
-	View.SetFromRect(sf::FloatRect(0, (float)MyWindow->GetWidth(), (float)MyWindow->GetHeight(), 0));
-	MyWindow->SetView(View);
+        View.setSize((float)MyWindow->getSize().x, (float)MyWindow->getSize().y);
+	MyWindow->setView(View);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0, MyWindow->GetWidth(), MyWindow->GetHeight(), 0, -1, 1);
+	glOrtho(0, MyWindow->getSize().x, MyWindow->getSize().y, 0, -1, 1);
 	glMatrixMode(GL_MODELVIEW);
 
-	glViewport(0, 0, MyWindow->GetWidth(), MyWindow->GetHeight());
+	glViewport(0, 0, MyWindow->getSize.x, MyWindow->getSize().y);
 };
 
 // Called by Rocket when it wants to render geometry that it does not wish to optimise.
@@ -134,7 +134,7 @@ void RocketSFMLRenderer::RenderGeometry(Rocket::Core::Vertex* vertices, int num_
 
 	if(image)
 	{
-		image->Bind();
+//FIXME:?		image->Bind();
 	}
 	else
 	{
@@ -264,7 +264,7 @@ void RocketSFMLRenderer::ReleaseCompiledGeometry(Rocket::Core::CompiledGeometryH
 // Called by Rocket when it wants to enable or disable scissoring to clip content.		
 void RocketSFMLRenderer::EnableScissorRegion(bool enable)
 {
-	MyWindow->SetActive();
+	MyWindow->setActive();
 
 	if (enable)
 		glEnable(GL_SCISSOR_TEST);
@@ -275,15 +275,15 @@ void RocketSFMLRenderer::EnableScissorRegion(bool enable)
 // Called by Rocket when it wants to change the scissor region.		
 void RocketSFMLRenderer::SetScissorRegion(int x, int y, int width, int height)
 {
-	MyWindow->SetActive();
+	MyWindow->setActive();
 
-	glScissor(x, MyWindow->GetHeight() - (y + height), width, height);
+	glScissor(x, MyWindow->getSize().y - (y + height), width, height);
 }
 
 // Called by Rocket when a texture is required by the library.		
 bool RocketSFMLRenderer::LoadTexture(Rocket::Core::TextureHandle& texture_handle, Rocket::Core::Vector2i& texture_dimensions, const Rocket::Core::String& source)
 {
-	MyWindow->SetActive();
+	MyWindow->setActive();
 
 	Rocket::Core::FileInterface* file_interface = Rocket::Core::GetFileInterface();
 	Rocket::Core::FileHandle file_handle = file_interface->Open(source);
@@ -300,7 +300,7 @@ bool RocketSFMLRenderer::LoadTexture(Rocket::Core::TextureHandle& texture_handle
 
 	sf::Image *image = new sf::Image();
 
-	if(!image->LoadFromMemory(buffer, buffer_size))
+	if(!image->loadFromMemory(buffer, buffer_size))
 	{
 		delete buffer;
 		delete image;
@@ -310,7 +310,7 @@ bool RocketSFMLRenderer::LoadTexture(Rocket::Core::TextureHandle& texture_handle
 	delete buffer;
 
 	texture_handle = (Rocket::Core::TextureHandle) image;
-	texture_dimensions = Rocket::Core::Vector2i(image->GetWidth(), image->GetHeight());
+	texture_dimensions = Rocket::Core::Vector2i(image->getSize().x, image->getSize().y);
 
 	return true;
 }
@@ -318,7 +318,7 @@ bool RocketSFMLRenderer::LoadTexture(Rocket::Core::TextureHandle& texture_handle
 // Called by Rocket when a texture is required to be built from an internally-generated sequence of pixels.
 bool RocketSFMLRenderer::GenerateTexture(Rocket::Core::TextureHandle& texture_handle, const Rocket::Core::byte* source, const Rocket::Core::Vector2i& source_dimensions)
 {
-	MyWindow->SetActive();
+	MyWindow->setActive();
 
 	sf::Image *image = new sf::Image();
 
@@ -337,7 +337,7 @@ bool RocketSFMLRenderer::GenerateTexture(Rocket::Core::TextureHandle& texture_ha
 // Called by Rocket when a loaded texture is no longer required.		
 void RocketSFMLRenderer::ReleaseTexture(Rocket::Core::TextureHandle texture_handle)
 {
-	MyWindow->SetActive();
+	MyWindow->setActive();
 
 	delete (sf::Image *)texture_handle;
 }
