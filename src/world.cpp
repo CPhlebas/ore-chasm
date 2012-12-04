@@ -143,6 +143,7 @@ void World::render()
     state.shader = &m_shader;
     m_window->draw(m_tileMapFinalSprite, state);
 
+    //set our view so that the player will stay relative to the view, in the center.
     m_window->setView(*m_view);
 
     //player drawn on top... since we don't have anything like z-ordering or layering (TODO)
@@ -151,13 +152,7 @@ void World::render()
 
     m_window->setView(m_window->getDefaultView());
 
-    // ==================== draw debug =====================
-/*    sf::VertexArray line(sf::Lines, 2);
-    line.append(sf::Vertex(viewportCenter()));
-    line.append(sf::Vertex(m_relativeVectorToAttack));
-    m_window->draw(line);
-    */
-
+    // ==================================================
     const sf::Vector2i mouse = sf::Mouse::getPosition(*m_window);
     const float radius = 10.0f;
     sf::RectangleShape crosshair = sf::RectangleShape();
@@ -169,7 +164,6 @@ void World::render()
     crosshair.setOrigin(radius/2, radius/2);
     m_window->draw(crosshair);
     // ==================================================
-
 }
 
 void World::handleEvent(const sf::Event& event)
