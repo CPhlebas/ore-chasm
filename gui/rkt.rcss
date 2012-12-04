@@ -4,41 +4,41 @@
 
 div
 {
-	display: block;
+    display: block;
 }
 
 p
 {
-	display: block;
+    display: block;
 }
 
 h1
 {
-	display: block;
+    display: block;
 }
 
 em
 {
-	font-style: italic;
+    font-style: italic;
 }
 
 strong
 {
-	font-weight: bold;
+    font-weight: bold;
 }
 
 datagrid
 {
-	display: block;
+    display: block;
 }
 
 select, dataselect, datacombo
 {
-	text-align: left;
+    text-align: left;
 }
 
 tabset tabs
 {
-	display: block;
+    display: block;
 }
 

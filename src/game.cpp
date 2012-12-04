@@ -226,9 +226,12 @@ void Game::tick()
                 if (event.key.code == sf::Keyboard::Escape) {
                     goto shutdown;
                 }
+
+                m_context->ProcessKeyDown(m_systemInterface->TranslateKey(event.key.code), m_systemInterface->GetKeyModifiers(m_app));
                 break;
 
             case sf::Event::KeyReleased:
+                m_context->ProcessKeyUp(m_systemInterface->TranslateKey(event.key.code), m_systemInterface->GetKeyModifiers(m_app));
                 break;
 
             case sf::Event::MouseMoved:
@@ -243,9 +246,11 @@ void Game::tick()
                 break;
 
             case sf::Event::MouseButtonPressed:
+                m_context->ProcessMouseButtonDown(event.mouseButton.button, m_systemInterface->GetKeyModifiers(m_app));
                 break;
 
             case sf::Event::MouseButtonReleased:
+                m_context->ProcessMouseButtonUp(event.mouseButton.button, m_systemInterface->GetKeyModifiers(m_app));
                 break;
 
             default:
@@ -260,6 +265,8 @@ void Game::tick()
 //               shutdown();
             //          }
         }
+
+        m_context->Update();
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -277,11 +284,9 @@ void Game::tick()
 
    //     m_app->popGLStates();
 
-        m_renderer->Resize();
         m_context->Render();
         // always after rendering!
         m_app->display();
-        m_context->Update();
     }
 
 shutdown:
