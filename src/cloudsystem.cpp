@@ -34,11 +34,14 @@ void CloudSystem::update()
     for (int i = 0; i < CLOUDS_COUNT; ++i) {
         Renderable *cloud = m_clouds[i];
 
-        if (cloud->getPosition().x < SCREEN_W) {
+        if (cloud->getPosition().x + cloud->getTextureRect().width < SCREEN_W) {
             cloud->move(m_windspeed, 0.0f);
         } else {
-            cloud->setPosition(0.0f, cloud->getPosition().y);
+            cloud->setPosition(-cloud->getTextureRect().width, cloud->getPosition().y);
         }
+
+        const float offset =  (SCREEN_H * 0.5) - m_view->getCenter().y ;
+        cloud->setPosition(cloud->getPosition().x,  cloud->getTextureRect().height + offset);
     }
 }
 

@@ -134,10 +134,7 @@ World::~World()
 void World::render()
 {
     //clouds should be at the near bottommost layer
-    //set it to the view so player positions/view pos affects it
-    m_window->setView(*m_view);
     m_cloudSystem->render();
-    m_window->setView(m_window->getDefaultView());
 
     sf::RenderStates state;
     state.shader = &m_shader;
