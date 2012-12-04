@@ -17,21 +17,39 @@
 
 #include "cloudsystem.h"
 
+#include "game.h"
+
 CloudSystem::CloudSystem(sf::RenderWindow *window) : m_window(window)
 {
-    m_cloud1 = new Renderable("../textures/cloud1.png");
-    m_cloud1->setOrigin(m_cloud1->getTextureRect().width * 0.5, m_cloud1->getTextureRect().height * 0.5);
-    m_cloud1->setPosition(100.0, 100.0);
+    for (int i = 0; i < CLOUDS_COUNT; ++i) {
+        m_clouds[i] = new Renderable("../textures/cloud1.png");
+        Renderable *cloud = m_clouds[i];
+        cloud->setOrigin(cloud->getTextureRect().width * 0.5, cloud->getTextureRect().height * 0.5);
+        cloud->setPosition(i * 300.0, 50.0);
+    }
 }
 
 void CloudSystem::update()
 {
+    for (int i = 0; i < CLOUDS_COUNT; ++i) {
+        Renderable *cloud = m_clouds[i];
 
+        if (cloud->getPosition().x < SCREEN_W) {
+            cloud->move(m_windspeed, 0.0f);
+        } else {
+            cloud->setPosition(0.0f, cloud->getPosition().y);
+        }
+    }
 }
 
 void CloudSystem::render()
 {
-    m_window->draw(*m_cloud1);
-    m_cloud1->render(m_window);
+    //FIXME: render to a sprite instead of doing a ton of draw clouds for all clouds
+
+    for (int i = 0; i < CLOUDS_COUNT; ++i) {
+        Renderable *cloud = m_clouds[i];
+        m_window->draw(*cloud);
+        cloud->render(m_window);
+    }
 }
 

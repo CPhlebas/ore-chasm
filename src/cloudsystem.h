@@ -23,6 +23,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 
+const int CLOUDS_COUNT = 5;
+
 class CloudSystem
 {
 public:
@@ -31,10 +33,12 @@ public:
     void update();
     void render();
 
+
 private:
     sf::RenderWindow *m_window;
 
-    Renderable *m_cloud1 = nullptr;
+    Renderable *m_clouds[CLOUDS_COUNT];
+    const float m_windspeed = 1.f;//0.0005f;
 };
 
 #endif
