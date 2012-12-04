@@ -19,7 +19,7 @@
 
 #include "game.h"
 
-CloudSystem::CloudSystem(sf::RenderWindow *window) : m_window(window)
+CloudSystem::CloudSystem(sf::RenderWindow *window, sf::View *view) : m_window(window), m_view(view)
 {
     for (int i = 0; i < CLOUDS_COUNT; ++i) {
         m_clouds[i] = new Renderable("../textures/cloud1.png");

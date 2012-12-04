@@ -122,7 +122,7 @@ World::World(sf::RenderWindow *window, sf::View *view)
     //m_shader.setParameter("TILE_SIZE", Block::blockSize, Block::blockSize);
     m_shader.setParameter("tile_types_super_texture", m_tileTypesSuperTexture);
 
-    m_cloudSystem = new CloudSystem(m_window);
+    m_cloudSystem = new CloudSystem(m_window, m_view);
 }
 
 World::~World()
@@ -134,7 +134,10 @@ World::~World()
 void World::render()
 {
     //clouds should be at the near bottommost layer
+    //set it to the view so player positions/view pos affects it
+    m_window->setView(*m_view);
     m_cloudSystem->render();
+    m_window->setView(m_window->getDefaultView());
 
     //FIXME: NEEDED?
     m_tileMapFinalSprite.setTexture(m_tileMapFinalTexture);

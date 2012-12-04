@@ -28,7 +28,7 @@ const int CLOUDS_COUNT = 5;
 class CloudSystem
 {
 public:
-    CloudSystem(sf::RenderWindow *window);
+    CloudSystem(sf::RenderWindow *window, sf::View *view);
 
     void update();
     void render();
@@ -36,6 +36,7 @@ public:
 
 private:
     sf::RenderWindow *m_window;
+    sf::View *m_view;
 
     Renderable *m_clouds[CLOUDS_COUNT];
     const float m_windspeed = 1.f;//0.0005f;
