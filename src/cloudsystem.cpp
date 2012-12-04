@@ -20,6 +20,7 @@
 CloudSystem::CloudSystem(sf::RenderWindow *window) : m_window(window)
 {
     m_cloud1 = new Renderable("../textures/cloud1.png");
+    m_cloud1->setOrigin(m_cloud1->getTextureRect().width * 0.5, m_cloud1->getTextureRect().height * 0.5);
     m_cloud1->setPosition(100.0, 100.0);
 }
 
