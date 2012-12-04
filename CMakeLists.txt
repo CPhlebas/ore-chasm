@@ -53,6 +53,7 @@ src/renderable.cpp
 src/entity.cpp
 src/block.cpp
 src/cloudsystem.cpp
+src/sky.cpp
 src/lighting/src/Utils.cpp
 src/lighting/src/Constructs/AABB.cpp
 src/lighting/src/Constructs/Color3f.cpp
