@@ -80,8 +80,7 @@ void Game::init()
 //    settings.majorVersion = 3;
 //    settings.minorVersion = 0;
 
-
-    m_app = new sf::RenderWindow(sf::VideoMode(SCREEN_W, SCREEN_H), "Buildarrhea", sf::Style::Resize, settings); //sf::Style::Fullscreen
+    m_app = new sf::RenderWindow(sf::VideoMode(SCREEN_W, SCREEN_H), "Buildarrhea", sf::Style::Default, settings);
     m_app->setVerticalSyncEnabled(false);
 //    m_app->setFramerateLimit(60);
     // totally useless for a game.
