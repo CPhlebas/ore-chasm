@@ -54,21 +54,6 @@ src/entity.cpp
 src/block.cpp
 src/cloudsystem.cpp
 src/sky.cpp
-src/lighting/src/Utils.cpp
-src/lighting/src/Constructs/AABB.cpp
-src/lighting/src/Constructs/Color3f.cpp
-src/lighting/src/Constructs/Point2i.cpp
-src/lighting/src/Constructs/Vec2f.cpp
-src/lighting/src/Light/ConvexHull.cpp
-src/lighting/src/Light/EmissiveLight.cpp
-src/lighting/src/Light/Light.cpp
-src/lighting/src/Light/Light_Point.cpp
-src/lighting/src/Light/LightSystem.cpp
-src/lighting/src/Light/ShadowFin.cpp
-src/lighting/src/QuadTree/QuadTree.cpp
-src/lighting/src/QuadTree/QuadTreeNode.cpp
-src/lighting/src/QuadTree/QuadTreeOccupant.cpp
-src/lighting/src/QuadTree/StaticQuadTree.cpp
 )
 
 #YAML, needed later

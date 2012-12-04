@@ -21,6 +21,7 @@
 #include "block.h"
 #include "game.h"
 #include "cloudsystem.h"
+#include "sky.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -53,14 +54,8 @@ World::World(sf::RenderWindow *window, sf::View *view)
 
     m_tileTypesSuperImage.create(Block::blockSize * WORLD_TILE_TYPE_COUNT, Block::blockSize);
     m_tileTypesSuperTexture.create(Block::blockSize * WORLD_TILE_TYPE_COUNT, Block::blockSize);
-    m_tileTypesSuperTexture.bind();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
     m_tileMapFinalTexture.create(SCREEN_W, SCREEN_H);
-    m_tileMapFinalTexture.bind();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     m_tileMapFinalSprite.setTexture(m_tileMapFinalTexture);
 
     assert(m_shader.isAvailable()); // if the system doesn't support it, we're fucked
@@ -374,10 +369,6 @@ void World::generatePixelTileMap()
     m_tileMapPixelsImage.flipVertically();
 
     m_tileMapPixelsTexture.loadFromImage(m_tileMapPixelsImage);
-    m_tileMapPixelsTexture.bind();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
 
     m_shader.setParameter("tilemap_pixels", m_tileMapPixelsTexture);
 }

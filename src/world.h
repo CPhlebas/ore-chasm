@@ -20,7 +20,6 @@
 
 #include "block.h"
 #include "player.h"
-#include "lighting/src/Light/LightSystem.h"
 
 #include <stdlib.h>
 #include <SFML/Graphics/Shader.hpp>
