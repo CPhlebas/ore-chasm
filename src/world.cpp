@@ -139,9 +139,6 @@ void World::render()
     m_cloudSystem->render();
     m_window->setView(m_window->getDefaultView());
 
-    //FIXME: NEEDED?
-    m_tileMapFinalSprite.setTexture(m_tileMapFinalTexture);
-
     sf::RenderStates state;
     state.shader = &m_shader;
     m_window->draw(m_tileMapFinalSprite, state);
