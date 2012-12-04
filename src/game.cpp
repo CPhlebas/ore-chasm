@@ -86,6 +86,7 @@ void Game::init()
 //    m_app->setFramerateLimit(60);
     // totally useless for a game.
     m_app->setKeyRepeatEnabled(false);
+    m_app->setMouseCursorVisible(false);
 
     settings = m_app->getSettings();
 

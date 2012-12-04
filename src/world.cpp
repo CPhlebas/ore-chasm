@@ -160,12 +160,13 @@ void World::render()
 
     const sf::Vector2i mouse = sf::Mouse::getPosition(*m_window);
     const float radius = 10.0f;
-    sf::CircleShape crosshair = sf::CircleShape(radius);
+    sf::RectangleShape crosshair = sf::RectangleShape();
+    crosshair.setSize(sf::Vector2f(radius, radius));
     crosshair.setPosition(sf::Vector2f(mouse.x, mouse.y));
     crosshair.setFillColor(sf::Color::Transparent);
     crosshair.setOutlineColor(sf::Color::Red);
     crosshair.setOutlineThickness(2.0f);
-    crosshair.setOrigin(radius, radius);
+    crosshair.setOrigin(radius/2, radius/2);
     m_window->draw(crosshair);
     // ==================================================
 
