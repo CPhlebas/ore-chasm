@@ -53,7 +53,7 @@ void Renderable::render(sf::RenderWindow* window)
     sf::RectangleShape outline;
     outline.setSize(rectSize);
     outline.setOutlineColor(sf::Color::Green);
-    outline.setOutlineThickness(1.0f);
+    outline.setOutlineThickness(-1.0f);
     outline.setFillColor(sf::Color(0, 0, 0, 0));
     outline.setPosition(pos);
     outline.setOrigin(center);
