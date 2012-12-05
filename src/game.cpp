@@ -89,10 +89,22 @@ void Game::init()
 
     settings = m_app->getSettings();
 
-    std::cout << "depth bits:" << settings.depthBits << std::endl;
-    std::cout << "stencil bits:" << settings.stencilBits << std::endl;
-    std::cout << "antialiasing level:" << settings.antialiasingLevel << std::endl;
-    std::cout << "version:" << settings.majorVersion << "." << settings.minorVersion << std::endl;
+    std::cout << "\n\n\n\n";
+    std::cout << "=======================================================================" << "\n";
+    std::cout << "=======================================================================" << "\n";
+    std::cout << "=======================================================================" << "\n";
+    std::cout << "=======================================================================" << "\n";
+    std::cout << "Hardware support information" << "\n";
+    std::cout << "OpenGL Version: " << settings.majorVersion << "." << settings.minorVersion << "\n";
+    std::cout << "Depth bits: " << settings.depthBits << "\n";
+    std::cout << "Stencil bits:" << settings.stencilBits << "\n";
+    std::cout << "Antialiasing Level: " << settings.antialiasingLevel << "\n";
+    std::cout << "Maximum Texture Size: " << sf::Texture::getMaximumSize() << " pixels \n";
+    std::cout << "=======================================================================" << "\n";
+    std::cout << "=======================================================================" << "\n";
+    std::cout << "=======================================================================" << "\n";
+    std::cout << "=======================================================================" << "\n";
+    std::cout << "\n\n\n\n";
 
     m_view = new sf::View(sf::FloatRect(0, 0, SCREEN_W, SCREEN_H));
     m_app->setView(*m_view);
@@ -216,8 +228,6 @@ void Game::tick()
 //               shutdown();
             //          }
         }
-
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         m_app->pushGLStates();
 //        m_view->move(500 * xDir * elapsedTime, 500* yDir * elapsedTime);
