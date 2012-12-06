@@ -117,7 +117,7 @@ private:
 
     /**
      */
-    sf::RenderTexture m_tileTypesTexture;
+    sf::Texture m_tileTypesTexture;
     sf::Image m_tileTypesImage;
     sf::Sprite m_tileTypesSprite;
 
