@@ -22,7 +22,6 @@
 #include "player.h"
 
 #include <stdlib.h>
-#include <SFML/Graphics/Shader.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
 class CloudSystem;
@@ -109,23 +108,18 @@ private:
     sf::RenderWindow *m_window = nullptr;
 
     /**
-     * Final texture that is blitted to screen, with the shader and render states
+     * Final texture that is blitted to screen, but we render each tile texture onto
+     * it while it is offscreen first.
      * (for the tilemap)
      */
-    sf::Texture m_tileMapFinalTexture;
-    sf::Sprite m_tileMapFinalSprite;
+    sf::RenderTexture m_tilemapOffscreenTexture;
+    sf::Sprite m_tileMapSprite;
 
     /**
-     * A super image which is loaded ONLY at init, which is a tilesheet/spritesheet
-     * of every tile that is possible. Used for passing it to the tile rendering shader
-     * (also at init).
      */
-    sf::Image m_tileTypesSuperImage;
-
-    /**
-     * What is actually passed to the frag shader.
-     */
-    sf::Texture m_tileTypesSuperTexture;
+    sf::Texture m_tileTypesTexture;
+    sf::Image m_tileTypesImage;
+    sf::Sprite m_tileTypesSprite;
 
     float m_inputXDirection = 0.f;
     float m_inputYDirection = 0.f;

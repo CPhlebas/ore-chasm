@@ -37,20 +37,11 @@
 #include <SFML/Window.hpp>
 #include <SFML/Window/Keyboard.hpp>
 
-World::World(sf::RenderWindow *window, sf::View *view)
+World::World(sf::RenderWindow *window, sf::View *view) :
+m_window(window),
+m_view(view),
+m_player(new Player("../textures/player.png"))
 {
-    m_window = window;
-    m_view = view;
-
-    m_player = new Player("../textures/player.png");
-
-
-    m_tileTypesSuperImage.create(Block::blockSize * WORLD_TILE_TYPE_COUNT, Block::blockSize);
-    m_tileTypesSuperTexture.create(Block::blockSize * WORLD_TILE_TYPE_COUNT, Block::blockSize);
-
-    m_tileMapFinalTexture.create(SCREEN_W, SCREEN_H);
-    m_tileMapFinalSprite.setTexture(m_tileMapFinalTexture);
-
     //FIXME/TODO: use RenderTexture, so we're not slow as all mighty fuck
     sf::Image currentTile;
     bool loaded;
@@ -83,16 +74,24 @@ World::World(sf::RenderWindow *window, sf::View *view)
     }
 */
 
+    m_tileTypesImage.create(Block::blockSize * WORLD_TILE_TYPE_COUNT, Block::blockSize);
+
     for (int i = 0; i < WORLD_TILE_TYPE_COUNT; ++i) {
         loaded = currentTile.loadFromFile(m_blockTextures[i]);
         //would indicate we couldn't find a tile. obviously, we need that..
         assert(loaded);
 
         destX = i * Block::blockSize;
-        m_tileTypesSuperImage.copy(currentTile, destX, destY);
+        m_tileTypesImage.copy(currentTile, destX, destY);
     }
 
-    m_tileTypesSuperTexture.loadFromImage(m_tileTypesSuperImage);
+    m_tileTypesTexture.loadFromImage(m_tileTypesImage);
+    m_tileTypesSprite.setTexture(m_tileTypesTexture);
+
+    //one additional row and column, for smooth movement/scrolling
+    m_tilemapOffscreenTexture.create(SCREEN_W + Block::blockSize, SCREEN_H + Block::blockSize);
+    m_tileMapSprite.setTexture(m_tilemapOffscreenTexture);
+
 
     loadMap();
     //FIXME: saveMap();
@@ -104,40 +103,6 @@ World::~World()
 {
     delete m_player;
     delete m_cloudSystem;
-}
-
-void World::render()
-{
-    //clouds should be at the near bottommost layer
-    m_cloudSystem->render();
-
-    m_window->draw(m_tileMapFinalSprite);
-
-    //set our view so that the player will stay relative to the view, in the center.
-    m_window->setView(*m_view);
-
-    //player drawn on top... since we don't have anything like z-ordering or layering (TODO)
-    m_window->draw(*m_player);
-    m_player->render(m_window);
-
-    m_window->setView(m_window->getDefaultView());
-
-    // ==================================================
-    const sf::Vector2i mouse = sf::Mouse::getPosition(*m_window);
-    const float radius = 16.0f;
-    const float halfRadius = radius * 0.5;
-    const float halfBlockSize = Block::blockSize * 0.5;
-    sf::Vector2f crosshairPosition(mouse.x - mouse.x % Block::blockSize, mouse.y - mouse.y % Block::blockSize);
-
-    sf::RectangleShape crosshair = sf::RectangleShape();
-    crosshair.setSize(sf::Vector2f(radius, radius));
-    crosshair.setPosition(crosshairPosition);
-    crosshair.setFillColor(sf::Color::Transparent);
-    crosshair.setOutlineColor(sf::Color::Red);
-    crosshair.setOutlineThickness(-2.0f);
-    crosshair.setOrigin(halfRadius - halfBlockSize, halfRadius - halfBlockSize);
-    m_window->draw(crosshair);
-    // ==================================================
 }
 
 void World::handleEvent(const sf::Event& event)
@@ -182,6 +147,41 @@ void World::handleEvent(const sf::Event& event)
     }
 }
 
+void World::render()
+{
+    //clouds should be at the near bottommost layer
+    m_cloudSystem->render();
+
+    renderOffscreenTilemap();
+    m_window->draw(m_tileMapSprite);
+
+    //set our view so that the player will stay relative to the view, in the center.
+    m_window->setView(*m_view);
+
+    //player drawn on top... since we don't have anything like z-ordering or layering (TODO)
+    m_window->draw(*m_player);
+    m_player->render(m_window);
+
+    m_window->setView(m_window->getDefaultView());
+
+    // ==================================================
+    const sf::Vector2i mouse = sf::Mouse::getPosition(*m_window);
+    const float radius = 16.0f;
+    const float halfRadius = radius * 0.5;
+    const float halfBlockSize = Block::blockSize * 0.5;
+    sf::Vector2f crosshairPosition(mouse.x - mouse.x % Block::blockSize, mouse.y - mouse.y % Block::blockSize);
+
+    sf::RectangleShape crosshair = sf::RectangleShape();
+    crosshair.setSize(sf::Vector2f(radius, radius));
+    crosshair.setPosition(crosshairPosition);
+    crosshair.setFillColor(sf::Color::Transparent);
+    crosshair.setOutlineColor(sf::Color::Red);
+    crosshair.setOutlineThickness(-2.0f);
+    crosshair.setOrigin(halfRadius - halfBlockSize, halfRadius - halfBlockSize);
+    m_window->draw(crosshair);
+    // ==================================================
+}
+
 void World::update()
 {
     m_cloudSystem->update();
@@ -192,7 +192,6 @@ void World::update()
     m_view->setCenter(m_player->getPosition());
 
     //calculateAttackPosition();
-    renderOffscreenTilemap();
 }
 
 sf::Vector2f World::viewportCenter() const
@@ -332,6 +331,10 @@ void World::renderOffscreenTilemap()
             assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
 
             const sf::Color color(m_blocks[index].type, 0, 0);
+
+            x = color.r * Block::blockSize + (screen_coordinates.x % Block::blockSize);
+            y = screen_coordinates.y % Block::blockSize;
+            m_tilemapOffscreenTexture.draw();
 
             x += Block::blockSize;
         }
