@@ -63,7 +63,7 @@ public:
      */
     sf::Vector2f viewportCenter() const;
     void calculateAttackPosition();
-    void generatePixelTileMap();
+    void renderOffscreenTilemap();
     void performBlockAttack();
 
     void handleEvent(const sf::Event& event);
@@ -108,17 +108,12 @@ private:
     sf::View *m_view = nullptr;
     sf::RenderWindow *m_window = nullptr;
 
-    sf::Shader m_shader;
-
     /**
      * Final texture that is blitted to screen, with the shader and render states
      * (for the tilemap)
      */
     sf::Texture m_tileMapFinalTexture;
     sf::Sprite m_tileMapFinalSprite;
-
-    sf::Image m_tileMapPixelsImage;
-    sf::Texture m_tileMapPixelsTexture;
 
     /**
      * A super image which is loaded ONLY at init, which is a tilesheet/spritesheet

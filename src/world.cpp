@@ -44,21 +44,12 @@ World::World(sf::RenderWindow *window, sf::View *view)
 
     m_player = new Player("../textures/player.png");
 
-    /*
-    const int gridSize = ceil(WORLD_TILE_TYPE_COUNT / 2.0);
-    std::cout << " GRIDSIZE : " << gridSize << std::endl;
-    const unsigned short textureSize = gridSize * Block::blockSize;
-    m_tileTypesSuperImage.create(textureSize, textureSize);
-    m_tileTypesSuperTexture.create(textureSize, textureSize);
-    */
 
     m_tileTypesSuperImage.create(Block::blockSize * WORLD_TILE_TYPE_COUNT, Block::blockSize);
     m_tileTypesSuperTexture.create(Block::blockSize * WORLD_TILE_TYPE_COUNT, Block::blockSize);
 
     m_tileMapFinalTexture.create(SCREEN_W, SCREEN_H);
     m_tileMapFinalSprite.setTexture(m_tileMapFinalTexture);
-
-    assert(m_shader.isAvailable()); // if the system doesn't support it, we're fucked
 
     //FIXME/TODO: use RenderTexture, so we're not slow as all mighty fuck
     sf::Image currentTile;
@@ -106,17 +97,6 @@ World::World(sf::RenderWindow *window, sf::View *view)
     loadMap();
     //FIXME: saveMap();
 
-    if (m_shader.loadFromFile("tilerenderer.frag", sf::Shader::Fragment)) {
-        std::cout << "Successfully loaded tilerenderer fragment shader!" << std::endl;
-    } else {
-        std::cout << "failed to load tilerenderer fragment shader!" << std::endl;
-        assert(0);
-    }
-
-    //FIXME: hardcoding :(
-    //m_shader.setParameter("TILE_SIZE", Block::blockSize, Block::blockSize);
-    m_shader.setParameter("tile_types_super_texture", m_tileTypesSuperTexture);
-
     m_cloudSystem = new CloudSystem(m_window, m_view);
 }
 
@@ -131,9 +111,7 @@ void World::render()
     //clouds should be at the near bottommost layer
     m_cloudSystem->render();
 
-    sf::RenderStates state;
-    state.shader = &m_shader;
-    m_window->draw(m_tileMapFinalSprite, state);
+    m_window->draw(m_tileMapFinalSprite);
 
     //set our view so that the player will stay relative to the view, in the center.
     m_window->setView(*m_view);
@@ -214,7 +192,7 @@ void World::update()
     m_view->setCenter(m_player->getPosition());
 
     //calculateAttackPosition();
-    generatePixelTileMap();
+    renderOffscreenTilemap();
 }
 
 sf::Vector2f World::viewportCenter() const
@@ -317,7 +295,7 @@ void World::performBlockAttack()
     std::cout << "ERROR: " << " no block found to attack?" << "\n";
 }
 
-void World::generatePixelTileMap()
+void World::renderOffscreenTilemap()
 {
     const sf::Vector2f playerPosition = m_player->getPosition();
     //consider block map as starting at player pos == 0,0 and going down and to the right-ward
@@ -343,12 +321,6 @@ void World::generatePixelTileMap()
         assert(0);
     }
 
-    // only make it as big as we need it, remember this is a pixel representation of the visible
-    // tile map, with the red channel identifying what type of tile it is
-    // x is columns..since they move from left to right, rows start at top and move to bottom
-    // (and yes..i confused this fact before, leaving a headache here ;)
-    m_tileMapPixelsImage.create(endColumn - startColumn, endRow - startRow);
-
     int x = 0;
     int  y = 0;
 
@@ -361,22 +333,12 @@ void World::generatePixelTileMap()
 
             const sf::Color color(m_blocks[index].type, 0, 0);
 
-            m_tileMapPixelsImage.setPixel(x, y, color);
-            ++x;
+            x += Block::blockSize;
         }
-        ++y;
+        y += Block::blockSize;
         x = 0;
     }
-
-    //FIXME: hugely fucking expensive..fix the above loops so we *generate* it upside down
-    // or...change the shader to calculate it properly
-    m_tileMapPixelsImage.flipVertically();
-
-    m_tileMapPixelsTexture.loadFromImage(m_tileMapPixelsImage);
-
-    m_shader.setParameter("tilemap_pixels", m_tileMapPixelsTexture);
 }
-
 
 void World::loadMap()
 {
