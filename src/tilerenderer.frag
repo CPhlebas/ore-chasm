@@ -1,4 +1,5 @@
 #version 130
+#extension GL_EXT_gpu_shader4 : enable
 
 //for a 1600x900 screen, this results in an image of 50x100 with each pixel representing a tile
 uniform sampler2D tilemap_pixels;
