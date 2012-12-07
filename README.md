@@ -40,21 +40,35 @@ First of all, I use SFML 2.0, which is technically unreleased.
 
 No matter, you can build it easily since I use CMake.
 
-See: http://sfgui.sfml-dev.de/download
+See: http://www.sfml-dev.org/download.php
 
 After this is installed and you have followed their directions, to get my code,
 you can either click download the zip, or run `git clone git://github.com/sreich/ore-chasm.git`
 
 
+## System Requirements
+* SFML 2.0 (unreleased, from git)
+* Platform of Windows, Linux/Unix, Mac OS X
 
 
 
-
-
-
-
-
-
+## Planned Features
+* Networking (a must)
+* Dungeons
+* Ladders! I hated navigation from depths in Terraria. It was terrible and
+usually resulted in you dying or being stranded.
+* Villages! (randomly generated). Think similar to Minecraft
+* No guide! This NPC always lingered around your house even though you wanted to
+be left the hell alone. It was really a piss poor replacement for a tutorial
+anyways, and he only had a couple tid bits of information. Literally.
+* NPCs/merchants you can "place" in your home?
+* Teleporters/Portals! Seriously. This is a definite want in my mind.
+* Crafting system more simlar to Minecraft? Would people like that? Personally,
+I was not much of a fan for Terraria's crafting.
+* Menu system (HUD) that isn't impossible to navigate, unlike Terraria's.
+* Full modding support (another must). This will have to be a later feature
+though of course, until I get a good amount of content into the game.
+* Android and in general, a mobile port? This is very much long term though.
 
 
 
