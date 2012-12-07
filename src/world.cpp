@@ -90,8 +90,6 @@ m_player(new Player("../textures/player.png"))
 
     //one additional row and column, for smooth movement/scrolling
     m_tilemapOffscreenTexture.create(SCREEN_W + Block::blockSize, SCREEN_H + Block::blockSize);
-    m_tileMapSprite.setTexture(m_tilemapOffscreenTexture);
-
 
     loadMap();
     //FIXME: saveMap();
@@ -153,6 +151,7 @@ void World::render()
     m_cloudSystem->render();
 
     renderOffscreenTilemap();
+    m_tileMapSprite.setTexture(m_tilemapOffscreenTexture.getTexture());
     m_window->draw(m_tileMapSprite);
 
     //set our view so that the player will stay relative to the view, in the center.
@@ -296,6 +295,8 @@ void World::performBlockAttack()
 
 void World::renderOffscreenTilemap()
 {
+    m_tilemapOffscreenTexture.clear(sf::Color::Blue);
+
     const sf::Vector2f playerPosition = m_player->getPosition();
     //consider block map as starting at player pos == 0,0 and going down and to the right-ward
     //tilesBefore{X,Y} is only at the center of the view though..find the whole screen real estate
@@ -309,8 +310,9 @@ void World::renderOffscreenTilemap()
     const int endRow = tilesBeforeY + ((SCREEN_H * 0.5) / Block::blockSize);
 
     //columns are our X value, rows the Y
-    const int startColumn = tilesBeforeX - ((SCREEN_W * 0.5) / Block::blockSize);
-    const int endColumn = tilesBeforeX + ((SCREEN_W * 0.5) / Block::blockSize);
+    // doing 1 more column and row, so we can start smooth scrolling
+    const int startColumn = tilesBeforeX - ((SCREEN_W * 0.5) / Block::blockSize) + 1;
+    const int endColumn = tilesBeforeX + ((SCREEN_W * 0.5) / Block::blockSize) + 1;
 
     if (std::abs(startColumn) != startColumn) {
         std::cout << "FIXME, WENT INTO NEGATIVE COLUMN!!";
@@ -323,6 +325,9 @@ void World::renderOffscreenTilemap()
     int x = 0;
     int  y = 0;
 
+//            x = color.r * Block::blockSize + (screen_coordinates.x % Block::blockSize);
+//            y = screen_coordinates.y % Block::blockSize;
+
     // [y*rowlength + x]
     for (int currentRow = startRow; currentRow < endRow; ++currentRow) {
         for (int currentColumn = startColumn; currentColumn < endColumn; ++currentColumn) {
@@ -332,15 +337,21 @@ void World::renderOffscreenTilemap()
 
             const sf::Color color(m_blocks[index].type, 0, 0);
 
-            x = color.r * Block::blockSize + (screen_coordinates.x % Block::blockSize);
-            y = screen_coordinates.y % Block::blockSize;
-            m_tilemapOffscreenTexture.draw();
+            const int tileTypeX = color.r * Block::blockSize + (m_tileTypesTexture.getSize().x % Block::blockSize);
+            const int tileTypeY = m_tileTypesTexture.getSize().y % Block::blockSize;
+
+            m_tileTypesSprite.setTextureRect(sf::IntRect(tileTypeX, tileTypeY, tileTypeX + Block::blockSize, tileTypeY + Block::blockSize));
+            m_tileTypesSprite.setPosition(x, y);
+
+            m_tilemapOffscreenTexture.draw(m_tileTypesSprite);
 
             x += Block::blockSize;
         }
         y += Block::blockSize;
         x = 0;
     }
+
+    m_tilemapOffscreenTexture.display();
 }
 
 void World::loadMap()
