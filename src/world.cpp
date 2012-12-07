@@ -115,6 +115,9 @@ World::World(sf::RenderWindow *window, sf::View *view)
     //FIXME: hardcoding :(
     //m_shader.setParameter("TILE_SIZE", Block::blockSize, Block::blockSize);
     m_shader.setParameter("tile_types_super_texture", m_tileTypesSuperTexture);
+
+    //FIXME: height
+    m_sky = new Sky(m_window, m_view, 0.0f);
 }
 
 World::~World()

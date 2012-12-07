@@ -27,6 +27,7 @@
 
 Renderable::Renderable()
 {
+    m_imageManager = ImageManager::instance();
 }
 
 Renderable::Renderable(const char* texture)
