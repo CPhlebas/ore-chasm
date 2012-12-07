@@ -24,7 +24,7 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-    cout << "Version " << buildarrhea_VERSION_MAJOR << "." << buildarrhea_VERSION_MINOR << endl;
+    cout << "Ore Chasm Version " << ore_chasm_VERSION_MAJOR << "." << ore_chasm_VERSION_MINOR << endl;
 
     Game game;
     game.init();

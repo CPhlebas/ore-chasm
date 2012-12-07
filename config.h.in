@@ -1,2 +1,2 @@
-#define buildarrhea_VERSION_MAJOR @buildarrhea_VERSION_MAJOR@
-#define buildarrhea_VERSION_MINOR @buildarrhea_VERSION_MINOR@
+#define ore_chasm_VERSION_MAJOR @ore_chasm_VERSION_MAJOR@
+#define ore_chasm_VERSION_MINOR @ore_chasm_VERSION_MINOR@

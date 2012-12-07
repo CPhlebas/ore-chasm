@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.6)
-project (buildarrhea)
+project (ore_chasm)
 
 # Enable debug symbols by default
 if(CMAKE_BUILD_TYPE STREQUAL "")
@@ -23,8 +23,8 @@ endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 message("PATH: " + ${CMAKE_MODULE_PATH})
 # Set version information in a config.h file
-set(buildarrhea_VERSION_MAJOR 0)
-set(buildarrhea_VERSION_MINOR 1)
+set(ore_chasm_VERSION_MAJOR 0)
+set(ore_chasm_VERSION_MINOR 1)
 
 find_package( GLUT REQUIRED )
 find_package( GLU REQUIRED )
@@ -39,7 +39,7 @@ configure_file(
 include_directories("${PROJECT_BINARY_DIR}")
 
 # Define sources and executable
-set(EXECUTABLE_NAME "buildarrhea")
+set(EXECUTABLE_NAME "ore-chasm")
 
 set(SRC
 src/main.cpp
@@ -84,8 +84,8 @@ target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES} ${GLUT_LIBRARIES} ${G
 # CPack packaging
 include(InstallRequiredSystemLibraries)
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/COPYING")
-set(CPACK_PACKAGE_VERSION_MAJOR "${buildarrhea_VERSION_MAJOR}")
-set(CPACK_PACKAGE_VERSION_MINOR "${buildarrhea_VERSION_MINOR}")
+set(CPACK_PACKAGE_VERSION_MAJOR "${ore_chasm_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${ore_chasm_VERSION_MINOR}")
 include(CPack)
 
 
