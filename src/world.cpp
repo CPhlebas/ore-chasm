@@ -203,7 +203,7 @@ void World::handleEvent(const sf::Event& event)
         break;
 
     case sf::Event::MouseButtonReleased:
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+        if (!sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             m_mouseLeftHeld = false;
         }
     }
