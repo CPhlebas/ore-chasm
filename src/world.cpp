@@ -20,7 +20,6 @@
 
 #include "block.h"
 #include "game.h"
-#include "cloudsystem.h"
 #include "sky.h"
 
 #include <stdio.h>
@@ -116,20 +115,18 @@ World::World(sf::RenderWindow *window, sf::View *view)
     //FIXME: hardcoding :(
     //m_shader.setParameter("TILE_SIZE", Block::blockSize, Block::blockSize);
     m_shader.setParameter("tile_types_super_texture", m_tileTypesSuperTexture);
-
-    m_cloudSystem = new CloudSystem(m_window, m_view);
 }
 
 World::~World()
 {
     delete m_player;
-    delete m_cloudSystem;
+    delete m_sky;
 }
 
 void World::render()
 {
-    //clouds should be at the near bottommost layer
-    m_cloudSystem->render();
+    //Sky at bottom layer
+    m_sky->render();
 
     sf::RenderStates state;
     state.shader = &m_shader;
@@ -206,7 +203,7 @@ void World::handleEvent(const sf::Event& event)
 
 void World::update()
 {
-    m_cloudSystem->update();
+    m_sky->update();
 
     //FIXME: bring in elapsedTime here ...to calculate player movements accurately
 

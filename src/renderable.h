@@ -25,6 +25,8 @@
 class Renderable : public sf::Sprite
 {
 public:
+    Renderable();
+
     /**
      * Small basic wrapper which inherits an sf::Sprite and automagically
      * integrates itself with the RenderManager.

@@ -25,6 +25,10 @@
 #include <SFML/Graphics/VertexArray.hpp>
 #include <SFML/Graphics/Shader.hpp>
 
+Renderable::Renderable()
+{
+}
+
 Renderable::Renderable(const char* texture)
 {
     m_imageManager = ImageManager::instance();

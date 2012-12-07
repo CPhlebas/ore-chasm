@@ -25,7 +25,7 @@
 #include <SFML/Graphics/Shader.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
-class CloudSystem;
+class Sky;
 //height
 static constexpr unsigned short WORLD_ROWCOUNT = 8400;
 //width
@@ -102,7 +102,7 @@ private:
 
     Player *m_player = nullptr;
 
-    CloudSystem *m_cloudSystem = nullptr;
+    Sky *m_sky = nullptr;
 
     //FIXME: just a ptr to the game.cpp one :(  same with window
     sf::View *m_view = nullptr;
