@@ -25,7 +25,8 @@ m_window(window),
 m_view(view),
 m_height(height)
 {
-    m_sunSprite.setTexture("sun.png");
+    m_sunSprite.setTexture("../textures/sun.png");
+    m_sunSprite.setOrigin(m_sunSprite.getTextureRect().width * 0.5, m_sunSprite.getTextureRect().height * 0.5);
 }
 
 void Sky::update()
