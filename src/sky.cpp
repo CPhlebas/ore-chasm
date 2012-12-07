@@ -25,6 +25,7 @@ m_window(window),
 m_view(view),
 m_height(height)
 {
+    m_sunSprite.setTexture("sun.png");
 }
 
 void Sky::update()
@@ -33,4 +34,6 @@ void Sky::update()
 
 void Sky::render()
 {
+    m_window->draw(m_sunSprite);
+    m_sunSprite.render(m_window);
 }

@@ -103,7 +103,7 @@ void Game::init()
     }
 
     ImageManager* manager = ImageManager::instance();
-    manager->addResourceDir("../textures");
+    manager->addResourceDir("../textures/");
 
     // World takes ownership of m_view
     m_world = new World(m_app, m_view);
