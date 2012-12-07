@@ -129,7 +129,6 @@ World::~World()
 void World::render()
 {
     //Sky at bottom layer
-    m_sky->render();
 
     sf::RenderStates state;
     state.shader = &m_shader;
@@ -160,6 +159,7 @@ void World::render()
     crosshair.setOrigin(halfRadius - halfBlockSize, halfRadius - halfBlockSize);
     m_window->draw(crosshair);
     // ==================================================
+    m_sky->render();
 }
 
 void World::handleEvent(const sf::Event& event)
@@ -198,14 +198,23 @@ void World::handleEvent(const sf::Event& event)
 
     case sf::Event::MouseButtonPressed:
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-            performBlockAttack();
+            m_mouseLeftHeld = true;
         }
         break;
+
+    case sf::Event::MouseButtonReleased:
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+            m_mouseLeftHeld = false;
+        }
     }
 }
 
 void World::update()
 {
+    if (m_mouseLeftHeld) {
+        performBlockAttack();
+    }
+
     m_sky->update();
 
     //FIXME: bring in elapsedTime here ...to calculate player movements accurately

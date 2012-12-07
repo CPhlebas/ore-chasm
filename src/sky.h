@@ -36,7 +36,8 @@ public:
 private:
     sf::RenderWindow *m_window;
     sf::View *m_view;
-    Renderable m_skySprite;
+    Renderable m_sunSprite;
+    Renderable m_moonSprite;
     CloudSystem *m_cloudSystem = nullptr;
 
     // the height of the sky
