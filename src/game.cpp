@@ -91,18 +91,12 @@ void Game::init()
 
     std::cout << "\n\n\n\n";
     std::cout << "=======================================================================" << "\n";
-    std::cout << "=======================================================================" << "\n";
-    std::cout << "=======================================================================" << "\n";
-    std::cout << "=======================================================================" << "\n";
     std::cout << "Hardware support information" << "\n";
     std::cout << "OpenGL Version: " << settings.majorVersion << "." << settings.minorVersion << "\n";
     std::cout << "Depth bits: " << settings.depthBits << "\n";
     std::cout << "Stencil bits:" << settings.stencilBits << "\n";
     std::cout << "Antialiasing Level: " << settings.antialiasingLevel << "\n";
     std::cout << "Maximum Texture Size: " << sf::Texture::getMaximumSize() << " pixels \n";
-    std::cout << "=======================================================================" << "\n";
-    std::cout << "=======================================================================" << "\n";
-    std::cout << "=======================================================================" << "\n";
     std::cout << "=======================================================================" << "\n";
     std::cout << "\n\n\n\n";
 
