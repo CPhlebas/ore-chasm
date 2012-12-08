@@ -39,6 +39,9 @@ private:
     Renderable m_sunSprite;
     Renderable m_moonSprite;
     CloudSystem *m_cloudSystem = nullptr;
+    sf::Vector2f m_sunMoonPosition;
+    float m_timeAngle = 0.0f;
+    int m_hour = 0;
 
     // the height of the sky
     float m_height;
