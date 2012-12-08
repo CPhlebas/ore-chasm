@@ -48,7 +48,7 @@ public:
 
 private:
     World *m_world = nullptr;
-    sf::RenderWindow *m_app = nullptr;
+    sf::RenderWindow *m_window = nullptr;
     sf::View *m_view = nullptr;
     sf::Font *m_font = nullptr;
 };

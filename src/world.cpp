@@ -148,7 +148,9 @@ void World::render()
     const float radius = 16.0f;
     const float halfRadius = radius * 0.5;
     const float halfBlockSize = Block::blockSize * 0.5;
-    sf::Vector2f crosshairPosition(mouse.x - mouse.x % Block::blockSize, mouse.y - mouse.y % Block::blockSize);
+
+    // NOTE: (SCREEN_H % Block::blockSize) is what we add so that it is aligned properly to the tile grid, even though the screen is not evenly divisible by such.
+    sf::Vector2f crosshairPosition(mouse.x - mouse.x % Block::blockSize + (SCREEN_W % Block::blockSize), mouse.y - mouse.y % Block::blockSize + (SCREEN_H % Block::blockSize));
 
     sf::RectangleShape crosshair = sf::RectangleShape();
     crosshair.setSize(sf::Vector2f(radius, radius));

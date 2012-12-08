@@ -40,7 +40,7 @@ Game::~Game()
     delete m_world;
     delete m_view;
     delete m_font;
-    delete m_app;
+    delete m_window;
 }
 
 void Game::abort_game(const char* message)
@@ -80,14 +80,14 @@ void Game::init()
 //    settings.majorVersion = 3;
 //    settings.minorVersion = 0;
 
-    m_app = new sf::RenderWindow(sf::VideoMode(SCREEN_W, SCREEN_H), "Ore Chasm", sf::Style::Default, settings);
-    m_app->setVerticalSyncEnabled(false);
+    m_window = new sf::RenderWindow(sf::VideoMode(SCREEN_W, SCREEN_H), "Ore Chasm", sf::Style::Default, settings);
+    m_window->setVerticalSyncEnabled(false);
 //    m_app->setFramerateLimit(60);
     // totally useless for a game.
-    m_app->setKeyRepeatEnabled(false);
-    m_app->setMouseCursorVisible(false);
+    m_window->setKeyRepeatEnabled(false);
+    m_window->setMouseCursorVisible(false);
 
-    settings = m_app->getSettings();
+    settings = m_window->getSettings();
 
     std::cout << "\n\n\n\n";
     std::cout << "=======================================================================" << "\n";
@@ -101,7 +101,7 @@ void Game::init()
     std::cout << "\n\n\n\n";
 
     m_view = new sf::View(sf::FloatRect(0, 0, SCREEN_W, SCREEN_H));
-    m_app->setView(*m_view);
+    m_window->setView(*m_view);
 
     m_font = new sf::Font();
     if (!m_font->loadFromFile("../font/DejaVuSerif.ttf")) {
@@ -112,7 +112,7 @@ void Game::init()
     manager->addResourceDir("../textures/");
 
     // World takes ownership of m_view
-    m_world = new World(m_app, m_view);
+    m_world = new World(m_window, m_view);
 
     tick();
     shutdown();
@@ -144,7 +144,7 @@ void Game::tick()
 
     float elapsedTime = 0;
 
-    while (m_app->isOpen()) {
+    while (m_window->isOpen()) {
         elapsedTime = clock.restart().asSeconds();
         benchTime -= 1;
         fps = int(1.f / elapsedTime);
@@ -169,7 +169,7 @@ void Game::tick()
         str = ss.str();
         text.setString(str);
 
-        while (m_app->pollEvent(event)) {
+        while (m_window->pollEvent(event)) {
 
             // bool LeftKeyDown = Input.isKeyDown(sf::Key::Left);
             // bool RightButtonDown = Input.isMouseButtonDown(sf::Mouse::Right);
@@ -223,22 +223,22 @@ void Game::tick()
             //          }
         }
 
-        m_app->pushGLStates();
+        m_window->pushGLStates();
 //        m_view->move(500 * xDir * elapsedTime, 500* yDir * elapsedTime);
 
-        m_app->clear(sf::Color(0, 0, 0));
+        m_window->clear(sf::Color(0, 0, 0));
 
         m_world->update();
         // render methods *must* exit by setting back to the default view
         // (if they set it to a different view at the beginning of the call)
         m_world->render();
 
-        m_app->draw(text);
+        m_window->draw(text);
 
-        m_app->popGLStates();
+        m_window->popGLStates();
 
         // always after rendering!
-        m_app->display();
+        m_window->display();
     }
 
 shutdown:
@@ -247,7 +247,7 @@ shutdown:
 
 void Game::shutdown()
 {
-    m_app->close();
-    delete m_app;
+    m_window->close();
+    delete m_window;
     exit(0);
 }
