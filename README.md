@@ -3,7 +3,7 @@
 ## What is it?
 
 Ore Chasm is a game that is greatly inspired by Terraria, but of course aims to
-be more.
+be way more.
 
 ## Why is it?
 
@@ -98,7 +98,7 @@ This means that you installed SFML 2.0 into a directory that your shell cannot
 find (FIXME: theres got to be a better way for this..I'm sure it's a failure on my
 cmake foo).
 To "fix" this, run something like:
- 'export LD_LIBRARY_PATH=/usr/local/bin/lib:/usr/lib:/usr/local/lib'
+ 'export LD_LIBRARY_PATH=/usr/local/bin/lib:/usr/lib:/usr/local/lib:$PATH'
 (where /usr/local/lib is where the result from
  `updatedb;locate libsfml-system.so.2`) is.
 
@@ -149,12 +149,23 @@ less realistic tile based water.
 Currently this isn't much of an issue, but with larger worlds and assets,
 it could turn into something to think about.
 
+## How can I reach you?
+Either through github, email (predator106 at gmail), or my preferable medium for
+non-trivial discussions, 'sreich' on Freenode (chat.freenode.net)
+(http://freenode.net/)
+
 
 #ToDo
 Most of the stuff to do is either in Planned Features, or in my head..but here's
 the more technical scratch notes, if I keep them updated:
 
-PARTICLES, neat stuff, may find useful:
-
+*PARTICLES, neat stuff, may find useful...perhaps for water system. or at the
+very least, just neat particles for everything, which will be needed either way.
 http://spark.developpez.com/index.php?page=home&lang=en
 
+* Compartmentalize CMake code a lot..it's currently very congested and within
+the root dir's CMakeLists.txt.
+
+* Fix CMake path linking with SFML 2.0. I'm not sure why exactly, but
+apparently people need to export LD_LIBRARY_PATH. can this be fixed
+on my end, or is it due to how SFML itself is installed?
