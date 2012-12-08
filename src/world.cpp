@@ -283,7 +283,6 @@ void World::performBlockAttack()
         mouse.x > center.x + Player::blockPickingRadius ||
         mouse.y < center.y - Player::blockPickingRadius ||
         mouse.y > center.y + Player::blockPickingRadius) {
-        std::cout << "attack vector out of range of block picking radius" << "\n";
         return;
     }
 
