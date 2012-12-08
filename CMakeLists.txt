@@ -26,11 +26,9 @@ message("PATH: " + ${CMAKE_MODULE_PATH})
 set(ore_chasm_VERSION_MAJOR 0)
 set(ore_chasm_VERSION_MINOR 1)
 
-find_package( GLUT REQUIRED )
-find_package( GLU REQUIRED )
 find_package( OpenGL REQUIRED )
 
-include_directories( ${CMAKE_SOURCE_DIR} ${GLUT_INCLUDE_DIR} )
+include_directories( ${CMAKE_SOURCE_DIR})
 
 configure_file(
   "${PROJECT_SOURCE_DIR}/config.h.in"
@@ -76,9 +74,9 @@ if (NOT SFML_FOUND)
     message(FATAL_ERROR "Could not find SFML.")
 endif()
 
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR} ${GLUT_INCLUDE_DIR} )
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR})
 include_directories(${SFML_INCLUDE_DIR} )
-target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES} ${GLUT_LIBRARIES} ${GLU_LIBRARIES} ${OPENGL_LIBRARIES})
+target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES} ${OPENGL_LIBRARIES})
 
 
 # CPack packaging
