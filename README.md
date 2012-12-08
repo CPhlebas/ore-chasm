@@ -3,7 +3,7 @@
 ## What is it?
 
 Ore Chasm is a game that is greatly inspired by Terraria, but of course aims to
-be more.
+be way more.
 
 ## Why is it?
 
@@ -71,10 +71,36 @@ No matter, you can build it easily since I use CMake.
 See: http://www.sfml-dev.org/download.php
 
 After this is installed and you have followed their directions, to get my code,
-you can either click download the zip, or run `git clone git://github.com/sreich/ore-chasm.git`
+you can either click download the zip, or run
+`git clone git://github.com/sreich/ore-chasm.git`
 
 After you have my code, go to the top directory of it, `mkdir build; cd build;`
-and now to actually build it
+and now to actually build it run `cmake ..`. Install any packages if it says
+ they cannot be found (same goes for when installing SFML).
+
+Usually you want to specify an installation directory, via
+`cmake .. -DCMAKE_INSTALL_PREFIX=~/ore-chasm/install` and then run
+`make -j9; make install` (where 9 is how many cores you have +1.
+In my case, 8 + 1).
+
+Specifying the cmake install prefix is not necessary, but means it will
+ default to some system path, which means that it will require sudo/su on
+`make install`.
+
+Note, run the game from the installation directory. DO NOT run it from the
+build directory. It will crash and complain about missing assets, because they
+are installed only to the installation directory, and not the build directory.
+
+If it says something like:
+"libsfml-system.so.2: cannot open shared object file: No such file or directory"
+
+This means that you installed SFML 2.0 into a directory that your shell cannot
+find (FIXME: theres got to be a better way for this..I'm sure it's a failure on my
+cmake foo).
+To "fix" this, run something like:
+ 'export LD_LIBRARY_PATH=/usr/local/bin/lib:/usr/lib:/usr/local/lib:$PATH'
+(where /usr/local/lib is where the result from
+ `updatedb;locate libsfml-system.so.2`) is.
 
 
 ## System Requirements
@@ -123,13 +149,27 @@ less realistic tile based water.
 Currently this isn't much of an issue, but with larger worlds and assets,
 it could turn into something to think about.
 
+## How can I reach you?
+Either through github, email (predator106 at gmail), or my preferable medium for
+non-trivial discussions, 'sreich' on Freenode (chat.freenode.net)
+(http://freenode.net/)
+
 
 #ToDo
 Most of the stuff to do is either in Planned Features, or in my head..but here's
 the more technical scratch notes, if I keep them updated:
 
-PARTICLES, neat stuff, may find useful:
-
+*PARTICLES, neat stuff, may find useful...perhaps for water system. or at the
+very least, just neat particles for everything, which will be needed either way.
 http://spark.developpez.com/index.php?page=home&lang=en
 
+<<<<<<< HEAD
 *test*
+=======
+* Compartmentalize CMake code a lot..it's currently very congested and within
+the root dir's CMakeLists.txt.
+
+* Fix CMake path linking with SFML 2.0. I'm not sure why exactly, but
+apparently people need to export LD_LIBRARY_PATH. can this be fixed
+on my end, or is it due to how SFML itself is installed?
+>>>>>>> b3d664b27beb730b1af5feb257a19fd85776adc8
