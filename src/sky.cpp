@@ -19,6 +19,7 @@
 
 #include "cloudsystem.h"
 #include "game.h"
+#include "time.h"
 #include <iostream>
 #include <stdio.h>
 #include <cmath>
@@ -42,7 +43,8 @@ void Sky::update()
     diffVect.x = _viewportCenter.x;
     diffVect.y = _viewportCenter.y;
 
-    m_timeAngle = m_hour * 15;
+    const unsigned char hour = Time::instance()->currentHour();
+    m_timeAngle = hour * 15;
 
 //    const double angle = atan2(diffVect.y, diffVect.x);
 //    const double angle = (m_timeAngle) * (M_PI / 180);
@@ -53,10 +55,6 @@ void Sky::update()
     m_sunMoonPosition = sf::Vector2f(newX, newY);
  //   std::cout << "x: " << newX << " y: " << newY << " \n";
 
-    m_hour += 1;
-    if (m_hour > 12) {
-        m_hour = 0;
-    }
 //    m_timeAngle += 0.05;
 //    if (m_timeAngle > 180) {
 //        m_timeAngle = 0;

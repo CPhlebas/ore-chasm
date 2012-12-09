@@ -215,6 +215,7 @@ void World::handleEvent(const sf::Event& event)
 void World::update()
 {
     Time::instance()->tick();
+    std::cout << "Time: " << Time::instance()->toString() << "\n";
 
     if (m_mouseLeftHeld) {
         performBlockAttack();
