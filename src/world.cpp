@@ -21,6 +21,7 @@
 #include "block.h"
 #include "game.h"
 #include "sky.h"
+#include "time.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -213,6 +214,8 @@ void World::handleEvent(const sf::Event& event)
 
 void World::update()
 {
+    Time::instance()->tick();
+
     if (m_mouseLeftHeld) {
         performBlockAttack();
     }

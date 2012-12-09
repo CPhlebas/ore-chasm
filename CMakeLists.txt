@@ -52,6 +52,7 @@ src/entity.cpp
 src/block.cpp
 src/cloudsystem.cpp
 src/sky.cpp
+src/time.cpp
 )
 
 #YAML, needed later
