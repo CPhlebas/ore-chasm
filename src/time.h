@@ -41,8 +41,8 @@ public:
 
     void setMinute(unsigned char minute) { assert(minute <= 59 && minute >= 0); m_minute = minute; }
 
-    int currentHour() { return m_hour; }
-    int currentMinute() { return m_minute; }
+    unsigned char currentHour() { return m_hour; }
+    unsigned char currentMinute() { return m_minute; }
 
     /**
      * Returns the current time as a formatted string.
