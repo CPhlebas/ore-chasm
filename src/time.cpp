@@ -18,33 +18,20 @@
 #include "time.h"
 
 #include <iostream>
+#include <sstream>
 
 static Time* s_instance = 0;
 
 Time::Time()
 {
-    m_hour = 7;
-    m_minute = 0;
-    std::cout << "Current Time, hour: " << m_hour << " : " << m_minute << " pm? " << m_pm << "\n";
 }
 
 Time::~Time()
 {
 }
 
-void Time::setHour(unsigned char hour)
-{
-
-}
-
-void Time::setMinute(unsigned char minute)
-{
-
-}
-
 void Time::tick()
 {
-    std::cout << "Current Time, hour: " << m_hour << " : " << m_minute << " pm? " << m_pm << "\n";
     // 1 minute, presumably
     int interval = 1;
 
@@ -56,11 +43,24 @@ void Time::tick()
     }
 
     if (m_hour > 12) {
-        m_pm = !m_pm;
         m_hour = 1;
+    } if (m_hour == 12 && m_minute == 0) {
+        m_pm = !m_pm;
+    }
+}
+
+std::string Time::toString()
+{
+    std::stringstream ss;
+    ss << short(m_hour) << ":";
+
+    //format it so it's native looking wrt single digit minutes
+    if (m_minute < 10) {
+        ss << "0";
     }
 
-
+    ss << short(m_minute) << (m_pm ? " pm" : " am");
+    return ss.str();
 }
 
 Time* Time::instance()

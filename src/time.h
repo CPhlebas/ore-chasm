@@ -18,6 +18,9 @@
 #ifndef TIME_H
 #define TIME_H
 
+#include <string>
+#include <assert.h>
+
 class Time
 {
 public:
@@ -34,11 +37,18 @@ public:
 
     void setTime(unsigned char hour, unsigned char minute) { setHour(hour); setMinute(minute); }
 
-    void setHour(unsigned char hour);
-    void setMinute(unsigned char minute);
+    void setHour(unsigned char hour) { assert(hour <= 12 && hour > 0); m_hour = hour; }
+
+    void setMinute(unsigned char minute) { assert(minute <= 59 && minute >= 0); m_minute = minute; }
 
     int currentHour() { return m_hour; }
     int currentMinute() { return m_minute; }
+
+    /**
+     * Returns the current time as a formatted string.
+     * e.g. 12:45 pm, 12:00 am, 7:01 pm
+     */
+    std::string toString();
 
 private:
     ~Time();
