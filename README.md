@@ -63,6 +63,11 @@ I'll do so ruthlessly every so often. I'd rather have clean code than easy histo
 * Submit issues and feature requests on the issue tracker on github!
 * Test, test, test!
 
+## Contact?
+
+We have an irc channel on chat.freenode.net #ore-chasm, feel free to drop in for
+chilling, devel questions, user questions...or whatever.
+
 ## How do I install it?
 First of all, I use SFML 2.0, which is technically unreleased.
 
