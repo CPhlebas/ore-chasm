@@ -413,7 +413,7 @@ void World::generateMap()
     int lastRow = 0;
 
     // 200 rows of "sky"
-    for (; lastRow < 15; ++lastRow) {
+    for (; lastRow < 30; ++lastRow) {
         for (int column = 0; column < WORLD_COLUMNCOUNT; ++column) {
             m_blocks[column * WORLD_ROWCOUNT + lastRow].type = 0;
         }

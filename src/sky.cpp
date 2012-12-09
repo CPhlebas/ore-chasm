@@ -48,7 +48,7 @@ void Sky::update()
 
 //    const double angle = atan2(diffVect.y, diffVect.x);
 //    const double angle = (m_timeAngle) * (M_PI / 180);
-    const double angle = (m_timeAngle) * (M_PI / 180);
+    const double angle = (m_timeAngle + 180) * (M_PI / 180);
 //    std::cout << "angle: " << angle << " timeangle: " << m_timeAngle << "\n";
     const float newX = _viewportCenter.x + cos(angle) * 200;
     const float newY = _viewportCenter.y  + sin(angle) * 200;
