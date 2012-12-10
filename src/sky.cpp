@@ -39,26 +39,17 @@ void Sky::update()
     _viewportCenter.x = SCREEN_W / 2;
     _viewportCenter.y = SCREEN_H / 2;
 
-    sf::Vector2f diffVect;
-    diffVect.x = _viewportCenter.x;
-    diffVect.y = _viewportCenter.y;
-
     const unsigned char hour = Time::instance()->currentHour();
     const unsigned char minute = Time::instance()->currentMinute();
     std::cout << "MINUTE! " << (short) minute << "\n";
-    m_timeAngle = (hour * 15) + (minute*15/60 );
+    // why 7.5? 7.5 * 24 == 180
+    m_timeAngle = (hour * 7.5) + (minute * 7.5 / 60 );
 
-//    const double angle = atan2(diffVect.y, diffVect.x);
-//    const double angle = (m_timeAngle) * (M_PI / 180);
-    const double angle = (m_timeAngle + 180) * (M_PI / 180);
-//    std::cout << "angle: " << angle << " timeangle: " << m_timeAngle << "\n";
-    const float newX = _viewportCenter.x + cos(angle) * 300;
-    const float newY = _viewportCenter.y + sin(angle) * 300;
+    const double angle = (m_timeAngle) * (M_PI / 180);
+    const float newX = _viewportCenter.x + cos(angle) * 500;
+    const float newY = _viewportCenter.y + sin(angle) * 500;
     m_sunMoonPosition = sf::Vector2f(newX, newY);
     m_sunSprite.setPosition(m_sunMoonPosition);
-
- //   std::cout << "x: " << newX << " y: " << newY << " \n";
-
 }
 
 void Sky::render()
@@ -69,6 +60,12 @@ void Sky::render()
     line.append(sf::Vertex(m_sunMoonPosition));
     m_window->draw(line);
 
-    m_window->draw(m_sunSprite);
-    m_sunSprite.render(m_window);
+    // sunrise at 7 am, sunset at 7am
+    const unsigned char hour = Time::instance()->currentHour();
+
+    // 7am, 7pm
+    if (hour >= 7 && hour <= 19) {
+        m_window->draw(m_sunSprite);
+        m_sunSprite.render(m_window);
+    }
 }

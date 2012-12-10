@@ -46,17 +46,15 @@ public:
 
     /**
      * Returns the current time as a formatted string.
-     * e.g. 12:45 pm, 12:00 am, 7:01 pm
+     * e.g. 12:45, 23:59, 00:00. 24-hour clock.
      */
     std::string toString();
 
 private:
     ~Time();
 
-    bool m_pm = false;
-
-    //sunrise should be ~7am, and ~7pm for sunset, time starts at 7am then.
-    unsigned char m_hour = 7;
+    //sunrise should be ~07:00, sunset 19:00
+    unsigned char m_hour = 0;
     unsigned char m_minute = 0;
 };
 #endif

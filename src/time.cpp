@@ -42,10 +42,8 @@ void Time::tick()
         m_minute = 0;
     }
 
-    if (m_hour > 12) {
-        m_hour = 1;
-    } if (m_hour == 12 && m_minute == 0) {
-        m_pm = !m_pm;
+    if (m_hour > 24) {
+        m_hour = 0;
     }
 }
 
@@ -59,7 +57,7 @@ std::string Time::toString()
         ss << "0";
     }
 
-    ss << short(m_minute) << (m_pm ? " pm" : " am");
+    ss << short(m_minute);
     return ss.str();
 }
 
