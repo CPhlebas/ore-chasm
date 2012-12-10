@@ -130,6 +130,7 @@ World::~World()
 void World::render()
 {
     //Sky at bottom layer
+    m_sky->render();
 
     sf::RenderStates state;
     state.shader = &m_shader;
@@ -162,7 +163,6 @@ void World::render()
     crosshair.setOrigin(halfRadius - halfBlockSize, halfRadius - halfBlockSize);
     m_window->draw(crosshair);
     // ==================================================
-    m_sky->render();
 }
 
 void World::handleEvent(const sf::Event& event)
