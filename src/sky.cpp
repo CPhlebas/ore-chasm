@@ -31,6 +31,9 @@ m_height(height)
 {
     m_sunSprite.setTexture("../textures/sun.png");
     m_sunSprite.setOrigin(m_sunSprite.getTextureRect().width * 0.5, m_sunSprite.getTextureRect().height * 0.5);
+
+    m_moonSprite.setTexture("../textures/moon.png");
+    m_moonSprite.setOrigin(m_moonSprite.getTextureRect().width * 0.5, m_moonSprite.getTextureRect().height * 0.5);
 }
 
 void Sky::update()
@@ -45,11 +48,18 @@ void Sky::update()
 
     m_timeAngle = (hour * (180 / 12)) + (minute * (180 / 12) / 60 );
 
-    const double angle = (m_timeAngle + 180) * (M_PI / 180);
-    const float newX = _viewportCenter.x + cos(angle) * 400;
-    const float newY = _viewportCenter.y + sin(angle) * 400;
-    m_sunMoonPosition = sf::Vector2f(newX, newY);
-    m_sunSprite.setPosition(m_sunMoonPosition);
+    double angle = (m_timeAngle + 90) * (M_PI / 180);
+    float newX = _viewportCenter.x + cos(angle) * 400;
+    float newY = _viewportCenter.y + sin(angle) * 400;
+    m_sunPosition = sf::Vector2f(newX, newY);
+    m_sunSprite.setPosition(m_sunPosition);
+
+    angle = (m_timeAngle + 90 - 180) * (M_PI / 180);
+    newX = _viewportCenter.x + cos(angle) * 400;
+    newY = _viewportCenter.y + sin(angle) * 400;
+
+    m_moonPosition = sf::Vector2f(newX, newY);
+    m_moonSprite.setPosition(m_moonPosition);
 }
 
 void Sky::render()
@@ -57,15 +67,18 @@ void Sky::render()
     sf::VertexArray line(sf::Lines, 2);
     sf::Vector2f screen = sf::Vector2f(SCREEN_W/2, SCREEN_H/2);
     line.append(sf::Vertex(screen));
-    line.append(sf::Vertex(m_sunMoonPosition));
+    line.append(sf::Vertex(m_sunPosition));
     m_window->draw(line);
 
-    // sunrise at 7 am, sunset at 7am
+    // sunrise at 7 am, sunset at 7am..
     const unsigned char hour = Time::instance()->currentHour();
 
     // 7am, 7pm
-    if (hour >= 7 && hour <= 19) {
+    if (hour >= 7 && hour < 19) {
         m_window->draw(m_sunSprite);
         m_sunSprite.render(m_window);
+    } else {
+        m_window->draw(m_moonSprite);
+        m_moonSprite.render(m_window);
     }
 }

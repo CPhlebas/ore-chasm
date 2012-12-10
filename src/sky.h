@@ -36,10 +36,15 @@ public:
 private:
     sf::RenderWindow *m_window;
     sf::View *m_view;
+
     Renderable m_sunSprite;
     Renderable m_moonSprite;
+
+    sf::Vector2f m_sunPosition;
+    sf::Vector2f m_moonPosition;
+
     CloudSystem *m_cloudSystem = nullptr;
-    sf::Vector2f m_sunMoonPosition;
+
     float m_timeAngle = 0.0f;
     int m_hour = 0;
 

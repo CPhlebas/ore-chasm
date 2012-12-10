@@ -25,6 +25,8 @@
 #include <SFML/Graphics/VertexArray.hpp>
 #include <SFML/Graphics/Shader.hpp>
 
+#include <assert.h>
+
 Renderable::Renderable()
 {
     m_imageManager = ImageManager::instance();
@@ -49,6 +51,7 @@ void Renderable::setTexture(const char* texture)
 
 void Renderable::render(sf::RenderWindow* window)
 {
+    assert(sf::Sprite::getTexture());
     const sf::Vector2u size = sf::Sprite::getTexture()->getSize();
     const sf::Vector2f rectSize(size.x, size.y);
     const sf::Vector2f pos = sf::Sprite::getPosition();
