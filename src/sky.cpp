@@ -42,12 +42,12 @@ void Sky::update()
     const unsigned char hour = Time::instance()->currentHour();
     const unsigned char minute = Time::instance()->currentMinute();
     std::cout << "MINUTE! " << (short) minute << "\n";
-    // why 7.5? 7.5 * 24 == 180
-    m_timeAngle = (hour * 7.5) + (minute * 7.5 / 60 );
 
-    const double angle = (m_timeAngle) * (M_PI / 180);
-    const float newX = _viewportCenter.x + cos(angle) * 500;
-    const float newY = _viewportCenter.y + sin(angle) * 500;
+    m_timeAngle = (hour * (180 / 12)) + (minute * (180 / 12) / 60 );
+
+    const double angle = (m_timeAngle + 180) * (M_PI / 180);
+    const float newX = _viewportCenter.x + cos(angle) * 400;
+    const float newY = _viewportCenter.y + sin(angle) * 400;
     m_sunMoonPosition = sf::Vector2f(newX, newY);
     m_sunSprite.setPosition(m_sunMoonPosition);
 }
