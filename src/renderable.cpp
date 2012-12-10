@@ -49,6 +49,11 @@ void Renderable::setTexture(const char* texture)
     }
 }
 
+void Renderable::setUncachedTexture(const sf::Texture& texture)
+{
+    sf::Sprite::setTexture(texture);
+}
+
 void Renderable::render(sf::RenderWindow* window)
 {
     assert(sf::Sprite::getTexture());

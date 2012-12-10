@@ -42,6 +42,14 @@ public:
     void setTexture(const char* texture);
 
     /**
+     * Use this if you generate an image/texture at runtime and need to set it.
+     * This method is separate, so that you know that it is in fact, uncached and not
+     * ref counted. Unlike ::setTexture(const char*);
+     * Just so we don't accidentally start setting uncached ones everywhere
+     */
+    void setUncachedTexture(const sf::Texture& texture);
+
+    /**
      * important ONLY for debug rendering, so there's less duplication..
      * CALL THIS AFTER m_window->draw(myrenderable)!!
      */

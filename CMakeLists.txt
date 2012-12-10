@@ -53,6 +53,7 @@ src/block.cpp
 src/cloudsystem.cpp
 src/sky.cpp
 src/time.cpp
+src/colorscale.cpp
 )
 
 #YAML, needed later
