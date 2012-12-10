@@ -121,8 +121,8 @@ though of course, until I get a good amount of content into the game.
 * Dynamic 2D lighting and shadow system, versus Terraria's very simplistic
 tile-based lighting.
 * More than 1 or 2 soundtracks, unlike Terraria's which get very repetitive :-)
-* Water..want to experiment with particle based water system, as opposed to the
-less realistic tile based water.
+* Water...and I'd also like to make it pressure based, but that's going to 
+be a lot more work as well
 * Weather system
 * Chunk Loading. Presently Ore Chasm just loads the whole map into memory.
 Currently this isn't much of an issue, but with larger worlds and assets,
