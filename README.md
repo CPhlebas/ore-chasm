@@ -3,14 +3,16 @@
 ## What is it?
 
 Ore Chasm is a game that is greatly inspired by Terraria, but of course aims to
-be more.
+be a hell of a lot more. Not to mention it will *be* the community, instead of
+just *using* the community.
 
 ## Why is it?
 
 It is a project, that is open source from the very beginning, as improving upon
-the ideas that Terraria introduced to the world when it released. It isn't
-written in XNA and C#, but SFML and C++, so is cross-platform and very fast (I
-use the GPU quite a bit, including fragment shaders).
+the ideas that Terraria introduced to the world when it released.
+
+It isn't written in XNA and C#, but SFML and C++, so is cross-platform and
+very fast (I use the GPU quite a bit, including fragment shaders).
 
 * It will have modding capabilities
 * It is open source, everything..including all assets
@@ -29,6 +31,7 @@ criticism, bug and feature requests, etc.
 ## What license is it under?
 
 All assets are required (by me ;) to be under a Free and Open license.
+
 The code is presently under GPLv2+ as that seems to be the licence
 I like the most.
 
@@ -44,6 +47,14 @@ anyways.. ;-)
 I would love to see it run on Android for instance. But for this to happen
 I'd have to wait until SFML has ports to that/those platforms. Or switch
 to a different framework if that becomes the only option.
+
+## Current Status
+
+The project is very, very preliminary right now. If there was a word for
+pre-alpha, I would use it to describe this.
+
+But of course, it's progressing quite quickly over just the few weeks it has
+existed
 
 ## How can I help out?
 
@@ -62,6 +73,7 @@ I'll do so ruthlessly every so often. I'd rather have clean code than easy histo
 * Edit the Wiki on here (github)!
 * Submit issues and feature requests on the issue tracker on github!
 * Test, test, test!
+* ART! Please give me all of your art :-)
 
 ## Contact?
 
@@ -80,6 +92,8 @@ you can either click download the zip, or run `git clone git://github.com/sreich
 
 After you have my code, go to the top directory of it, `mkdir build; cd build;`
 and now to actually build it
+
+
 
 
 ## System Requirements
@@ -114,14 +128,15 @@ anyways, and he only had a couple tid bits of information. Literally.
 * Teleporters/Portals! Seriously. This is a definite want in my mind.
 * Crafting system more simlar to Minecraft? Would people like that? Personally,
 I was not much of a fan for Terraria's crafting.
-* Menu system (HUD) that isn't impossible to navigate, unlike Terraria's.
+* Menu system (HUD) that isn't impossible to navigate, unlike Terraria's. It
+will also be customizable/fully moddable, by XML and images.
 * Full modding support (another must). This will have to be a later feature
 though of course, until I get a good amount of content into the game.
 * Android and in general, a mobile port? This is very much long term though.
 * Dynamic 2D lighting and shadow system, versus Terraria's very simplistic
 tile-based lighting.
 * More than 1 or 2 soundtracks, unlike Terraria's which get very repetitive :-)
-* Water...and I'd also like to make it pressure based, but that's going to 
+* Water...and I'd also like to make it pressure based, but that's going to
 be a lot more work as well
 * Weather system
 * Chunk Loading. Presently Ore Chasm just loads the whole map into memory.
