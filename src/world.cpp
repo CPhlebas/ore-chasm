@@ -342,7 +342,7 @@ void World::generatePixelTileMap()
     const int endRow = tilesBeforeY + ((SCREEN_H * 0.5) / Block::blockSize);
 
     //columns are our X value, rows the Y
-    const int startColumn = tilesBeforeX - ((SCREEN_W * 0.5) / Block::blockSize);
+    const int startColumn = tilesBeforeX - ((SCREEN_W * 0.5) / Block::blockSize) - 1;
     const int endColumn = tilesBeforeX + ((SCREEN_W * 0.5) / Block::blockSize);
 
     if (std::abs(startColumn) != startColumn) {
@@ -396,7 +396,7 @@ void World::loadMap()
     std::cout << "SIZEOF m_blocks: " << sizeof(m_blocks) / 1e6 << " MiB" << std::endl;
     generateMap();
 
-    m_player->setPosition(800, 450);
+    m_player->setPosition(2800, 2450);
 }
 
 void World::generateMap()
