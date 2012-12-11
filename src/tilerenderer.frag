@@ -17,7 +17,7 @@ void main()
 {
     ivec2 tilemap_size = textureSize(tile_types_super_texture, 0);
 
-    ivec2 screen_coordinates = ivec2(gl_FragCoord.x + int(offset.x), gl_FragCoord.y - int(offset.y));
+    ivec2 screen_coordinates = ivec2(gl_FragCoord.x + int(offset.x), gl_FragCoord.y - int(offset.y) + TILE_SIZE.y);
 
     // find the pixel (RGBA) values in the tilemap pixel representation that is what we're
     // currently interested in.
@@ -25,7 +25,7 @@ void main()
 
     ivec2 tileCoordinate;
     tileCoordinate.x = (int(currentPixel.r * 255.0) ) * TILE_SIZE.x + (screen_coordinates.x % TILE_SIZE.x);
-    tileCoordinate.y = screen_coordinates.y % TILE_SIZE.y;
+    tileCoordinate.y = (screen_coordinates.y) % TILE_SIZE.y;
 
     vec4 tileColor = texelFetch(tile_types_super_texture, tileCoordinate, 0);
 

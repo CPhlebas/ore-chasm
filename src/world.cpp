@@ -36,6 +36,8 @@
 #include <SFML/Window.hpp>
 #include <SFML/Window/Keyboard.hpp>
 
+#include <GL/gl.h>
+
 World::World(sf::RenderWindow *window, sf::View *view)
 {
     m_window = window;
@@ -338,7 +340,7 @@ void World::generatePixelTileMap()
     int tilesBeforeY = playerPosition.y / Block::blockSize;
 
     //FIXME: only calculate this crap when we move/change tiles
-    const int startRow = tilesBeforeY - ((SCREEN_H * 0.5) / Block::blockSize);
+    const int startRow = tilesBeforeY - ((SCREEN_H * 0.5) / Block::blockSize) - 1;
     const int endRow = tilesBeforeY + ((SCREEN_H * 0.5) / Block::blockSize);
 
     //columns are our X value, rows the Y
