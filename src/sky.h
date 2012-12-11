@@ -30,7 +30,7 @@ class Sky
 public:
     Sky(sf::RenderWindow *window, sf::View *view, float height);
 
-    void update();
+    void update(const float elapsedTime);
     void render();
 
 private:

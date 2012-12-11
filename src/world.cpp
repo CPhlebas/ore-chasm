@@ -213,17 +213,17 @@ void World::handleEvent(const sf::Event& event)
     }
 }
 
-void World::update()
+void World::update(const float elapsedTime)
 {
     if (m_mouseLeftHeld) {
         performBlockAttack();
     }
 
-    m_sky->update();
+    m_sky->update(elapsedTime);
 
     //FIXME: bring in elapsedTime here ...to calculate player movements accurately
 
-    m_player->move(m_inputXDirection, m_inputYDirection);
+    m_player->move(m_inputXDirection * elapsedTime * Player::movementSpeed, m_inputYDirection * elapsedTime * Player::movementSpeed);
     m_view->setCenter(m_player->getPosition());
 
     //calculateAttackPosition();

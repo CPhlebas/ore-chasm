@@ -50,21 +50,10 @@ public:
     World(sf::RenderWindow *window, sf::View *view);
     ~World();
 
-    void update();
+    void update(const float elapsedTime);
     void render();
 
     void loadMap();
-
-    /**
-     * FIXME: presently only calculates the center of the screen according to resolution.
-     * i'm not sure how zooming will be affected with this..i don't *think* it would. but verify
-     * if this is ideal or not
-     * NOTE: doesn't *actually* use m_view->getViewport, just a simple SCREEN_W,H / 2
-     */
-    sf::Vector2f viewportCenter() const;
-    void calculateAttackPosition();
-    void generatePixelTileMap();
-    void performBlockAttack();
 
     void handleEvent(const sf::Event& event);
 
@@ -95,6 +84,23 @@ public:
     //create containers of various entities, and implement a tile system
     //game.cpp calls into this each tick, which this descends downward into each entity
 private:
+        /**
+     * From scratch, create a randomly generated tileset and store it in our array
+     */
+    void generateMap();
+
+     /**
+     * FIXME: presently only calculates the center of the screen according to resolution.
+     * i'm not sure how zooming will be affected with this..i don't *think* it would. but verify
+     * if this is ideal or not
+     * NOTE: doesn't *actually* use m_view->getViewport, just a simple SCREEN_W,H / 2
+     */
+    sf::Vector2f viewportCenter() const;
+    void calculateAttackPosition();
+    void generatePixelTileMap();
+    void performBlockAttack();
+    void saveMap();
+
     // it's faster and easier to manage with a linear array. access is trivial - array[y][x] simply becomes array[y*rowlength + x]
     // makes sure that the memory allocated is in fact contiguous.
     // [column * WORLD_ROWCOUNT + row]
@@ -142,12 +148,7 @@ private:
      */
     sf::Vector2f m_relativeVectorToAttack;
 
-    /**
-     * From scratch, create a randomly generated tileset and store it in our array
-     */
-    void generateMap();
 
-    void saveMap();
 };
 
 #endif

@@ -29,7 +29,7 @@ m_height(height)
     m_sunSprite.setOrigin(m_sunSprite.getTextureRect().width * 0.5, m_sunSprite.getTextureRect().height * 0.5);
 }
 
-void Sky::update()
+void Sky::update(const float elapsedTime)
 {
 }
 

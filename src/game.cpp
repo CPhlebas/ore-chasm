@@ -228,7 +228,7 @@ void Game::tick()
 
         m_window->clear(sf::Color(0, 0, 0));
 
-        m_world->update();
+        m_world->update(elapsedTime);
         // render methods *must* exit by setting back to the default view
         // (if they set it to a different view at the beginning of the call)
         m_world->render();
