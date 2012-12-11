@@ -152,7 +152,7 @@ void World::render()
     const float halfBlockSize = Block::blockSize * 0.5;
 
     // NOTE: (SCREEN_H % Block::blockSize) is what we add so that it is aligned properly to the tile grid, even though the screen is not evenly divisible by such.
-    sf::Vector2f crosshairPosition(mouse.x - mouse.x % Block::blockSize + (SCREEN_W % Block::blockSize), mouse.y - mouse.y % Block::blockSize + (SCREEN_H % Block::blockSize));
+    sf::Vector2f crosshairPosition(mouse.x - mouse.x % Block::blockSize + (SCREEN_W % Block::blockSize) - tileOffset().x + Block::blockSize, mouse.y - mouse.y % Block::blockSize + (SCREEN_H % Block::blockSize) - tileOffset().y + Block::blockSize);
 
     sf::RectangleShape crosshair = sf::RectangleShape();
     crosshair.setSize(sf::Vector2f(radius, radius));
@@ -220,8 +220,6 @@ void World::update(const float elapsedTime)
     }
 
     m_sky->update(elapsedTime);
-
-    //FIXME: bring in elapsedTime here ...to calculate player movements accurately
 
     m_player->move(m_inputXDirection * elapsedTime * Player::movementSpeed, m_inputYDirection * elapsedTime * Player::movementSpeed);
     m_view->setCenter(m_player->getPosition());
@@ -389,9 +387,16 @@ void World::generatePixelTileMap()
 
     m_shader.setParameter("tilemap_pixels", m_tileMapPixelsTexture);
     // to get per-pixel smooth scrolling, we get the remainders and pass it as an offset to the shader
-    m_shader.setParameter("offset", int(playerPosition.x) & Block::blockSize - 1, int(playerPosition.y) & Block::blockSize - 1);
+    m_shader.setParameter("offset", tileOffset().x, tileOffset().y);
 }
 
+sf::Vector2f World::tileOffset() const
+{
+    const sf::Vector2f playerPosition = m_player->getPosition();
+    // to get per-pixel smooth scrolling, we get the remainders and pass it as an offset to things that need to know the tile positions
+    const sf::Vector2f ret = sf::Vector2f(int(playerPosition.x) & Block::blockSize - 1, int(playerPosition.y) & Block::blockSize - 1);
+    return ret;
+}
 
 void World::loadMap()
 {
