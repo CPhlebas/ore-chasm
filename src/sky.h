@@ -41,9 +41,9 @@ private:
     Renderable m_moonSprite;
     Renderable m_skyBox;
 
-    sf::Texture m_skyBoxDayImage;
-    sf::Texture m_skyBoxDuskImage;
-    sf::Texture m_skyBoxNightImage;
+    sf::Texture m_skyBoxDayTexture;
+    sf::Texture m_skyBoxDuskTexture;
+    sf::Texture m_skyBoxNightTexture;
 
     sf::Vector2f m_sunPosition;
     sf::Vector2f m_moonPosition;
