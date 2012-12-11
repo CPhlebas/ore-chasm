@@ -385,6 +385,8 @@ void World::generatePixelTileMap()
     m_tileMapPixelsTexture.loadFromImage(m_tileMapPixelsImage);
 
     m_shader.setParameter("tilemap_pixels", m_tileMapPixelsTexture);
+    // to get per-pixel smooth scrolling, we get the remainders and pass it as an offset to the shader
+    m_shader.setParameter("offset", int(playerPosition.x) & Block::blockSize - 1, int(playerPosition.y) & Block::blockSize - 1);
 }
 
 
