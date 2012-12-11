@@ -17,7 +17,6 @@
 
 #include "sky.h"
 
-#include "colorscale.h"
 #include "cloudsystem.h"
 #include "game.h"
 #include "time.h"
@@ -66,28 +65,6 @@ void Sky::update()
 
 void Sky::render()
 {
-
-    ///////////////////////////////////////// render skybox gradient /////////////////////////////////////////////
-    ColorScale gradient;
-    gradient.insert(0.0,sf::Color::Red);
-    gradient.insert(1.0,sf::Color::Magenta);
-    gradient.insert(2.0,sf::Color::Blue);
-    gradient.insert(3.0,sf::Color::Cyan);
-    gradient.insert(4.0,sf::Color::Green);
-    gradient.insert(5.0,sf::Color::Yellow);
-    gradient.insert(6.0,sf::Color::Red);
-
-
-    sf::Image image;
-    image.create(SCREEN_H, SCREEN_W);
-    gradient.draw(image,sf::Vector2f(250.0,250.0),sf::Vector2f(200.0,0.0),GradientStyle::Radial);
-
-    sf::Texture texture;
-    texture.loadFromImage(image);
-    m_skyBox.setUncachedTexture(texture);
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
     sf::VertexArray line(sf::Lines, 2);
     sf::Vector2f screen = sf::Vector2f(SCREEN_W/2, SCREEN_H/2);
     line.append(sf::Vertex(screen));
