@@ -34,7 +34,7 @@ public:
      */
     Entity(const char* texture);
 
-    virtual void update();
+    virtual void update(const float elapsedTime);
 
     //FIXME: unused
     //FIXME: isolate and move further up the chain, and make Renderable privately inherited?

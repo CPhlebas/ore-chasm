@@ -53,7 +53,6 @@ src/imagemanager.cpp
 src/player.cpp
 src/debug.cpp
 src/world.cpp
-src/renderer.cpp
 src/renderable.cpp
 src/entity.cpp
 src/block.cpp

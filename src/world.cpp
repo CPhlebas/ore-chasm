@@ -243,7 +243,7 @@ void World::update(const float elapsedTime)
     m_sky->update(elapsedTime);
 
     for (Entity *currentEntity : m_entities) {
-        currentEntity->update();
+        currentEntity->update(elapsedTime);
     }
 
 
