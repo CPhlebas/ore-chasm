@@ -34,13 +34,6 @@ public:
      */
     Entity(const char* texture);
 
-    //FIXME: actually broken, seems it never lets me call setTexture on it?
-    /**
-     * Default ctor, creates an entity which has an X/No sign, as it has no texture
-     * assigned, or is invalid somehow.
-     */
-//    Entity();
-
     virtual void update();
 
     //FIXME: unused
@@ -56,7 +49,7 @@ public:
      * @see update
      */
     void setPosition(float x, float y);
-    void setPosition(sf::Vector2f vect) { };
+    void setPosition(sf::Vector2f vect);
 
     /**
      * Sets the velocity that this entity should have. It is affected by gravity,

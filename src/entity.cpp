@@ -41,3 +41,8 @@ void Entity::setPosition(float x, float y)
     Renderable::setPosition(x, y);
 }
 
+void Entity::setPosition(sf::Vector2f vect)
+{
+    Renderable::setPosition(vect);
+}
+
