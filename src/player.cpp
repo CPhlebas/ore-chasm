@@ -18,6 +18,7 @@
 #include "player.h"
 
 #include "imagemanager.h"
+#include <assert.h>
 
 Player::Player(const char* texture) : Entity(texture)
 {
@@ -38,3 +39,5 @@ void Player::render(sf::RenderWindow* window)
     rect.setOutlineThickness(1.0f);
     window->draw(rect);
 }
+
+//    m_player->move(m_inputXDirection * elapsedTime * Player::movementSpeed, m_inputYDirection * elapsedTime * Player::movementSpeed);

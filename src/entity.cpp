@@ -36,8 +36,6 @@ void Entity::update()
     Renderable::move(m_velocity);
 }
 
-
-
 void Entity::setPosition(float x, float y)
 {
     Renderable::setPosition(x, y);

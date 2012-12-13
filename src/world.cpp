@@ -62,6 +62,8 @@ World::World(sf::RenderWindow *window, sf::View *view)
     m_view = view;
 
     m_player = new Player("../textures/player.png");
+    m_entities.insert(m_entities.end(), m_player);
+
     /*
     const int gridSize = ceil(WORLD_TILE_TYPE_COUNT / 2.0);
     std::cout << " GRIDSIZE : " << gridSize << std::endl;
@@ -157,8 +159,10 @@ void World::render()
     m_window->setView(*m_view);
 
     //player drawn on top... since we don't have anything like z-ordering or layering (TODO)
-    m_window->draw(*m_player);
-    m_player->render(m_window);
+    for (Entity *currentEntity : m_entities) {
+        m_window->draw(*currentEntity);
+        currentEntity->render(m_window);
+    }
 
     m_window->setView(m_window->getDefaultView());
 
@@ -238,7 +242,11 @@ void World::update(const float elapsedTime)
 
     m_sky->update(elapsedTime);
 
-    m_player->move(m_inputXDirection * elapsedTime * Player::movementSpeed, m_inputYDirection * elapsedTime * Player::movementSpeed);
+    for (Entity *currentEntity : m_entities) {
+        currentEntity->update();
+    }
+
+
     m_view->setCenter(m_player->getPosition());
 
     //calculateAttackPosition();

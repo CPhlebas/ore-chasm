@@ -45,7 +45,7 @@ public:
      * important ONLY for debug rendering, so there's less duplication..
      * CALL THIS AFTER m_window->draw(myrenderable)!!
      */
-    void render(sf::RenderWindow *window);
+    virtual void render(sf::RenderWindow *window);
 
 private:
     /**
