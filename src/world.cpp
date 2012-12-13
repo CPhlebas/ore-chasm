@@ -242,7 +242,6 @@ void World::update(const float elapsedTime)
         currentEntity->update(elapsedTime);
     }
 
-
     m_view->setCenter(m_player->getPosition());
 
     //calculateAttackPosition();
@@ -251,14 +250,16 @@ void World::update(const float elapsedTime)
 
 bool World::isTileSolid(const sf::Vector2f& vecDest)
 {
-    const int column = int(std::ceil(vecDest.x));
-    const int row = int(std::ceil(vecDest.y));
+    const int column = int(std::ceil(vecDest.x) / Block::blockSize);
+    const int row = int(std::ceil(vecDest.y) / Block::blockSize);
 
     int index = column * WORLD_ROWCOUNT + row;
     assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
 
+    const unsigned char tileType = World::m_blocks[index].type;
+
     //FIXME: do water, lava, doors..what else?
-    return World::m_blocks[index].type == 0;
+    return  tileType != 0;
 }
 
 sf::Vector2f World::viewportCenter() const

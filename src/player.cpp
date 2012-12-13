@@ -76,6 +76,3 @@ void Player::handleEvent(const sf::Event& event)
 
     Entity::setVelocity(sf::Vector2f(m_inputXDirection, m_inputYDirection));
 }
-
-
-//    m_player->move(m_inputXDirection * elapsedTime * Player::movementSpeed, m_inputYDirection * elapsedTime * Player::movementSpeed);
