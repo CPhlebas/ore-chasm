@@ -103,6 +103,8 @@ private:
 
     sf::Vector2f tileOffset() const;
 
+    std::vector<Entity*> m_entities;
+
     // it's faster and easier to manage with a linear array. access is trivial - array[y][x] simply becomes array[y*rowlength + x]
     // makes sure that the memory allocated is in fact contiguous.
     // [column * WORLD_ROWCOUNT + row]

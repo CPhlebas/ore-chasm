@@ -16,7 +16,7 @@
  *****************************************************************************/
 
 #include "world.h"
-#include "logging.h"
+#include "debug.h"
 
 #include "block.h"
 #include "game.h"
@@ -44,7 +44,6 @@ World::World(sf::RenderWindow *window, sf::View *view)
     m_view = view;
 
     m_player = new Player("../textures/player.png");
-
     /*
     const int gridSize = ceil(WORLD_TILE_TYPE_COUNT / 2.0);
     std::cout << " GRIDSIZE : " << gridSize << std::endl;
@@ -318,7 +317,7 @@ void World::performBlockAttack()
             if (row == attackY && column == attackX) {
                 index = column * WORLD_ROWCOUNT + row;
                 assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
-                m_blocks[index].type = 0;
+                World::m_blocks[index].type = 0;
                 return;
             }
         }

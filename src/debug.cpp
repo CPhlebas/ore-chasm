@@ -15,19 +15,60 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#include "logging.h"
+#include "debug.h"
+
+#include <assert.h>
+#include <iostream>
+#include <sstream>
 
 #ifndef NDEBUG
 #endif
 
-void Logging::log(const char* message)
+LogStream Debug::log(Debug::Area area)
 {
-
-}
-
-void Logging::log(const char* message, sf::Vector2f vect)
-{
-
+    return LogStream(area);
 }
 
 
+void Debug::assertf(bool value, std::string message)
+{
+    if (!value) {
+        std::cout << message << "\n";
+        assert(0);
+    }
+}
+
+////////////////////////////////////////////////////////////////// LogStream class ///////////////////////////////////////////////////////////////////////////
+
+LogStream::LogStream(Debug::Area area) : m_area(area)
+{
+}
+
+LogStream::~LogStream()
+{
+    std::string areaString;
+
+    switch (m_area) {
+        case Debug::Area::General:
+            areaString.append("[General]");
+            break;
+        case Debug::Area::Graphics:
+            areaString.append("[Graphics]");
+            break;
+        case Debug::Area::Physics:
+            areaString.append("[Physics]");
+            break;
+        case Debug::Area::Sound:
+            areaString.append("[Sound]");
+            break;
+        case Debug::Area::System:
+            areaString.append("[System]");
+            break;
+    }
+    std::cout << "----------- " << areaString << " | " << str() << " ---------------------------------------------------" << "\n";
+}
+
+LogStream::LogStream(const LogStream& stream): std::stringstream(stream.str())
+{
+    m_area = stream.m_area;
+}

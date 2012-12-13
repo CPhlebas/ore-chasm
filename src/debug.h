@@ -15,17 +15,49 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#ifndef LOGGING_H
-#define LOGGING_H
+#ifndef DEBUG_H
+#define DEBUG_H
 
 #include <stdlib.h>
 #include <SFML/System/Vector2.hpp>
+#include <string>
+#include <iostream>
+#include <sstream>
 
-class Logging
+class LogStream;
+
+class Debug
 {
 public:
-    void log(const char* message);
-    void log(const char* message, sf::Vector2f vect);
+    enum class Type {
+        Debug,
+        Warning,
+        Error,
+    };
+
+    enum class Area {
+        General,
+        Graphics,
+        System,
+        Physics,
+        Sound
+    };
+
+    static LogStream log(Area area);
+
+    void assertf(bool value, std::string message);
+};
+
+class LogStream : public std::stringstream
+{
+public:
+    LogStream(Debug::Area area);
+    ~LogStream();
+
+    LogStream(const LogStream& stream);
+
+private:
+    Debug::Area m_area;
 };
 
 #endif
