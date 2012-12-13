@@ -112,6 +112,7 @@ void Game::init()
 
     // World takes ownership of m_view
     World::createInstance(m_window, m_view);
+    m_world = World::instance();
 
     tick();
     shutdown();
