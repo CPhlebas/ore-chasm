@@ -40,4 +40,42 @@ void Player::render(sf::RenderWindow* window)
     window->draw(rect);
 }
 
+void Player::handleEvent(const sf::Event& event)
+{
+
+    switch (event.type) {
+    case sf::Event::KeyPressed:
+        if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
+            m_inputXDirection = 1.f;
+        }
+        if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
+            m_inputXDirection = -1.f;
+        }
+        if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down) {
+            m_inputYDirection = 1.f;
+        }
+        if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
+            m_inputYDirection = -1.f;
+        }
+        break;
+        
+    case sf::Event::KeyReleased:
+        if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
+            m_inputXDirection = 0.f;
+        }
+        if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
+            m_inputXDirection = 0.f;
+        }
+        if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down) {
+            m_inputYDirection = 0.f;
+        }
+        if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
+            m_inputYDirection = 0.f;
+        }
+        break;
+
+    }
+}
+
+
 //    m_player->move(m_inputXDirection * elapsedTime * Player::movementSpeed, m_inputYDirection * elapsedTime * Player::movementSpeed);

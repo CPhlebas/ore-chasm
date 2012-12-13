@@ -17,6 +17,8 @@
 
 #include "entity.h"
 
+#include "world.h"
+
 Entity::Entity(const char* texture) : Renderable(texture)
 {
 }
@@ -33,7 +35,13 @@ void Entity::setVelocity(const sf::Vector2f& velocity)
 void Entity::update(const float elapsedTime)
 {
 //    m_velocity.y += GRAVITY;
-    Renderable::move(m_velocity);
+
+    const sf::Vector2f dest = sf::Vector2f(m_velocity.x * elapsedTime, m_velocity.y * elapsedTime);
+
+    if (!World::instance()->isTileSolid(dest)) {
+    }
+
+        Renderable::move(m_velocity);
 }
 
 void Entity::setPosition(float x, float y)

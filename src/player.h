@@ -33,6 +33,8 @@ public:
      */
     Player(const char* texture);
 
+    void handleEvent(const sf::Event& event);
+
     // radius indicating how many pixels out the player can pick
     // blocks
     static constexpr float blockPickingRadius = Block::blockSize * 8.0f;
@@ -42,6 +44,8 @@ public:
 
 private:
     unsigned char health = 100;
+    float m_inputXDirection = 0.0f;
+    float m_inputYDirection = 0.0f;
 };
 
 

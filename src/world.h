@@ -149,9 +149,6 @@ private:
      */
     sf::Texture m_tileTypesSuperTexture;
 
-    float m_inputXDirection = 0.f;
-    float m_inputYDirection = 0.f;
-
     bool m_mouseLeftHeld = false;
 
     /**

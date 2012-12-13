@@ -58,7 +58,6 @@ public:
     void setVelocity(const sf::Vector2f& velocity);
 
 private:
-
     sf::Vector2f m_velocity;
 };
 
