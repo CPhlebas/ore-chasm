@@ -83,6 +83,8 @@ public:
         "../textures/grass.png"
     };
 
+    bool isTileSolid(int column, int row);
+
     //create containers of various entities, and implement a tile system
     //game.cpp calls into this each tick, which this descends downward into each entity
 private:
@@ -156,8 +158,6 @@ private:
      * In client window coordinates (relative)
      */
     sf::Vector2f m_relativeVectorToAttack;
-
-
 };
 
 #endif

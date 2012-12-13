@@ -245,6 +245,15 @@ void World::update(const float elapsedTime)
     generatePixelTileMap();
 }
 
+bool World::isTileSolid(int column, int row)
+{
+    int index = column * WORLD_ROWCOUNT + row;
+    assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
+
+    //FIXME: do water, lava, doors..what else?
+    return World::m_blocks[index].type == 0;
+}
+
 sf::Vector2f World::viewportCenter() const
 {
     return sf::Vector2f(SCREEN_W * 0.5, SCREEN_H * 0.5);
