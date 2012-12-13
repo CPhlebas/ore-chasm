@@ -37,7 +37,6 @@ Game::Game()
 
 Game::~Game()
 {
-    delete m_world;
     delete m_view;
     delete m_font;
     delete m_window;
@@ -112,7 +111,7 @@ void Game::init()
     manager->addResourceDir("../textures/");
 
     // World takes ownership of m_view
-    m_world = new World(m_window, m_view);
+    World::createInstance(m_window, m_view);
 
     tick();
     shutdown();

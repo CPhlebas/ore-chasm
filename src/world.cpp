@@ -38,6 +38,24 @@
 
 #include <GL/gl.h>
 
+static World* s_instance = 0;
+
+World* World::instance()
+{
+    assert(s_instance);
+    return s_instance;
+}
+
+void World::createInstance(sf::RenderWindow *_window, sf::View *_view)
+{
+    if (!s_instance) {
+        s_instance = new World(_window, _view);
+    } else {
+        assert(0);
+    }
+}
+
+
 World::World(sf::RenderWindow *window, sf::View *view)
 {
     m_window = window;

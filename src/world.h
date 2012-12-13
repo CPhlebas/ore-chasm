@@ -48,7 +48,9 @@ class World
 {
 public:
     World(sf::RenderWindow *window, sf::View *view);
-    ~World();
+
+    static World* instance();
+    static void createInstance(sf::RenderWindow *_window, sf::View *_view);
 
     void update(const float elapsedTime);
     void render();
@@ -84,6 +86,9 @@ public:
     //create containers of various entities, and implement a tile system
     //game.cpp calls into this each tick, which this descends downward into each entity
 private:
+
+    ~World();
+
         /**
      * From scratch, create a randomly generated tileset and store it in our array
      */
