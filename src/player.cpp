@@ -42,7 +42,6 @@ void Player::render(sf::RenderWindow* window)
 
 void Player::handleEvent(const sf::Event& event)
 {
-
     switch (event.type) {
     case sf::Event::KeyPressed:
         if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
@@ -58,7 +57,7 @@ void Player::handleEvent(const sf::Event& event)
             m_inputYDirection = -1.f;
         }
         break;
-        
+
     case sf::Event::KeyReleased:
         if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
             m_inputXDirection = 0.f;
@@ -73,8 +72,9 @@ void Player::handleEvent(const sf::Event& event)
             m_inputYDirection = 0.f;
         }
         break;
-
     }
+
+    Entity::setVelocity(sf::Vector2f(m_inputXDirection, m_inputYDirection));
 }
 
 
