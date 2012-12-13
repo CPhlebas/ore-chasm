@@ -83,7 +83,7 @@ public:
         "../textures/grass.png"
     };
 
-    bool isTileSolid(int column, int row);
+    bool isTileSolid(const sf::Vector2f& vecDest);
 
     //create containers of various entities, and implement a tile system
     //game.cpp calls into this each tick, which this descends downward into each entity

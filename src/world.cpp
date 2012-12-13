@@ -253,8 +253,11 @@ void World::update(const float elapsedTime)
     generatePixelTileMap();
 }
 
-bool World::isTileSolid(int column, int row)
+bool World::isTileSolid(const sf::Vector2f& vecDest)
 {
+    const int column = int(std::ceil(vecDest.x));
+    const int row = int(std::ceil(vecDest.y));
+
     int index = column * WORLD_ROWCOUNT + row;
     assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
 
