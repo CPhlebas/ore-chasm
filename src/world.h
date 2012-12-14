@@ -41,8 +41,6 @@ static constexpr unsigned short WORLD_COLUMNCOUNT = 2400;
 
 */
 
-//NOTE: update this when you update m_blockTextures
-static constexpr unsigned short WORLD_TILE_TYPE_COUNT = 4;
 
 class World
 {
@@ -59,29 +57,6 @@ public:
 
     void handleEvent(const sf::Event& event);
 
-    /**
-     * Determines the health and texture of the Block.
-     * NOTE: MUST be in sync with index of m_blockTextures
-     */
-    enum BlockType {
-        Null = 0,
-        Dirt,
-        Stone,
-        Grass
-    };
-
-    /**
-     * Coincides with BlockType (and goes in order.
-     * The enum BlockType acts as index for this.
-     * NOTE: update TILE_TYPE_COUNT when this gets something
-     * added to it, as well as BlockType.
-     */
-    const char* const m_blockTextures[WORLD_TILE_TYPE_COUNT] {
-        "../textures/null.png",
-        "../textures/dirt.png",
-        "../textures/stone.png",
-        "../textures/grass.png"
-    };
 
     bool isTileSolid(const sf::Vector2f& vecDest);
 

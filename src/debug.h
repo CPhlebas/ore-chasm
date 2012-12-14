@@ -43,7 +43,7 @@ public:
         Sound
     };
 
-    static LogStream log(Area area);
+    static LogStream log(Area area = Area::General);
 
     void assertf(bool value, std::string message);
 };

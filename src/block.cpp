@@ -22,6 +22,13 @@
 #include <iostream>
 #include <assert.h>
 
+std::map<Block::BlockType, Block::BlockStruct> Block::blockTypeMap = {
+    { BlockType::Null, BlockStruct("../textures/null.png", false) },
+    { BlockType::Dirt, BlockStruct("../textures/dirt.png", true) },
+    { BlockType::Stone, BlockStruct("../textures/stone.png", true) },
+    { BlockType::Grass, BlockStruct("../textures/grass.png", true) }
+};
+
 Block::Block()
 {
 }

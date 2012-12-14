@@ -18,6 +18,9 @@
 #ifndef BLOCK_H
 #define BLOCK_H
 
+#include <map>
+#include <string>
+
 class Block
 {
 public:
@@ -29,8 +32,32 @@ public:
      */
     void update();
 
+    /**
+     * Determines the health and texture of the Block.
+     * NOTE: MUST be in sync with index of m_blockTextures
+     */
+    enum class BlockType {
+        Null = 0,
+        Dirt,
+        Stone,
+        Grass
+    };
+
     // height is the same as width (they're square)
     static constexpr unsigned char blockSize = 16;
+
+    struct BlockStruct {
+        BlockStruct(const char *_texture, bool _collides) { texture = _texture; collides = _collides; };
+        const char* texture;
+
+        // I thought about using flags..but this seems better, save for the might-be-fucking-huge-constructor
+        // this will be useful for TODO: blocks that hurt or help the player's health, etc. (lava), liquids of types, etc.
+        bool collides : 1;
+
+        //TODO: animations..array of textures for animation..for destroying and other shit
+    };
+
+    static std::map<BlockType, BlockStruct> blockTypeMap;
 
     /**
      * 0-255, 0 obviously meaning this block is marked as to be destroyed.

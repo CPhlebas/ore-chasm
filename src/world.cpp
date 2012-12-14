@@ -72,8 +72,8 @@ World::World(sf::RenderWindow *window, sf::View *view)
     m_tileTypesSuperTexture.create(textureSize, textureSize);
     */
 
-    m_tileTypesSuperImage.create(Block::blockSize * WORLD_TILE_TYPE_COUNT, Block::blockSize);
-    m_tileTypesSuperTexture.create(Block::blockSize * WORLD_TILE_TYPE_COUNT, Block::blockSize);
+    m_tileTypesSuperImage.create(Block::blockSize * Block::blockTypeMap.size(), Block::blockSize);
+    m_tileTypesSuperTexture.create(Block::blockSize * Block::blockTypeMap.size(), Block::blockSize);
 
     m_tileMapFinalTexture.create(SCREEN_W, SCREEN_H);
     m_tileMapFinalSprite.setTexture(m_tileMapFinalTexture);
@@ -112,13 +112,16 @@ World::World(sf::RenderWindow *window, sf::View *view)
     }
 */
 
-    for (int i = 0; i < WORLD_TILE_TYPE_COUNT; ++i) {
-        loaded = currentTile.loadFromFile(m_blockTextures[i]);
+    int i = 0;
+    for (auto blockStruct : Block::blockTypeMap) {
+        loaded = currentTile.loadFromFile(blockStruct.second.texture);
+
         //would indicate we couldn't find a tile. obviously, we need that..
         assert(loaded);
 
         destX = i * Block::blockSize;
         m_tileTypesSuperImage.copy(currentTile, destX, destY);
+        ++i;
     }
 
     m_tileTypesSuperTexture.loadFromImage(m_tileTypesSuperImage);
