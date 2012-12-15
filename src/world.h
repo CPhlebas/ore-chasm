@@ -59,6 +59,7 @@ public:
 
 
     bool isTileSolid(const sf::Vector2f& vecDest);
+    bool isTileSolid(const int row, const int column);
 
     //create containers of various entities, and implement a tile system
     //game.cpp calls into this each tick, which this descends downward into each entity

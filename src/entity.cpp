@@ -37,14 +37,86 @@ void Entity::update(const float elapsedTime)
 {
 //    m_velocity.y += GRAVITY;
 
+    // where we want to move
     sf::Vector2f dest = sf::Vector2f(m_velocity.x * elapsedTime, m_velocity.y * elapsedTime);
     dest.x += getPosition().x;
     dest.y += getPosition().y;
 
-    if (!World::instance()->isTileSolid(dest)) {
-        Renderable::setPosition(dest);
+    // all tiles to the left, then right, top, bottom of entity
+    // if a single one is solid, we cannot move in said direction
+//    rect.intersects()
+
+    const sf::Vector2f position = getPosition();
+
+    //consider block map as starting at player pos == 0,0 and going down and to the right-ward
+    //tilesBefore{X,Y} is only at the center of the view though..find the whole screen real estate
+    // which is why startRow etc add and subtract half the screen
+    //column
+    int tilesBeforeX = position.x / Block::blockSize;
+    //row
+    int tilesBeforeY = position.y / Block::blockSize;
+
+    const sf::IntRect textureRect = getTextureRect();
+
+    const int startRow = tilesBeforeY - ((textureRect.height * 0.5) / Block::blockSize);
+    const int endRow = tilesBeforeY + ((textureRect.height * 0.5) / Block::blockSize);
+
+    //columns are our X value, rows the Y
+    const int startColumn = tilesBeforeX - ((textureRect.width * 0.5) / Block::blockSize);
+    const int endColumn = tilesBeforeX + ((textureRect.width * 0.5) / Block::blockSize);
+
+    int currentRow = startRow;
+    int currentColumn = startColumn;
+
+
+    //left, const column, iterate over that row's cells
+    for (; currentRow < endRow; ++currentRow) {
+        if (World::instance()->isTileSolid(dest)) {
+            //the tileposition, that is the top left of the tile. in theory.
+            const float tileX = currentColumn * Block::blockSize; //FIXME: +/- offset per pixel for view..
+            const float tileY = currentRow * Block::blockSize;
+            sf::FloatRect tile;
+            tile.left = tileX;
+            tile.top = tileY;
+            tile.height = Block::blockSize;
+            tile.width = Block::blockSize;
+
+            bool intersect = tile.intersects(getGlobalBounds());
+            bool isSolid = World::instance()->isTileSolid(currentRow, currentColumn);
+
+            Debug::log() << "intersects? : " << intersect << " isSolid? :" << isSolid;
+        }
     }
+
+//    if (dest.x != std::abs(dest.x))
+
+
+    Renderable::setPosition(dest);
 }
+
+/*
+ s *f::FloatRect tile_rect(0, 0, 16, 16);
+ sf::FloatRect intersection_rect;
+ std::for_each(tiles.begin(), tiles.end(), [&tile_rect, &player, &intersection_rect ]( const Tile& aTile ) {
+     tile_rect.left = aTile.position.x;
+     tile_rect.top = aTile.position.y;
+     if( tile_rect.intersects( player.getRect(), intersection_rect ) == true )
+     {
+         // Probably also add here so it takes into account the player's size
+         player.setPosition( findPosition( tile_rect, intersection_rect ) );
+ }
+ } );
+ 
+ sf::Vector2f findPosition( sf::FloatRect aSource, sf::FloatRect anIntersection )
+ {
+     // Now we solve the position where to put the player
+     // Which we will do by finding where on the rect we are hitting.
+     if( aSource.left <= anIntersection.left )
+         return sf::Vector2f( aSource.left, anIntersection.top );
+     
+     Etc, etc
+ }
+*/
 
 void Entity::setPosition(float x, float y)
 {

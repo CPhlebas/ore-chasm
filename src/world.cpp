@@ -265,6 +265,17 @@ bool World::isTileSolid(const sf::Vector2f& vecDest)
     return  tileType != 0;
 }
 
+bool World::isTileSolid(const int row, const int column)
+{
+    int index = column * WORLD_ROWCOUNT + row;
+    assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
+
+    const unsigned char tileType = World::m_blocks[index].type;
+
+    //FIXME: do water, lava, doors..what else?
+    return  tileType != 0;
+}
+
 sf::Vector2f World::viewportCenter() const
 {
     return sf::Vector2f(SCREEN_W * 0.5, SCREEN_H * 0.5);
