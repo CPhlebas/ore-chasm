@@ -74,5 +74,5 @@ void Player::handleEvent(const sf::Event& event)
         break;
     }
 
-    Entity::setVelocity(sf::Vector2f(m_inputXDirection, m_inputYDirection));
+    Entity::setVelocity(sf::Vector2f(m_inputXDirection * 100, m_inputYDirection * 100));
 }

@@ -74,8 +74,9 @@ void Entity::update(const float elapsedTime)
     for (; currentRow < endRow; ++currentRow) {
         if (World::instance()->isTileSolid(dest)) {
             //the tileposition, that is the top left of the tile. in theory.
-            const float tileX = currentColumn * Block::blockSize; //FIXME: +/- offset per pixel for view..
+            const float tileX = currentColumn * Block::blockSize;
             const float tileY = currentRow * Block::blockSize;
+
             sf::FloatRect tile;
             tile.left = tileX;
             tile.top = tileY;
