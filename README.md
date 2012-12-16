@@ -56,6 +56,17 @@ pre-alpha, I would use it to describe this.
 But of course, it's progressing quite quickly over just the few weeks it has
 existed
 
+What is working? Not much :)
+
+* I did have a working tilemap rendering fragment shader..which uses some neat
+tricks to render it all in super fast manner.
+* I just implemented pretty stupid entity->tilemap collision, but it seems to
+work.
+* And as I'm typing this, I'm researching on how to further revamp the tilemap
+renderer, and implement the background (underground, and walls), in addition
+to making the foreground tiles meshable (cleanly, seamless). The design
+I'm planning on allows for *a lot* more flexibility than Terraria has.
+
 ## How can I help out?
 
 * Merge requests/patches. They will need to match my coding style, which isn't too
