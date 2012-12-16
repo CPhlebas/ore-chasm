@@ -38,11 +38,13 @@ public:
     // radius indicating how many pixels out the player can pick
     // blocks
     static constexpr float blockPickingRadius = Block::blockSize * 8.0f;
-    static constexpr float movementSpeed = 1000.0f;
+    static constexpr float movementSpeed = 100.0f;
 
     void render(sf::RenderWindow *window);
 
 private:
+    void checkInput();
+
     unsigned char health = 100;
     float m_inputXDirection = 0.0f;
     float m_inputYDirection = 0.0f;

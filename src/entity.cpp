@@ -85,16 +85,20 @@ void Entity::update(const float elapsedTime)
             bool intersect = tile.intersects(getGlobalBounds());
             bool isSolid = World::instance()->isTileSolid(currentRow, currentColumn);
 
-            Debug::log() << "tileX: " << tileX << " tileY: " << tileY << " globalbounds width: " << getGlobalBounds().width << " globalbounds height: " <<
-            getGlobalBounds().height << " globalbounds left: " << getGlobalBounds().left << " top: " << getGlobalBounds().top;
+            if (isSolid) {
+                // you shall not pass!
+//                dest.x = position.x;
+                Debug::log() << "tileX: " << tileX << " tileY: " << tileY << " globalbounds width: " << getGlobalBounds().width << " globalbounds height: " <<
+                getGlobalBounds().height << " globalbounds left: " << getGlobalBounds().left << " top: " << getGlobalBounds().top;
 
-            Debug::log() << "intersects? : " << intersect << " isSolid? :" << isSolid << " offset x: " << offset.x << " offset y: " << offset.y;
+                Debug::log() << "intersects? : " << intersect << " isSolid? :" << isSolid << " offset x: " << offset.x << " offset y: " << offset.y;
+            }
         }
     }
 
+    Renderable::setPosition(dest);
 //    if (dest.x != std::abs(dest.x))
 
-    Renderable::setPosition(dest);
 }
 
 /*

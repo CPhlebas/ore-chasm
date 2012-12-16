@@ -18,6 +18,7 @@
 #include "player.h"
 
 #include "imagemanager.h"
+#include "debug.h"
 #include <assert.h>
 
 Player::Player(const char* texture) : Entity(texture)
@@ -44,35 +45,24 @@ void Player::handleEvent(const sf::Event& event)
 {
     switch (event.type) {
     case sf::Event::KeyPressed:
-        if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
-            m_inputXDirection = 1.f;
-        }
-        if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
-            m_inputXDirection = -1.f;
-        }
-        if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down) {
-            m_inputYDirection = 1.f;
-        }
-        if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
-            m_inputYDirection = -1.f;
-        }
+        checkInput();
         break;
 
     case sf::Event::KeyReleased:
-        if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
-            m_inputXDirection = 0.f;
-        }
-        if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
-            m_inputXDirection = 0.f;
-        }
-        if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down) {
-            m_inputYDirection = 0.f;
-        }
-        if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
-            m_inputYDirection = 0.f;
-        }
+        checkInput();
         break;
     }
 
     Entity::setVelocity(sf::Vector2f(m_inputXDirection * 100, m_inputYDirection * 100));
+}
+
+void Player::checkInput()
+{
+    const bool left = (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left));
+    const bool right = (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right));
+    const bool up = (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up));
+    const bool down = (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down));
+
+    m_inputXDirection = right - left;
+    m_inputYDirection = down - up;
 }
