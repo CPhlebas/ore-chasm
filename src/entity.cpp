@@ -58,16 +58,17 @@ void Entity::update(const float elapsedTime)
 
     const sf::IntRect textureRect = getTextureRect();
 
-    const int startRow = tilesBeforeY - ((textureRect.height * 0.5) / Block::blockSize);
+    const sf::Vector2f offset = World::instance()->tileOffset();
+
+    const int startRow = tilesBeforeY - ((textureRect.height * 0.5 - offset.x) / Block::blockSize) - 1;
     const int endRow = tilesBeforeY + ((textureRect.height * 0.5) / Block::blockSize);
 
     //columns are our X value, rows the Y
-    const int startColumn = tilesBeforeX - ((textureRect.width * 0.5) / Block::blockSize);
+    const int startColumn = tilesBeforeX - ((textureRect.width * 0.5 + offset.x) / Block::blockSize) - 1;
     const int endColumn = tilesBeforeX + ((textureRect.width * 0.5) / Block::blockSize);
 
     int currentRow = startRow;
     int currentColumn = startColumn;
-
 
     //left, const column, iterate over that row's cells
     for (; currentRow < endRow; ++currentRow) {
@@ -84,12 +85,11 @@ void Entity::update(const float elapsedTime)
             bool intersect = tile.intersects(getGlobalBounds());
             bool isSolid = World::instance()->isTileSolid(currentRow, currentColumn);
 
-            Debug::log() << "intersects? : " << intersect << " isSolid? :" << isSolid;
+            Debug::log() << "intersects? : " << intersect << " isSolid? :" << isSolid << " offset x: " << offset.x << " offset y: " << offset.y;
         }
     }
 
 //    if (dest.x != std::abs(dest.x))
-
 
     Renderable::setPosition(dest);
 }
@@ -106,14 +106,14 @@ void Entity::update(const float elapsedTime)
          player.setPosition( findPosition( tile_rect, intersection_rect ) );
  }
  } );
- 
+
  sf::Vector2f findPosition( sf::FloatRect aSource, sf::FloatRect anIntersection )
  {
      // Now we solve the position where to put the player
      // Which we will do by finding where on the rect we are hitting.
      if( aSource.left <= anIntersection.left )
          return sf::Vector2f( aSource.left, anIntersection.top );
-     
+
      Etc, etc
  }
 */
@@ -127,4 +127,3 @@ void Entity::setPosition(sf::Vector2f vect)
 {
     Renderable::setPosition(vect);
 }
-

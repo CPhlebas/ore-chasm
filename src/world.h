@@ -61,6 +61,8 @@ public:
     bool isTileSolid(const sf::Vector2f& vecDest);
     bool isTileSolid(const int row, const int column);
 
+    sf::Vector2f tileOffset() const;
+
     //create containers of various entities, and implement a tile system
     //game.cpp calls into this each tick, which this descends downward into each entity
 private:
@@ -84,7 +86,6 @@ private:
     void performBlockAttack();
     void saveMap();
 
-    sf::Vector2f tileOffset() const;
 
     std::vector<Entity*> m_entities;
 
