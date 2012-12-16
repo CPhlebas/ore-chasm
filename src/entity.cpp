@@ -38,9 +38,7 @@ void Entity::update(const float elapsedTime)
 //    m_velocity.y += GRAVITY;
 
     // where we want to move
-    sf::Vector2f dest = sf::Vector2f(m_velocity.x * elapsedTime, m_velocity.y * elapsedTime);
-    dest.x += getPosition().x;
-    dest.y += getPosition().y;
+    sf::Vector2f velocity = sf::Vector2f(m_velocity.x * elapsedTime, m_velocity.y * elapsedTime);
 
     // all tiles to the left, then right, top, bottom of entity
     // if a single one is solid, we cannot move in said direction
@@ -71,7 +69,7 @@ void Entity::update(const float elapsedTime)
 
     //left, const column, iterate over that row's cells
     for (; currentRow < endRow; ++currentRow) {
-        if (World::instance()->isTileSolid(dest)) {
+        if (World::instance()->isTileSolid(currentRow, currentColumn)) {
             //the tileposition, that is the top left of the tile. in theory.
             const float tileX = currentColumn * Block::blockSize;
             const float tileY = currentRow * Block::blockSize;
@@ -86,17 +84,52 @@ void Entity::update(const float elapsedTime)
             bool isSolid = World::instance()->isTileSolid(currentRow, currentColumn);
 
             if (isSolid) {
-                // you shall not pass!
-//                dest.x = position.x;
+                //movement to left attempted
+                if (velocity.x < 0) {
+                    // YOUUUUU SHALLLL NOTTTT PASSS!
+                    velocity.x = 0.0f;
+                }
+            } else {
+                /*
                 Debug::log() << "tileX: " << tileX << " tileY: " << tileY << " globalbounds width: " << getGlobalBounds().width << " globalbounds height: " <<
                 getGlobalBounds().height << " globalbounds left: " << getGlobalBounds().left << " top: " << getGlobalBounds().top;
-
                 Debug::log() << "intersects? : " << intersect << " isSolid? :" << isSolid << " offset x: " << offset.x << " offset y: " << offset.y;
+                */
             }
         }
     }
 
-    Renderable::setPosition(dest);
+    currentRow = startRow;
+    currentColumn = startColumn + ((textureRect.width - offset.x) / Block::blockSize) + 1;
+
+    //right, const column, iterate over that row's cells
+    for (; currentRow < endRow; ++currentRow) {
+        if (World::instance()->isTileSolid(currentRow, currentColumn)) {
+            //the tileposition, that is the top left of the tile. in theory.
+            const float tileX = currentColumn * Block::blockSize;
+            const float tileY = currentRow * Block::blockSize;
+
+            sf::FloatRect tile;
+            tile.left = tileX;
+            tile.top = tileY;
+            tile.height = Block::blockSize;
+            tile.width = Block::blockSize;
+
+            bool intersect = tile.intersects(getGlobalBounds());
+            bool isSolid = World::instance()->isTileSolid(currentRow, currentColumn);
+
+                Debug::log() << "intersects? : " << intersect << " isSolid? :" << isSolid << " offset x: " << offset.x << " offset y: " << offset.y;
+            if (isSolid) {
+                //movement to right attempted
+                if (velocity.x > 0) {
+                    velocity.x = 0.0f;
+                }
+            }
+        }
+    }
+
+//    Renderable::setPosition(dest);
+Renderable::move(velocity);
 //    if (dest.x != std::abs(dest.x))
 
 }
