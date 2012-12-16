@@ -88,6 +88,7 @@ void Entity::update(const float elapsedTime)
                 if (velocity.x < 0) {
                     // YOUUUUU SHALLLL NOTTTT PASSS!
                     velocity.x = 0.0f;
+                    Renderable::move(1.0f, 0.0f);
                 }
             } else {
                 /*
@@ -122,6 +123,7 @@ void Entity::update(const float elapsedTime)
                 //movement to right attempted
                 if (velocity.x > 0) {
                     velocity.x = 0.0f;
+                    Renderable::move(-1.0f, 0.0f);
                 }
             }
         }
@@ -150,6 +152,7 @@ void Entity::update(const float elapsedTime)
                 //movement to up attempted
                 if (velocity.y < 0) {
                     velocity.y = 0.0f;
+                    Renderable::move(0.0f, 1.0f);
                 }
             }
         }
@@ -178,6 +181,7 @@ void Entity::update(const float elapsedTime)
                 //movement to down attempted
                 if (velocity.y > 0) {
                     velocity.y = 0.0f;
+                    Renderable::move(0.0f, -1.0f);
                 }
             }
         }
