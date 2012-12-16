@@ -60,12 +60,11 @@ void Entity::update(const float elapsedTime)
 
     const sf::Vector2f offset = World::instance()->tileOffset();
 
-    const int startRow = tilesBeforeY - ((textureRect.height * 0.5 - offset.x) / Block::blockSize) - 1;
-    const int endRow = tilesBeforeY + ((textureRect.height * 0.5) / Block::blockSize);
+    const int startRow = (getGlobalBounds().top) / Block::blockSize;
+    const int endRow = (getGlobalBounds().top + getTextureRect().height) / Block::blockSize;
 
-    //columns are our X value, rows the Y
-    const int startColumn = tilesBeforeX - ((textureRect.width * 0.5 + offset.x) / Block::blockSize) - 1;
-    const int endColumn = tilesBeforeX + ((textureRect.width * 0.5) / Block::blockSize);
+    const int startColumn = (getGlobalBounds().left) / Block::blockSize - 1;
+    const int endColumn = (getGlobalBounds().left + getTextureRect().width) / Block::blockSize;
 
     int currentRow = startRow;
     int currentColumn = startColumn;
@@ -85,6 +84,9 @@ void Entity::update(const float elapsedTime)
 
             bool intersect = tile.intersects(getGlobalBounds());
             bool isSolid = World::instance()->isTileSolid(currentRow, currentColumn);
+
+            Debug::log() << "tileX: " << tileX << " tileY: " << tileY << " globalbounds width: " << getGlobalBounds().width << " globalbounds height: " <<
+            getGlobalBounds().height << " globalbounds left: " << getGlobalBounds().left << " top: " << getGlobalBounds().top;
 
             Debug::log() << "intersects? : " << intersect << " isSolid? :" << isSolid << " offset x: " << offset.x << " offset y: " << offset.y;
         }
