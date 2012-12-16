@@ -118,11 +118,66 @@ void Entity::update(const float elapsedTime)
             bool intersect = tile.intersects(getGlobalBounds());
             bool isSolid = World::instance()->isTileSolid(currentRow, currentColumn);
 
-                Debug::log() << "intersects? : " << intersect << " isSolid? :" << isSolid << " offset x: " << offset.x << " offset y: " << offset.y;
             if (isSolid) {
                 //movement to right attempted
                 if (velocity.x > 0) {
                     velocity.x = 0.0f;
+                }
+            }
+        }
+    }
+
+    currentRow = startRow - 1;
+    currentColumn = startColumn;
+
+    //top, const row, iterate through all columns
+    for (; currentColumn < endColumn; ++currentColumn) {
+        if (World::instance()->isTileSolid(currentRow, currentColumn)) {
+            //the tileposition, that is the top left of the tile. in theory.
+            const float tileX = currentColumn * Block::blockSize;
+            const float tileY = currentRow * Block::blockSize;
+
+            sf::FloatRect tile;
+            tile.left = tileX;
+            tile.top = tileY;
+            tile.height = Block::blockSize;
+            tile.width = Block::blockSize;
+
+            bool intersect = tile.intersects(getGlobalBounds());
+            bool isSolid = World::instance()->isTileSolid(currentRow, currentColumn);
+
+            if (isSolid) {
+                //movement to up attempted
+                if (velocity.y < 0) {
+                    velocity.y = 0.0f;
+                }
+            }
+        }
+    }
+
+    currentRow = endRow - 1;
+    currentColumn = startColumn;
+
+    //bottom, const row, iterate through all columns
+    for (; currentColumn < endColumn; ++currentColumn) {
+        if (World::instance()->isTileSolid(currentRow, currentColumn)) {
+            //the tileposition, that is the top left of the tile. in theory.
+            const float tileX = currentColumn * Block::blockSize;
+            const float tileY = currentRow * Block::blockSize;
+
+            sf::FloatRect tile;
+            tile.left = tileX;
+            tile.top = tileY;
+            tile.height = Block::blockSize;
+            tile.width = Block::blockSize;
+
+            bool intersect = tile.intersects(getGlobalBounds());
+            bool isSolid = World::instance()->isTileSolid(currentRow, currentColumn);
+
+            if (isSolid) {
+                //movement to down attempted
+                if (velocity.y > 0) {
+                    velocity.y = 0.0f;
                 }
             }
         }
