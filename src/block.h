@@ -36,7 +36,8 @@ public:
      * Determines the health and texture of the Block.
      * NOTE: MUST be in sync with index of m_blockTextures
      */
-    enum class BlockType {
+    enum class BlockType
+    {
         Null = 0,
         Dirt,
         Stone,
@@ -47,7 +48,10 @@ public:
     static constexpr unsigned char blockSize = 16;
 
     struct BlockStruct {
-        BlockStruct(const char *_texture, bool _collides) { texture = _texture; collides = _collides; };
+        BlockStruct(const char *_texture, bool _collides) {
+            texture = _texture;
+            collides = _collides;
+        };
         const char* texture;
 
         // I thought about using flags..but this seems better, save for the might-be-fucking-huge-constructor

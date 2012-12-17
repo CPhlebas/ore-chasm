@@ -66,17 +66,17 @@ private:
 
     ~World();
 
-        /**
-     * From scratch, create a randomly generated tileset and store it in our array
-     */
+    /**
+    * From scratch, create a randomly generated tileset and store it in our array
+    */
     void generateMap();
 
-     /**
-     * FIXME: presently only calculates the center of the screen according to resolution.
-     * i'm not sure how zooming will be affected with this..i don't *think* it would. but verify
-     * if this is ideal or not
-     * NOTE: doesn't *actually* use m_view->getViewport, just a simple SCREEN_W,H / 2
-     */
+    /**
+    * FIXME: presently only calculates the center of the screen according to resolution.
+    * i'm not sure how zooming will be affected with this..i don't *think* it would. but verify
+    * if this is ideal or not
+    * NOTE: doesn't *actually* use m_view->getViewport, just a simple SCREEN_W,H / 2
+    */
     sf::Vector2f viewportCenter() const;
     void calculateAttackPosition();
     void generatePixelTileMap();

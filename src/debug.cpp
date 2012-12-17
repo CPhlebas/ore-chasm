@@ -49,21 +49,21 @@ LogStream::~LogStream()
     std::string areaString;
 
     switch (m_area) {
-        case Debug::Area::General:
-            areaString.append("[General]");
-            break;
-        case Debug::Area::Graphics:
-            areaString.append("[Graphics]");
-            break;
-        case Debug::Area::Physics:
-            areaString.append("[Physics]");
-            break;
-        case Debug::Area::Sound:
-            areaString.append("[Sound]");
-            break;
-        case Debug::Area::System:
-            areaString.append("[System]");
-            break;
+    case Debug::Area::General:
+        areaString.append("[General]");
+        break;
+    case Debug::Area::Graphics:
+        areaString.append("[Graphics]");
+        break;
+    case Debug::Area::Physics:
+        areaString.append("[Physics]");
+        break;
+    case Debug::Area::Sound:
+        areaString.append("[Sound]");
+        break;
+    case Debug::Area::System:
+        areaString.append("[System]");
+        break;
     }
     std::cout << "----------- " << areaString << " | " << str() << " ---------------------------------------------------" << "\n";
 }

@@ -87,33 +87,33 @@ World::World(sf::RenderWindow *window, sf::View *view)
     unsigned int destX = 0;
     unsigned int destY = 0;
 
-/*
- TODO: for when we hit the 256 tile limit ... hopefully that won't happen for a while :)
-    // iterate through each TILE_TYPE in m_blockTextures and create a super
-    // texture out of this which we can pass to the shader as a list of known
-    // tiles.
-    for (int columnIndex = 0; columnIndex < gridSize; ++columnIndex) {
-        for (int rowIndex = 0; rowIndex < gridSize; ++rowIndex) {
-            std::cout << "accfessing block texture at i value: " << i << std::endl;
-            loaded = currentTile.loadFromFile(m_blockTextures[i]);
-            //would indicate we couldn't find a tile. obviously, we need that..
-            assert(loaded);
+    /*
+     TODO: for when we hit the 256 tile limit ... hopefully that won't happen for a while :)
+        // iterate through each TILE_TYPE in m_blockTextures and create a super
+        // texture out of this which we can pass to the shader as a list of known
+        // tiles.
+        for (int columnIndex = 0; columnIndex < gridSize; ++columnIndex) {
+            for (int rowIndex = 0; rowIndex < gridSize; ++rowIndex) {
+                std::cout << "accfessing block texture at i value: " << i << std::endl;
+                loaded = currentTile.loadFromFile(m_blockTextures[i]);
+                //would indicate we couldn't find a tile. obviously, we need that..
+                assert(loaded);
 
-            destX = rowIndex * Block::blockSize;
-            destY = columnIndex * Block::blockSize;
-            std::cout << "placing tile at X: " << destX << " y: " << destY << std::endl;
-            m_tileTypesSuperImage.copy(currentTile, destX, destY);
+                destX = rowIndex * Block::blockSize;
+                destY = columnIndex * Block::blockSize;
+                std::cout << "placing tile at X: " << destX << " y: " << destY << std::endl;
+                m_tileTypesSuperImage.copy(currentTile, destX, destY);
 
-            ++i;
-            if (i >= WORLD_TILE_TYPE_COUNT) {
-                break;
+                ++i;
+                if (i >= WORLD_TILE_TYPE_COUNT) {
+                    break;
+                }
             }
         }
-    }
-*/
+    */
 
     int i = 0;
-    for (auto blockStruct : Block::blockTypeMap) {
+for (auto blockStruct : Block::blockTypeMap) {
         loaded = currentTile.loadFromFile(blockStruct.second.texture);
 
         //would indicate we couldn't find a tile. obviously, we need that..
@@ -162,7 +162,7 @@ void World::render()
     m_window->setView(*m_view);
 
     //player drawn on top... since we don't have anything like z-ordering or layering (TODO)
-    for (Entity *currentEntity : m_entities) {
+for (Entity * currentEntity : m_entities) {
         m_window->draw(*currentEntity);
         currentEntity->render(m_window);
     }
@@ -241,7 +241,7 @@ void World::update(const float elapsedTime)
 
     m_sky->update(elapsedTime);
 
-    for (Entity *currentEntity : m_entities) {
+for (Entity * currentEntity : m_entities) {
         currentEntity->update(elapsedTime);
     }
 
@@ -273,19 +273,19 @@ sf::Vector2f World::viewportCenter() const
 //FIXME: unused..will be used for shooting and such. not for block breaking.
 void World::calculateAttackPosition()
 {
-/*    const sf::Vector2f _viewportCenter = viewportCenter();
+    /*    const sf::Vector2f _viewportCenter = viewportCenter();
 
-    const sf::Vector2i mousePos = sf::Mouse::getPosition(*m_window);
+        const sf::Vector2i mousePos = sf::Mouse::getPosition(*m_window);
 
-    sf::Vector2f diffVect;
-    diffVect.x = mousePos.x - _viewportCenter.x;
-    diffVect.y = mousePos.y - _viewportCenter.y;
+        sf::Vector2f diffVect;
+        diffVect.x = mousePos.x - _viewportCenter.x;
+        diffVect.y = mousePos.y - _viewportCenter.y;
 
-    const double angle = atan2(diffVect.y, diffVect.x);
-    const float newX = _viewportCenter.x + cos(angle) * Player::blockPickingRadius;
-    const float newY= _viewportCenter.y  + sin(angle) * Player::blockPickingRadius;
-    m_relativeVectorToAttack = sf::Vector2f(newX, newY);
-*/
+        const double angle = atan2(diffVect.y, diffVect.x);
+        const float newX = _viewportCenter.x + cos(angle) * Player::blockPickingRadius;
+        const float newY= _viewportCenter.y  + sin(angle) * Player::blockPickingRadius;
+        m_relativeVectorToAttack = sf::Vector2f(newX, newY);
+    */
 }
 
 //FIXME: this function needs a lot of help. it's just a copy from pixelmap generation
@@ -296,12 +296,12 @@ void World::performBlockAttack()
     const sf::Vector2f viewCenter = m_view->getCenter();
 
     sf::Vector2f viewPosition;
-//    std::cout << "viewportcenter" << " viewportcenter y: " << viewportCenter().y << " view->getcenter() y: " << viewCenter.y << "\n";
+    //    std::cout << "viewportcenter" << " viewportcenter y: " << viewportCenter().y << " view->getcenter() y: " << viewCenter.y << "\n";
     viewPosition.x = viewCenter.x - viewportCenter().x;
     viewPosition.y = viewCenter.y - viewportCenter().y;
     const int column = int((m_relativeVectorToAttack.x + viewPosition.x) / Block::blockSize);
     const int row = int((m_relativeVectorToAttack.y + viewPosition.y) / Block::blockSize);
-//    std::cout << "relativevector y: " << m_relativeVectorToAttack.y << " view position y: " << viewPosition.y << "\n";
+    //    std::cout << "relativevector y: " << m_relativeVectorToAttack.y << " view position y: " << viewPosition.y << "\n";
 
     const int startRow = (m_player->getPosition().y / Block::blockSize) - radius;
     const int startColumn = (m_player->getPosition().x / Block::blockSize) - radius;
@@ -317,9 +317,9 @@ void World::performBlockAttack()
 
     // if the attempted block pick location is out of range, do nothing.
     if (mouse.x < center.x - Player::blockPickingRadius ||
-        mouse.x > center.x + Player::blockPickingRadius ||
-        mouse.y < center.y - Player::blockPickingRadius ||
-        mouse.y > center.y + Player::blockPickingRadius) {
+            mouse.x > center.x + Player::blockPickingRadius ||
+            mouse.y < center.y - Player::blockPickingRadius ||
+            mouse.y > center.y + Player::blockPickingRadius) {
         return;
     }
 

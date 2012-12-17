@@ -29,13 +29,15 @@ class LogStream;
 class Debug
 {
 public:
-    enum class Type {
+    enum class Type
+    {
         Debug,
         Warning,
         Error,
     };
 
-    enum class Area {
+    enum class Area
+    {
         General,
         Graphics,
         System,
