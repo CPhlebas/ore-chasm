@@ -60,6 +60,16 @@ public:
     static std::map<BlockType, BlockStruct> blockTypeMap;
 
     /**
+     * A lookup table to represent the 0-255 possibilities for a tile being surrounded,
+     * as 47 possible different sprites.
+     * for more info, see http://forums.tigsource.com/index.php?topic=9859.15
+     * http://www.saltgames.com/2010/a-bitwise-method-for-applying-tilemaps/
+     * http://www.gamedev.net/page/resources/_/technical/game-programming/tilemap-based-game-techniques-handling-terrai-r934
+     * http://www.angryfishstudios.com/2011/04/adventures-in-bitmasking/
+     */
+    static std::map<unsigned char, unsigned char> tileMeshingTable;
+
+    /**
      * 0-255, 0 obviously meaning this block is marked as to be destroyed.
      * higher values are for more "difficult" to break block types. e.g. sand has a very low number.
      */
