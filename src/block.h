@@ -70,6 +70,13 @@ public:
      * http://www.saltgames.com/2010/a-bitwise-method-for-applying-tilemaps/
      * http://www.gamedev.net/page/resources/_/technical/game-programming/tilemap-based-game-techniques-handling-terrai-r934
      * http://www.angryfishstudios.com/2011/04/adventures-in-bitmasking/
+     *
+     * My amazing illustration:
+     * |********|*********|***********
+     * |___8____|____16___|____1____*
+     * |___128__|__center_|____32___*
+     * |___4____|____64___|____2____*
+     * |********|*********|***********
      */
     static std::map<unsigned char, unsigned char> tileMeshingTable;
 
