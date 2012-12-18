@@ -25,11 +25,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/Config.hpp>
-#include <SFML/OpenGL.hpp>
+#include <allegro5/allegro.h>
 
 Game::Game()
 {
@@ -37,9 +33,7 @@ Game::Game()
 
 Game::~Game()
 {
-    delete m_view;
-    delete m_font;
-    delete m_window;
+    delete m_world;
 }
 
 void Game::abort_game(const char* message)
@@ -51,33 +45,16 @@ void Game::abort_game(const char* message)
 
 void Game::init()
 {
-    /*
-    TODO:
-    unsigned int VideoModesCount = sf::VideoMode::GetModesCount();
-    for (unsigned int i = 0; i < VideoModesCount; ++i)
-    {
-        sf::VideoMode Mode = sf::VideoMode::GetMode(i);
-
-        // Mode is a valid video mode
-    }
-    // Creating a fullscreen window with the best video mode supported
-    App.Create(sf::VideoMode::GetMode(0), "SFML Window", sf::Style::Fullscreen);
-
-    sf::VideoMode DesktopMode = sf::VideoMode::GetDesktopMode();
-    */
-
-    //TODO: debug only, on by default
-    //    App.SetFramerateLimit(60); // Limit to 60 frames per second
-
-    // sf::WindowSettings Settings = App.GetSettings();
+    uint32_t version = al_get_allegro_version();
+    int major = version >> 24;
+    int minor = (version >> 16) & 255;
+    int revision = (version >> 8) & 255;
+    int release = version & 255;
 
     sf::ContextSettings settings;
 
     settings.depthBits = 24;
     settings.stencilBits = 8;
-//    settings.antialiasingLevel = 4;
-//    settings.majorVersion = 3;
-//    settings.minorVersion = 0;
 
     m_window = new sf::RenderWindow(sf::VideoMode(SCREEN_W, SCREEN_H), "Ore Chasm", sf::Style::Default, settings);
     m_window->setVerticalSyncEnabled(false);

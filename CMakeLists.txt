@@ -74,16 +74,15 @@ include(FindPkgConfig)
 
 add_executable(${EXECUTABLE_NAME} ${SRC})
 
-find_package(SFML 2.0 REQUIRED system window graphics audio) #network
+find_package(Allegro5 REQUIRED)
 
-if (NOT SFML_FOUND)
-    message(FATAL_ERROR "Could not find SFML.")
+if (NOT ALLEGRO5_FOUND)
+    message(FATAL_ERROR "Could not find Allegro 5.")
 endif()
 
 INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR})
-include_directories(${SFML_INCLUDE_DIR} )
-target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES} ${OPENGL_LIBRARIES} ${PugiXML_LIBRARY})
-
+include_directories(${ALLEGRO5_INCLUDE_DIR})
+target_link_libraries(${EXECUTABLE_NAME} ${ALLEGRO5_LIBRARY} ${OPENGL_LIBRARIES} ${PugiXML_LIBRARY})
 
 # CPack packaging
 include(InstallRequiredSystemLibraries)

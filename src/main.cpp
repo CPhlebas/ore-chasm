@@ -20,11 +20,9 @@
 
 #include <iostream>
 
-using namespace std;
-
 int main(int argc, char* argv[])
 {
-    cout << "Ore Chasm Version " << ore_chasm_VERSION_MAJOR << "." << ore_chasm_VERSION_MINOR << endl;
+    std::cout << "Ore Chasm Version " << ore_chasm_VERSION_MAJOR << "." << ore_chasm_VERSION_MINOR << std::endl;
 
     Game game;
     game.init();
