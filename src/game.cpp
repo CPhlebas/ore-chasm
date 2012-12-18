@@ -18,6 +18,7 @@
 #include "game.h"
 #include "imagemanager.h"
 #include "entity.h"
+#include "debug.h"
 
 #include <iostream>
 #include <sstream>
@@ -50,6 +51,11 @@ void Game::init()
     int minor = (version >> 16) & 255;
     int revision = (version >> 8) & 255;
     int release = version & 255;
+    Debug::log(Debug::Area::System) << "Using allegro version: " << major << "." << minor << "." << revision << "." << release;
+
+    
+
+    m_display =
 
     sf::ContextSettings settings;
 
