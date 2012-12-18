@@ -53,9 +53,9 @@ void Game::init()
     int release = version & 255;
     Debug::log(Debug::Area::System) << "Using allegro version: " << major << "." << minor << "." << revision << "." << release;
 
-    
+    al_init();
 
-    m_display =
+    m_display =al_create_display(SCREEN_W, SCREEN_H);
 
     sf::ContextSettings settings;
 

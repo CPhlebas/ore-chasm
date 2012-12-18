@@ -29,11 +29,18 @@ LogStream Debug::log(Debug::Area area)
     return LogStream(area);
 }
 
-
 void Debug::assertf(bool value, std::string message)
 {
     if (!value) {
         std::cout << message << "\n";
+        assert(0);
+    }
+}
+
+void fatal(bool value, Debug::Area area, std::string message)
+{
+    if (!value) {
+        Debug::log(area) << "FATAL: " << message;
         assert(0);
     }
 }
