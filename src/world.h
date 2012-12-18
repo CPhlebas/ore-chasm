@@ -58,7 +58,7 @@ public:
     void handleEvent(const sf::Event& event);
 
 
-    bool isTileSolid(const sf::Vector2f& vecDest);
+    bool isTileSolid(const sf::Vector2f& vecDest) const;
 
     //create containers of various entities, and implement a tile system
     //game.cpp calls into this each tick, which this descends downward into each entity
@@ -84,6 +84,24 @@ private:
     void saveMap();
 
     sf::Vector2f tileOffset() const;
+
+    /**
+     * Looks at @p tileX, @p tileY and looks at 4 sides and 4 corners of it.
+     * Returns what is the resulting meshing type that this tile should now have.
+     */
+    unsigned char calculateTileMeshingType(const int tileX, const int tileY) const;
+
+    /**
+     * Decides whether or not a blend type of the tile at the source position matches a tile at a different position.
+     *
+     * Used for seeing if the tile we are looking at has any nearby ones of similar blendtypes.
+     *
+     * Presently, blend types are only (FIXME/TODO) applicable to tiles of same type. Need to expand to e.g.
+     * blend stone and copper/gold together well.
+     *
+     * @p sourceTileX expected to be a position divided by Block::blockSize, aka 16, and already offset
+     */
+    bool tileBlendTypeMatch(const int sourceTileX, const int sourceTileY, const int nearbyTileX, const int nearbyTileY) const;
 
     std::vector<Entity*> m_entities;
 

@@ -251,7 +251,26 @@ for (Entity * currentEntity : m_entities) {
     generatePixelTileMap();
 }
 
-bool World::isTileSolid(const sf::Vector2f& vecDest)
+unsigned char World::calculateTileMeshingType(const int tileX, const int tileY) const
+{
+    const bool left = tileBlendTypeMatch(tileX, tileY, tileX - 1, tileY);
+    const bool right = tileBlendTypeMatch(tileX, tileY, tileX + 1, tileY);
+
+    const bool top = tileBlendTypeMatch(tileX, tileY, tileX, tileY - 1);
+    const bool bottom = tileBlendTypeMatch(tileX, tileY, tileX, tileY + 1);
+
+    const bool topLeft = tileBlendTypeMatch(tileX, tileY, tileX - 1, tileY - 1);
+    const bool bottomLeft = tileBlendTypeMatch(tileX, tileY, tileX - 1, tileY + 1);
+
+    const bool topRight = tileBlendTypeMatch(tileX, tileY, tileX + 1, tileY - 1);
+    const bool bottomRight = tileBlendTypeMatch(tileX, tileY, tileX + 1, tileY + 1);
+
+    // behold the motherfucking magic
+    const unsigned char result = (1 * topRight) + (2 * bottomRight) + (4 * bottomLeft) + (8 * topLeft) + (16 * top) + (32 * right) + (64 * bottom) + (128 * left);
+    return result;
+}
+
+bool World::isTileSolid(const sf::Vector2f& vecDest) const
 {
     const int column = int(std::ceil(vecDest.x) / Block::blockSize);
     const int row = int(std::ceil(vecDest.y) / Block::blockSize);
@@ -263,6 +282,21 @@ bool World::isTileSolid(const sf::Vector2f& vecDest)
 
     //FIXME: do water, lava, doors..what else?
     return  tileType != 0;
+}
+
+bool World::tileBlendTypeMatch(const int sourceTileX, const int sourceTileY, const int nearbyTileX, const int nearbyTileY) const
+{
+    bool isMatched = false;
+    const int srcIndex = sourceTileX * WORLD_ROWCOUNT + sourceTileY;
+    const int nearbyIndex = nearbyTileX * WORLD_ROWCOUNT + nearbyTileY;
+
+    if (m_blocks[srcIndex].type == m_blocks[nearbyIndex].type) {
+        isMatched = true;
+    }
+
+    //TODO future, use blending types..not just tile type is same
+
+    return isMatched;
 }
 
 sf::Vector2f World::viewportCenter() const
