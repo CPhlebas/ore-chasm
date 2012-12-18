@@ -87,10 +87,26 @@ public:
     unsigned char health = 255;
 
     /**
+     * Which mesh sprite to use, aka subsprite.
+     * This is utilized to cleanly decide which exact sprite(e.g. full block, corner pieces, etc.) to show for whatever
+     * tile (e.g. dirt, grass) this is.
+     * 0-255.
+     * For example, @sa primitiveType
+     * which does not generally depend on the surroundings.
+     *
+     * meshType however, is determined by calculating the surrounding tiles and if they are of a simlar type or similar
+     * blendType, then it will change the overall look of it.
+     *
+     * Bottom line: use meshType ONLY for rendering, use primitiveType for everything else. meshType is only a displaying
+     * niche of a detail, not a gameplay mechanic
+     */
+    unsigned char meshType = 0;
+
+    /**
      * The type of tile this is, 0-255 is valid and can be compared with the world's definition of tile types
      * (an enum)
      */
-    unsigned char type = 0;
+    unsigned char primitiveType = 0;
 };
 
 #endif

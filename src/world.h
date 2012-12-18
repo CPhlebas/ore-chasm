@@ -86,6 +86,12 @@ private:
     sf::Vector2f tileOffset() const;
 
     /**
+     * Should be called AFTER the world has been fully processed in raw block form.
+     * This translates each block type into a meshable tile frame
+     */
+    void generateTileMeshes();
+
+    /**
      * Looks at @p tileX, @p tileY and looks at 4 sides and 4 corners of it.
      * Returns what is the resulting meshing type that this tile should now have.
      */

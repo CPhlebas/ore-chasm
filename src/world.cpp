@@ -255,7 +255,7 @@ unsigned char World::calculateTileMeshingType(const int tileX, const int tileY) 
 {
     const bool left = tileBlendTypeMatch(tileX, tileY, tileX - 1, tileY);
     const bool right = tileBlendTypeMatch(tileX, tileY, tileX + 1, tileY);
-
+sf::Shader;
     const bool top = tileBlendTypeMatch(tileX, tileY, tileX, tileY - 1);
     const bool bottom = tileBlendTypeMatch(tileX, tileY, tileX, tileY + 1);
 
@@ -278,7 +278,7 @@ bool World::isTileSolid(const sf::Vector2f& vecDest) const
     int index = column * WORLD_ROWCOUNT + row;
     assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
 
-    const unsigned char tileType = World::m_blocks[index].type;
+    const unsigned char tileType = World::m_blocks[index].primitiveType;
 
     //FIXME: do water, lava, doors..what else?
     return  tileType != 0;
@@ -290,7 +290,7 @@ bool World::tileBlendTypeMatch(const int sourceTileX, const int sourceTileY, con
     const int srcIndex = sourceTileX * WORLD_ROWCOUNT + sourceTileY;
     const int nearbyIndex = nearbyTileX * WORLD_ROWCOUNT + nearbyTileY;
 
-    if (m_blocks[srcIndex].type == m_blocks[nearbyIndex].type) {
+    if (m_blocks[srcIndex].primitiveType == m_blocks[nearbyIndex].primitiveType) {
         isMatched = true;
     }
 
@@ -389,7 +389,7 @@ void World::performBlockAttack()
             if (row == attackY && column == attackX) {
                 index = column * WORLD_ROWCOUNT + row;
                 assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
-                World::m_blocks[index].type = 0;
+                World::m_blocks[index].primitiveType = 0;
                 return;
             }
         }
@@ -441,7 +441,7 @@ void World::generatePixelTileMap()
             const int index = currentColumn * WORLD_ROWCOUNT + currentRow;
             assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
 
-            const sf::Color color(m_blocks[index].type, 0, 0);
+            const sf::Color color(m_blocks[index].primitiveType, 0, 0);
 
             m_tileMapPixelsImage.setPixel(x, y, color);
             ++x;
@@ -492,13 +492,13 @@ void World::generateMap()
     // 200 rows of "sky"
     for (; lastRow < 15; ++lastRow) {
         for (int column = 0; column < WORLD_COLUMNCOUNT; ++column) {
-            m_blocks[column * WORLD_ROWCOUNT + lastRow].type = 0;
+            m_blocks[column * WORLD_ROWCOUNT + lastRow].primitiveType = 0;
         }
     }
 
     for (; lastRow < WORLD_ROWCOUNT; ++lastRow) {
         for (int column = 0; column < WORLD_COLUMNCOUNT; ++column) {
-            m_blocks[column * WORLD_ROWCOUNT + lastRow].type = distribution(rand);
+            m_blocks[column * WORLD_ROWCOUNT + lastRow].primitiveType = distribution(rand);
         }
     }
 
@@ -517,7 +517,7 @@ void World::saveMap()
 
     for (int row = 0; row < WORLD_ROWCOUNT; ++row) {
         for (int column = 0; column < WORLD_COLUMNCOUNT; ++column) {
-            color.r = m_blocks[column * WORLD_ROWCOUNT + row].type;
+            color.r = m_blocks[column * WORLD_ROWCOUNT + row].primitiveType;
             image.setPixel(row, column, color);
         }
     }
