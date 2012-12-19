@@ -77,7 +77,7 @@ void Game::init()
 
     std::cout << "\n\n\n\n";
     Debug::log(Debug::Area::Graphics) << "Hardware we're running on...";
-    Debug::log(Debug::Area::Graphics) << major << "." << minor << "." << revision << "\n";
+    Debug::log(Debug::Area::Graphics) << major << "." << minor << "." << revision;
 
     int glVariant = al_get_opengl_variant();
 
