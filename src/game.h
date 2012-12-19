@@ -49,6 +49,7 @@ private:
     //World *m_world = nullptr;
     ALLEGRO_DISPLAY *m_display = nullptr;
     ALLEGRO_EVENT_QUEUE *m_events = nullptr;
+    bool m_running = true;
 };
 
 

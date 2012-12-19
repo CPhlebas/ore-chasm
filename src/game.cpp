@@ -68,27 +68,43 @@ void Game::init()
     m_display = al_create_display(SCREEN_W, SCREEN_H);
     Debug::fatal(m_display, Debug::Area::Graphics, "display creation failed");
 
+    version = al_get_opengl_version();
+    major = version >> 24;
+    minor = (version >> 16) & 255;
+    revision = (version >> 8) & 255;
+
+    std::cout << "\n\n\n\n";
+    Debug::log(Debug::Area::Graphics) << "Hardware we're running on...";
+    Debug::log(Debug::Area::Graphics) << major << "." << minor << "." << revision << "\n";
+
+    int glVariant = al_get_opengl_variant();
+    if (glVariant & ALLEGRO_DESKTOP_OPENGL) {
+        Debug::log(Debug::Area::Graphics) << "Using desktop OpenGL variant.";
+    } else if (glVariant & ALLEGRO_OPENGL_ES) {
+        Debug::log(Debug::Area::Graphics) << "Using desktop OpenGL variant.";
+    }
+
+    GLint textureSize;
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &textureSize);
+    Debug::log(Debug::Area::Graphics) << "Maximum texture size" << textureSize;
+    std::cout << "\n\n\n\n";
+
+
+    al_set_new_display_flags(ALLEGRO_WINDOWED | ALLEGRO_OPENGL);
+
     al_set_app_name("ore-chasm");
     al_set_window_title(m_display, "Ore Chasm");
 
     Debug::fatal(al_create_event_queue(), Debug::Area::System, "event queue init");
 
     al_register_event_source(m_events, al_get_display_event_source(m_display));
+    al_register_event_source(m_events, al_get_mouse_event_source());
+    al_register_event_source(m_events, al_get_keyboard_event_source());
 
     al_clear_to_color(al_map_rgb(0, 0, 0));
 
     al_flip_display();
 
-    std::cout << "\n\n\n\n";
-    std::cout << "=======================================================================" << "\n";
-    std::cout << "Hardware support information" << "\n";
-    std::cout << "OpenGL Version: " << settings.majorVersion << "." << settings.minorVersion << "\n";
-    std::cout << "Depth bits: " << settings.depthBits << "\n";
-    std::cout << "Stencil bits:" << settings.stencilBits << "\n";
-    std::cout << "Antialiasing Level: " << settings.antialiasingLevel << "\n";
-    std::cout << "Maximum Texture Size: " << sf::Texture::getMaximumSize() << " pixels \n";
-    std::cout << "=======================================================================" << "\n";
-    std::cout << "\n\n\n\n";
 
 //    ImageManager* manager = ImageManager::instance();
 //    manager->addResourceDir("../textures/");
@@ -117,7 +133,7 @@ void Game::tick()
 
     float elapsedTime = 0;
 
-    while (m_window->isOpen()) {
+    while (m_running) {
         elapsedTime = clock.restart().asSeconds();
         benchTime -= 1;
         fps = int(1.f / elapsedTime);
@@ -142,66 +158,66 @@ void Game::tick()
         str = ss.str();
         text.setString(str);
 
-        while (m_window->pollEvent(event)) {
+        ALLEGRO_EVENT event;
+        ALLEGRO_TIMEOUT timeout;
+        al_init_timeout(&timeout, 0.06);
+
+        bool hasEvent = al_wait_for_event_until(m_events, &event, &timeout);
 
             // bool LeftKeyDown = Input.isKeyDown(sf::Key::Left);
             // bool RightButtonDown = Input.isMouseButtonDown(sf::Mouse::Right);
             // unsigned int MouseX = Input.getMouseX();
             // unsigned int MouseY = Input.getMouseY();
 
-            m_world->handleEvent(event);
-            switch (event.type) {
+//            m_world->handleEvent(event);
+        if (hasEvent) {
+            switch (event) {
                 // window closed
-            case sf::Event::Closed:
-                goto shutdown;
+                case ALLEGRO_EVENT_DISPLAY_CLOSE:
+                m_running = false;
                 break;
 
                 // key pressed
-            case sf::Event::KeyPressed:
+                case ALLEGRO_EVENT_KEY_DOWN:
                 if (event.key.code == sf::Keyboard::Escape) {
-                    goto shutdown;
+                    m_running = false;
                 }
                 break;
 
-            case sf::Event::KeyReleased:
+                case ALLEGRO_EVENT_DISPLAY_SWITCH_OUT:
+                    //FIXME: pause game
                 break;
 
-            case sf::Event::MouseMoved:
-                // std::cout << "new mouse x: " << event.mouseMove.x << std::endl;
-                // std::cout << "new mouse y: " << event.mouseMove.y << std::endl;
+                case ALLEGRO_EVENT_DISPLAY_SWITCH_IN:
+                    //FIXME: resume game
                 break;
 
-            case sf::Event::GainedFocus:
-                break;
+                case ALLEGRO_EVENT_DISPLAY_HALT_DRAWING:
+                    //FIXME: for android
+                    break;
 
-            case sf::Event::LostFocus:
-                break;
+                case ALLEGRO_EVENT_DISPLAY_RESUME_DRAWING:
+                    //FIXME: for android
+                    break;
 
-            case sf::Event::MouseButtonPressed:
-                break;
-
-            case sf::Event::MouseButtonReleased:
-                break;
-
-            default:
-                break;
+                default:
+                    break;
             }
+        }
 
-            //sf::event::LostFocus
-            //sf::event::GainedFocus
+        al_clear_to_color(al_map_rgb(0,0,0));
 
             // Window closed
 //            if (event.type == sf::Event::Closed || ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Key::Escape))) {
 //               shutdown();
             //          }
-        }
 
 
  //       m_world->update(elapsedTime);
         // render methods *must* exit by setting back to the default view
         // (if they set it to a different view at the beginning of the call)
 //        m_world->render();
-
+        al_flip_display();
     }
 
 shutdown:
@@ -210,5 +226,7 @@ shutdown:
 
 void Game::shutdown()
 {
+    al_destroy_display(m_display);
+    al_destroy_event_queue(m_events);
     exit(0);
 }
