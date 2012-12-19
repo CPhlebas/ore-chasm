@@ -102,12 +102,11 @@ void Game::init()
     al_set_app_name("ore-chasm");
     al_set_window_title(m_display, "Ore Chasm");
 
-    Debug::fatal(al_create_event_queue(), Debug::Area::System, "event queue init");
+    Debug::fatal(m_events = al_create_event_queue(), Debug::Area::System, "event queue init");
 
     al_register_event_source(m_events, al_get_display_event_source(m_display));
     al_register_event_source(m_events, al_get_mouse_event_source());
     al_register_event_source(m_events, al_get_keyboard_event_source());
-    al_register_event_source(m_events, al_get_timer_event_source(m_timer));
 
     al_clear_to_color(al_map_rgb(0, 0, 0));
 
@@ -140,6 +139,7 @@ void Game::tick()
     bool redraw = false;
 
     m_timer = al_create_timer(1.0 / FPS);
+    al_register_event_source(m_events, al_get_timer_event_source(m_timer));
     al_start_timer(m_timer);
 
     while (m_running) {
