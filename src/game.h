@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+class ALLEGRO_TIMER;
 class ALLEGRO_EVENT_QUEUE;
 class ALLEGRO_DISPLAY;
 //1600
@@ -49,6 +50,7 @@ private:
     //World *m_world = nullptr;
     ALLEGRO_DISPLAY *m_display = nullptr;
     ALLEGRO_EVENT_QUEUE *m_events = nullptr;
+    ALLEGRO_TIMER *m_timer = nullptr;
     bool m_running = true;
 };
 

@@ -255,7 +255,7 @@ unsigned char World::calculateTileMeshingType(const int tileX, const int tileY) 
 {
     const bool left = tileBlendTypeMatch(tileX, tileY, tileX - 1, tileY);
     const bool right = tileBlendTypeMatch(tileX, tileY, tileX + 1, tileY);
-sf::Shader;
+
     const bool top = tileBlendTypeMatch(tileX, tileY, tileX, tileY - 1);
     const bool bottom = tileBlendTypeMatch(tileX, tileY, tileX, tileY + 1);
 

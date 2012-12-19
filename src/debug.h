@@ -19,7 +19,6 @@
 #define DEBUG_H
 
 #include <stdlib.h>
-#include <SFML/System/Vector2.hpp>
 #include <string>
 #include <iostream>
 #include <sstream>
@@ -31,7 +30,7 @@ class Debug
 public:
     enum class Type
     {
-        Debug,
+        DebugType,
         Warning,
         Error,
     };

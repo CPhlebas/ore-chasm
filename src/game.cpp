@@ -64,6 +64,8 @@ void Game::init()
     al_init_font_addon();
     al_init_ttf_addon();
     al_init_image_addon();
+    Debug::fatal(al_install_keyboard(), Debug::Area::System, "Failure to install keyboard");
+    Debug::fatal(al_install_mouse(), Debug::Area::System, "Failure to install mouse");
 
     m_display = al_create_display(SCREEN_W, SCREEN_H);
     Debug::fatal(m_display, Debug::Area::Graphics, "display creation failed");
@@ -78,17 +80,22 @@ void Game::init()
     Debug::log(Debug::Area::Graphics) << major << "." << minor << "." << revision << "\n";
 
     int glVariant = al_get_opengl_variant();
+
     if (glVariant & ALLEGRO_DESKTOP_OPENGL) {
         Debug::log(Debug::Area::Graphics) << "Using desktop OpenGL variant.";
     } else if (glVariant & ALLEGRO_OPENGL_ES) {
-        Debug::log(Debug::Area::Graphics) << "Using desktop OpenGL variant.";
+        Debug::log(Debug::Area::Graphics) << "Using OpenGL ES OpenGL variant.";
     }
+
+    Debug::log(Debug::Area::Graphics) << "Platform: Driver Vendor: " << glGetString(GL_VENDOR);
+    Debug::log(Debug::Area::Graphics) << "Platform: Renderer: " << glGetString(GL_RENDERER);
+    Debug::log(Debug::Area::Graphics) << "OpenGL Version: " << glGetString(GL_VERSION);
+    Debug::log(Debug::Area::Graphics) << "GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION);
 
     GLint textureSize;
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &textureSize);
-    Debug::log(Debug::Area::Graphics) << "Maximum texture size" << textureSize;
+    Debug::log(Debug::Area::Graphics) << "Maximum OpenGL texture size allowed: " << textureSize;
     std::cout << "\n\n\n\n";
-
 
     al_set_new_display_flags(ALLEGRO_WINDOWED | ALLEGRO_OPENGL);
 
@@ -100,11 +107,11 @@ void Game::init()
     al_register_event_source(m_events, al_get_display_event_source(m_display));
     al_register_event_source(m_events, al_get_mouse_event_source());
     al_register_event_source(m_events, al_get_keyboard_event_source());
+    al_register_event_source(m_events, al_get_timer_event_source(m_timer));
 
     al_clear_to_color(al_map_rgb(0, 0, 0));
 
     al_flip_display();
-
 
 //    ImageManager* manager = ImageManager::instance();
 //    manager->addResourceDir("../textures/");
@@ -122,8 +129,6 @@ void Game::tick()
     std::stringstream ss;
     std::string str;
 
-    sf::Clock clock;
-
     int fps = 0;
     int minFps = 0;
     int maxFps = 0;
@@ -131,10 +136,14 @@ void Game::tick()
     const int MAX_BENCH = 300;
     int benchTime = MAX_BENCH;
 
-    float elapsedTime = 0;
+    int64_t elapsedTime = 0;
+    bool redraw = false;
+
+    m_timer = al_create_timer(1.0 / FPS);
+    al_start_timer(m_timer);
 
     while (m_running) {
-        elapsedTime = clock.restart().asSeconds();
+        elapsedTime = al_get_timer_count(m_timer);
         benchTime -= 1;
         fps = int(1.f / elapsedTime);
 
@@ -156,22 +165,16 @@ void Game::tick()
         ss.str("");
         ss << "Framerate: " << fps << " Min: " << minFps << " Max: " << maxFps << " elapsedTime: " << elapsedTime << "";
         str = ss.str();
-        text.setString(str);
 
         ALLEGRO_EVENT event;
-        ALLEGRO_TIMEOUT timeout;
-        al_init_timeout(&timeout, 0.06);
+        al_wait_for_event(m_events, &event);
 
-        bool hasEvent = al_wait_for_event_until(m_events, &event, &timeout);
-
-            // bool LeftKeyDown = Input.isKeyDown(sf::Key::Left);
-            // bool RightButtonDown = Input.isMouseButtonDown(sf::Mouse::Right);
-            // unsigned int MouseX = Input.getMouseX();
-            // unsigned int MouseY = Input.getMouseY();
+        if (event.type == ALLEGRO_EVENT_TIMER) {
+            redraw = true;
+        }
 
 //            m_world->handleEvent(event);
-        if (hasEvent) {
-            switch (event) {
+            switch (event.type) {
                 // window closed
                 case ALLEGRO_EVENT_DISPLAY_CLOSE:
                 m_running = false;
@@ -179,7 +182,7 @@ void Game::tick()
 
                 // key pressed
                 case ALLEGRO_EVENT_KEY_DOWN:
-                if (event.key.code == sf::Keyboard::Escape) {
+                if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
                     m_running = false;
                 }
                 break;
@@ -203,21 +206,17 @@ void Game::tick()
                 default:
                     break;
             }
+
+            // if there are events to process, lets suspend drawing for a tick
+        if (redraw && al_is_event_queue_empty(m_events)) {
+            al_clear_to_color(al_map_rgb(0,0,0));
+
+    //       m_world->update(elapsedTime);
+            // render methods *must* exit by setting back to the default view
+            // (if they set it to a different view at the beginning of the call)
+    //        m_world->render();
+            al_flip_display();
         }
-
-        al_clear_to_color(al_map_rgb(0,0,0));
-
-            // Window closed
-//            if (event.type == sf::Event::Closed || ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Key::Escape))) {
-//               shutdown();
-            //          }
-
-
- //       m_world->update(elapsedTime);
-        // render methods *must* exit by setting back to the default view
-        // (if they set it to a different view at the beginning of the call)
-//        m_world->render();
-        al_flip_display();
     }
 
 shutdown:
@@ -226,6 +225,7 @@ shutdown:
 
 void Game::shutdown()
 {
+    al_destroy_timer(m_timer);
     al_destroy_display(m_display);
     al_destroy_event_queue(m_events);
     exit(0);

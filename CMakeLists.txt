@@ -1,4 +1,6 @@
 cmake_minimum_required(VERSION 2.6)
+
+
 project (ore_chasm)
 
 # Enable debug symbols by default
@@ -18,6 +20,11 @@ else(CMAKE_BUILD_TYPE STREQUAL "")
     set(CMAKE_CXX_FLAGS "-std=c++11 -O2 -Wall -Wno-unused-variable -Wno-unused-function -fexpensive-optimizations -Woverloaded-virtual")
     set(CMAKE_C_FLAGS "-O2 -Wall -Wno-unused-variable -Wno-unused-function -fexpensive-optimizations")
 endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
+
+# FIXME because i don't know how to switch it easily
+# and passing it to cmake on cli goes into an infinite loop
+set(CMAKE_C_COMPILER "/usr/bin/clang")
+set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
 
 # (you can also set it on the command line: -D CMAKE_BUILD_TYPE=Release)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
@@ -127,9 +134,9 @@ set(EXECUTABLE_NAME "ore-chasm")
 set(SRC
 src/main.cpp
 src/game.cpp
+src/debug.cpp
 #src/imagemanager.cpp
 #src/player.cpp
-src/debug.cpp
 #src/world.cpp
 #src/renderable.cpp
 #src/entity.cpp
