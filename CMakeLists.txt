@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 2.6)
 
-
 project (ore_chasm)
 
 # Enable debug symbols by default
@@ -145,17 +144,7 @@ src/debug.cpp
 #src/sky.cpp
 )
 
-#YAML, needed later
-## pkg-config-based library
 include(FindPkgConfig)
-#pkg_check_modules(yaml-cpp REQUIRED yaml-cpp>=0.2.5)
-#if(yaml-cpp_FOUND)
-#  include_directories(${yaml-cpp_INCLUDE_DIRS})
-#  link_directories(${yaml-cpp_LIBRARY_DIRS})
-#endif()
-#add_executable(${EXECUTABLE_NAME} ${SOURCES})
-#target_link_libraries(${EXECUTABLE_NAME} ${yaml-cpp_LIBRARIES})
-#
 
 add_executable(${EXECUTABLE_NAME} ${SRC})
 
@@ -168,7 +157,6 @@ set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/COPYING")
 set(CPACK_PACKAGE_VERSION_MAJOR "${ore_chasm_VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${ore_chasm_VERSION_MINOR}")
 include(CPack)
-
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/src/)
 
