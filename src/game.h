@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+class ALLEGRO_FONT;
 class ALLEGRO_TIMER;
 class ALLEGRO_EVENT_QUEUE;
 class ALLEGRO_DISPLAY;
@@ -51,6 +52,7 @@ private:
     ALLEGRO_DISPLAY *m_display = nullptr;
     ALLEGRO_EVENT_QUEUE *m_events = nullptr;
     ALLEGRO_TIMER *m_timer = nullptr;
+    ALLEGRO_FONT *m_font = nullptr;
     bool m_running = true;
 };
 

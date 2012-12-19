@@ -62,8 +62,8 @@ void Game::init()
     Debug::fatal(al_init(), Debug::Area::System, "Failure to init allegro");
 
     al_init_font_addon();
-    al_init_ttf_addon();
-    al_init_image_addon();
+    Debug::fatal(al_init_ttf_addon(), Debug::Area::System, "Failure to init ttf addon");
+    Debug::fatal(al_init_image_addon(), Debug::Area::System, "Failure to init image addon");
     Debug::fatal(al_install_keyboard(), Debug::Area::System, "Failure to install keyboard");
     Debug::fatal(al_install_mouse(), Debug::Area::System, "Failure to install mouse");
 
@@ -108,9 +108,7 @@ void Game::init()
     al_register_event_source(m_events, al_get_mouse_event_source());
     al_register_event_source(m_events, al_get_keyboard_event_source());
 
-    al_clear_to_color(al_map_rgb(0, 0, 0));
-
-    al_flip_display();
+    Debug::fatal(m_font = al_load_ttf_font("../font/Ubuntu-L.ttf", 12, 0), Debug::Area::System, "Failure to load font");
 
 //    ImageManager* manager = ImageManager::instance();
 //    manager->addResourceDir("../textures/");
@@ -118,6 +116,11 @@ void Game::init()
     // World takes ownership of m_view
  //   World::createInstance(m_window, m_view);
 //    m_world = World::instance();
+
+    // ----------------------------------------------------- initial render --------------------------------------------------
+    al_clear_to_color(al_map_rgb(0, 0, 0));
+
+    al_flip_display();
 
     tick();
     shutdown();
@@ -162,10 +165,6 @@ void Game::tick()
             maxFps = fps;
         }
 
-        ss.str("");
-        ss << "Framerate: " << fps << " Min: " << minFps << " Max: " << maxFps << " elapsedTime: " << elapsedTime << "";
-        str = ss.str();
-
         ALLEGRO_EVENT event;
         al_wait_for_event(m_events, &event);
 
@@ -209,12 +208,17 @@ void Game::tick()
 
             // if there are events to process, lets suspend drawing for a tick
         if (redraw && al_is_event_queue_empty(m_events)) {
+            // rendering always goes after this
             al_clear_to_color(al_map_rgb(0,0,0));
 
+            ss.str("");
+            ss << "Framerate: " << fps << " Min: " << minFps << " Max: " << maxFps << " elapsedTime: " << elapsedTime << "";
+            str = ss.str();
+            al_draw_text(m_font, al_map_rgb(255, 255, 0), 0, 0, ALLEGRO_ALIGN_LEFT, str.c_str());
+
     //       m_world->update(elapsedTime);
-            // render methods *must* exit by setting back to the default view
-            // (if they set it to a different view at the beginning of the call)
     //        m_world->render();
+            //rendering always before this
             al_flip_display();
         }
     }
