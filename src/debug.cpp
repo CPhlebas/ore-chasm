@@ -37,7 +37,7 @@ void Debug::assertf(bool value, std::string message)
     }
 }
 
-void fatal(bool value, Debug::Area area, std::string message)
+void Debug::fatal(bool value, Debug::Area area, std::string message)
 {
     if (!value) {
         Debug::log(area) << "FATAL: " << message;
