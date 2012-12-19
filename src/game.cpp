@@ -53,23 +53,14 @@ void Game::init()
     int release = version & 255;
     Debug::log(Debug::Area::System) << "Using allegro version: " << major << "." << minor << "." << revision << "." << release;
 
-    al_init();
+    Debug::fatal(al_init(), Debug::Area::System, "Failure to init allegro");
 
-    m_display =al_create_display(SCREEN_W, SCREEN_H);
+    m_display = al_create_display(SCREEN_W, SCREEN_H);
+    Debug::fatal(m_display, Debug::Area::Graphics, "display creation failed");
 
-    sf::ContextSettings settings;
+    Debug::fatal(al_create_event_queue(), Debug::Area::System, "event queue init");
 
-    settings.depthBits = 24;
-    settings.stencilBits = 8;
-
-    m_window = new sf::RenderWindow(sf::VideoMode(SCREEN_W, SCREEN_H), "Ore Chasm", sf::Style::Default, settings);
-    m_window->setVerticalSyncEnabled(false);
-//    m_app->setFramerateLimit(60);
-    // totally useless for a game.
-    m_window->setKeyRepeatEnabled(false);
-    m_window->setMouseCursorVisible(false);
-
-    settings = m_window->getSettings();
+    al_register_event_source(m_events, al_get_display_event_source(m_display));
 
     std::cout << "\n\n\n\n";
     std::cout << "=======================================================================" << "\n";
@@ -82,13 +73,7 @@ void Game::init()
     std::cout << "=======================================================================" << "\n";
     std::cout << "\n\n\n\n";
 
-    m_view = new sf::View(sf::FloatRect(0, 0, SCREEN_W, SCREEN_H));
     m_window->setView(*m_view);
-
-    m_font = new sf::Font();
-    if (!m_font->loadFromFile("../font/DejaVuSerif.ttf")) {
-        abort_game("unable to load font");
-    }
 
     ImageManager* manager = ImageManager::instance();
     manager->addResourceDir("../textures/");

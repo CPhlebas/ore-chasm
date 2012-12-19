@@ -26,10 +26,81 @@ message("PATH: " + ${CMAKE_MODULE_PATH})
 set(ore_chasm_VERSION_MAJOR 0)
 set(ore_chasm_VERSION_MINOR 1)
 
+##### Allegro 5 #######
+find_package(Allegro5 REQUIRED)
+find_package(Allegro5Main REQUIRED)
+find_package(Allegro5Primitives REQUIRED)
+find_package(Allegro5Font REQUIRED)
+find_package(Allegro5TTF REQUIRED)
+find_package(Allegro5Image REQUIRED)
+find_package(Allegro5Audio REQUIRED)
+find_package(Allegro5ACodec REQUIRED)
+find_package(Allegro5Dialog REQUIRED)
+
+if (NOT ALLEGRO5_FOUND)
+    message(FATAL_ERROR "Can't find Allegro 5 library")
+endif(NOT ALLEGRO5_FOUND)
+
+if (NOT ALLEGRO5_MAIN_FOUND)
+    message(FATAL_ERROR "Can't find Allegro 5 Main addon")
+endif(NOT ALLEGRO5_MAIN_FOUND)
+
+if (NOT ALLEGRO5_PRIMITIVES_FOUND)
+    message(FATAL_ERROR "Can't find Allegro 5 Primitives addon")
+endif(NOT ALLEGRO5_PRIMITIVES_FOUND)
+
+if (NOT ALLEGRO5_FONT_FOUND)
+    message(FATAL_ERROR "Can't find Allegro 5 Font addon")
+endif(NOT ALLEGRO5_FONT_FOUND)
+
+if (NOT ALLEGRO5_TTF_FOUND)
+    message(FATAL_ERROR "Can't find Allegro 5 TTF addon")
+endif(NOT ALLEGRO5_TTF_FOUND)
+
+if (NOT ALLEGRO5_IMAGE_FOUND)
+    message(FATAL_ERROR "Can't find Allegro 5 Image addon")
+endif(NOT ALLEGRO5_IMAGE_FOUND)
+
+if (NOT ALLEGRO5_AUDIO_FOUND)
+    message(FATAL_ERROR "Can't find Allegro 5 Audio addon")
+endif(NOT ALLEGRO5_AUDIO_FOUND)
+
+if (NOT ALLEGRO5_ACODEC_FOUND)
+    message(FATAL_ERROR "Can't find Allegro 5 ACodec addon")
+endif(NOT ALLEGRO5_ACODEC_FOUND)
+
+if (NOT ALLEGRO5_DIALOG_FOUND)
+    message(FATAL_ERROR "Can't find Allegro 5 Native Dialog addon")
+endif(NOT ALLEGRO5_DIALOG_FOUND)
+
+
+
+list(APPEND ALLEGRO_LIBRARIES
+    ${ALLEGRO5_LIBRARIES}
+    ${ALLEGRO5_MAIN_LIBRARIES}
+    ${ALLEGRO5_PRIMITIVES_LIBRARIES}
+    ${ALLEGRO5_FONT_LIBRARIES}
+    ${ALLEGRO5_TTF_LIBRARIES}
+    ${ALLEGRO5_IMAGE_LIBRARIES}
+    ${ALLEGRO5_DIALOG_LIBRARIES}
+    ${ALLEGRO5_AUDIO_LIBRARIES}
+    ${ALLEGRO5_ACODEC_LIBRARIES}
+)
+
+list(APPEND ALLEGRO_INCLUDE_DIRS
+    ${ALLEGRO5_INCLUDE_DIRS}
+    ${ALLEGRO5_MAIN_INCLUDE_DIRS}
+    ${ALLEGRO5_PRIMITIVES_INCLUDE_DIRS}
+    ${ALLEGRO5_FONT_INCLUDE_DIRS}
+    ${ALLEGRO5_TTF_INCLUDE_DIRS}
+    ${ALLEGRO5_AUDIO_INCLUDE_DIRS}
+    ${ALLEGRO5_ACODEC_INCLUDE_DIRS}
+)
+
+##################
+
 find_package( PugiXML REQUIRED)
 find_package( OpenGL REQUIRED )
-
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 
 if (NOT PugiXML_FOUND)
     message(FATAL_ERROR "Could not find pugixml library.")
@@ -74,15 +145,8 @@ include(FindPkgConfig)
 
 add_executable(${EXECUTABLE_NAME} ${SRC})
 
-find_package(Allegro5 REQUIRED)
-
-if (NOT ALLEGRO5_FOUND)
-    message(FATAL_ERROR "Could not find Allegro 5.")
-endif()
-
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR})
-include_directories(${ALLEGRO5_INCLUDE_DIR})
-target_link_libraries(${EXECUTABLE_NAME} ${ALLEGRO5_LIBRARY} ${OPENGL_LIBRARIES} ${PugiXML_LIBRARY})
+include_directories(${CMAKE_SOURCE_DIR} ${ALLEGRO_INCLUDE_DIRS})
+target_link_libraries(${EXECUTABLE_NAME} ${ALLEGRO_LIBRARIES} ${OPENGL_LIBRARIES} ${PugiXML_LIBRARY})
 
 # CPack packaging
 include(InstallRequiredSystemLibraries)

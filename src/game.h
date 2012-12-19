@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+class ALLEGRO_EVENT_QUEUE;
 class ALLEGRO_DISPLAY;
 //1600
 static int SCREEN_W = 1600;
@@ -47,6 +48,7 @@ public:
 private:
     World *m_world = nullptr;
     ALLEGRO_DISPLAY *m_display = nullptr;
+    ALLEGRO_EVENT_QUEUE *m_events = nullptr;
 };
 
 
