@@ -132,45 +132,20 @@ void Game::tick()
     std::string str;
 
     int fps = 0;
-    int minFps = 0;
-    int maxFps = 0;
 
     const int MAX_BENCH = 300;
     int benchTime = MAX_BENCH;
 
-    int64_t elapsedTime = 0;
-    bool redraw = false;
-
-    m_timer = al_create_timer(1.0 / FPS);
-    al_register_event_source(m_events, al_get_timer_event_source(m_timer));
-    al_start_timer(m_timer);
+    double oldTime = al_get_time();
 
     while (m_running) {
-        elapsedTime = al_get_timer_count(m_timer);
-        benchTime -= 1;
-        fps = int(1.f / elapsedTime);
-
-        // recheck the max, good amount of time passed
-        if (benchTime <= 0) {
-            maxFps = fps;
-            minFps = maxFps;
-            benchTime = MAX_BENCH;
-        }
-
-        if (fps < minFps) {
-            minFps = fps;
-        }
-
-        if (fps > maxFps) {
-            maxFps = fps;
-        }
+        double newTime = al_get_time();
+        double delta = newTime - oldTime;
+        double fps = 1 / (delta);
+        oldTime = newTime;
 
         ALLEGRO_EVENT event;
-        al_wait_for_event(m_events, &event);
-
-        if (event.type == ALLEGRO_EVENT_TIMER) {
-            redraw = true;
-        }
+        al_get_next_event(m_events, &event);
 
 //            m_world->handleEvent(event);
             switch (event.type) {
@@ -182,7 +157,7 @@ void Game::tick()
                 // key pressed
                 case ALLEGRO_EVENT_KEY_DOWN:
                 if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
-                    m_running = false;
+                    goto shutdown;
                 }
                 break;
 
@@ -207,12 +182,10 @@ void Game::tick()
             }
 
             // if there are events to process, lets suspend drawing for a tick
-        if (redraw && al_is_event_queue_empty(m_events)) {
-            // rendering always goes after this
             al_clear_to_color(al_map_rgb(0,0,0));
 
             ss.str("");
-            ss << "Framerate: " << fps << " Min: " << minFps << " Max: " << maxFps << " elapsedTime: " << elapsedTime << "";
+            ss << "FPS: " << fps;
             str = ss.str();
             al_draw_text(m_font, al_map_rgb(255, 255, 0), 0, 0, ALLEGRO_ALIGN_LEFT, str.c_str());
 
@@ -220,7 +193,6 @@ void Game::tick()
     //        m_world->render();
             //rendering always before this
             al_flip_display();
-        }
     }
 
 shutdown:
@@ -229,7 +201,6 @@ shutdown:
 
 void Game::shutdown()
 {
-    al_destroy_timer(m_timer);
     al_destroy_display(m_display);
     al_destroy_event_queue(m_events);
     exit(0);
