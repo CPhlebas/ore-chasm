@@ -127,15 +127,15 @@ set(EXECUTABLE_NAME "ore-chasm")
 set(SRC
 src/main.cpp
 src/game.cpp
-src/imagemanager.cpp
-src/player.cpp
+#src/imagemanager.cpp
+#src/player.cpp
 src/debug.cpp
-src/world.cpp
-src/renderable.cpp
-src/entity.cpp
-src/block.cpp
-src/cloudsystem.cpp
-src/sky.cpp
+#src/world.cpp
+#src/renderable.cpp
+#src/entity.cpp
+#src/block.cpp
+#src/cloudsystem.cpp
+#src/sky.cpp
 )
 
 #YAML, needed later

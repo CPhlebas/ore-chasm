@@ -47,8 +47,8 @@ public:
 
     static LogStream log(Area area = Area::General);
 
-    void assertf(bool value, std::string message);
-    void fatal(bool value, Area area, std::string message);
+    static void assertf(bool value, std::string message);
+    static void fatal(bool value, Area area, std::string message);
 };
 
 class LogStream : public std::stringstream

@@ -16,17 +16,24 @@
  *****************************************************************************/
 
 #include "game.h"
-#include "imagemanager.h"
-#include "entity.h"
+
 #include "debug.h"
+//#include "entity.h"
+//#include "imagemanager.h"
 
 #include <iostream>
 #include <sstream>
-#include <string>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string>
 
 #include <allegro5/allegro.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_image.h>
+#include <allegro5/allegro_opengl.h>
+#include <allegro5/allegro_ttf.h>
+#include <allegro5/keyboard.h>
+#include <allegro5/mouse.h>
 
 Game::Game()
 {
@@ -34,7 +41,6 @@ Game::Game()
 
 Game::~Game()
 {
-    delete m_world;
 }
 
 void Game::abort_game(const char* message)
@@ -55,12 +61,23 @@ void Game::init()
 
     Debug::fatal(al_init(), Debug::Area::System, "Failure to init allegro");
 
+    al_init_font_addon();
+    al_init_ttf_addon();
+    al_init_image_addon();
+
     m_display = al_create_display(SCREEN_W, SCREEN_H);
     Debug::fatal(m_display, Debug::Area::Graphics, "display creation failed");
+
+    al_set_app_name("ore-chasm");
+    al_set_window_title(m_display, "Ore Chasm");
 
     Debug::fatal(al_create_event_queue(), Debug::Area::System, "event queue init");
 
     al_register_event_source(m_events, al_get_display_event_source(m_display));
+
+    al_clear_to_color(al_map_rgb(0, 0, 0));
+
+    al_flip_display();
 
     std::cout << "\n\n\n\n";
     std::cout << "=======================================================================" << "\n";
@@ -73,14 +90,12 @@ void Game::init()
     std::cout << "=======================================================================" << "\n";
     std::cout << "\n\n\n\n";
 
-    m_window->setView(*m_view);
-
-    ImageManager* manager = ImageManager::instance();
-    manager->addResourceDir("../textures/");
+//    ImageManager* manager = ImageManager::instance();
+//    manager->addResourceDir("../textures/");
 
     // World takes ownership of m_view
-    World::createInstance(m_window, m_view);
-    m_world = World::instance();
+ //   World::createInstance(m_window, m_view);
+//    m_world = World::instance();
 
     tick();
     shutdown();
@@ -88,15 +103,6 @@ void Game::init()
 
 void Game::tick()
 {
-    sf::Event event;
-
-//    m_player->setPosition(m_view->getCenter());
-
-    sf::Text text;
-    text.setFont(*m_font);
-    text.setCharacterSize(12.0);
-    text.setColor(sf::Color::Yellow);
-
     std::stringstream ss;
     std::string str;
 
@@ -108,7 +114,6 @@ void Game::tick()
 
     const int MAX_BENCH = 300;
     int benchTime = MAX_BENCH;
-
 
     float elapsedTime = 0;
 
@@ -191,22 +196,12 @@ void Game::tick()
             //          }
         }
 
-        m_window->pushGLStates();
-//        m_view->move(500 * xDir * elapsedTime, 500* yDir * elapsedTime);
 
-        m_window->clear(sf::Color(0, 0, 0));
-
-        m_world->update(elapsedTime);
+ //       m_world->update(elapsedTime);
         // render methods *must* exit by setting back to the default view
         // (if they set it to a different view at the beginning of the call)
-        m_world->render();
+//        m_world->render();
 
-        m_window->draw(text);
-
-        m_window->popGLStates();
-
-        // always after rendering!
-        m_window->display();
     }
 
 shutdown:
@@ -215,7 +210,5 @@ shutdown:
 
 void Game::shutdown()
 {
-    m_window->close();
-    delete m_window;
     exit(0);
 }
