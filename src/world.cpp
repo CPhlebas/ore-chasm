@@ -32,6 +32,8 @@
 
 #include <GL/gl.h>
 
+#include <eigen3/Eigen/Core>
+
 #include <allegro5/allegro.h>
 
 static World* s_instance = 0;

@@ -38,7 +38,6 @@ if (NOT EIGEN3_FOUND)
     message(FATAL_ERROR "Can't find Eigen 3 library")
 endif(NOT EIGEN3_FOUND)
 
-
 ##### Allegro 5 #######
 find_package(Allegro5 REQUIRED)
 find_package(Allegro5Main REQUIRED)
@@ -155,7 +154,7 @@ include(FindPkgConfig)
 
 add_executable(${EXECUTABLE_NAME} ${SRC})
 
-include_directories(${CMAKE_SOURCE_DIR} ${ALLEGRO_INCLUDE_DIRS})
+include_directories(${CMAKE_SOURCE_DIR} ${ALLEGRO_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIR})
 target_link_libraries(${EXECUTABLE_NAME} ${ALLEGRO_LIBRARIES} ${OPENGL_LIBRARIES} ${PugiXML_LIBRARY})
 
 # CPack packaging
