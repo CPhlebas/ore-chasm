@@ -65,7 +65,7 @@ public:
      */
     void setOrigin(const Eigen::Vector2f origin);
 
-    Eigen::Vector2f origin() const;
+    Eigen::Vector2f origin() const { return m_origin; };
 
 private:
     void renderDebugDrawing();
