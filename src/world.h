@@ -22,8 +22,9 @@
 #include "player.h"
 
 #include <stdlib.h>
-#include <SFML/Graphics/Shader.hpp>
-#include <SFML/Graphics/Texture.hpp>
+
+class ALLEGRO_EVENT;
+class ALLEGRO_DISPLAY;
 
 class Sky;
 //height
@@ -41,22 +42,20 @@ static constexpr unsigned short WORLD_COLUMNCOUNT = 2400;
 
 */
 
-
 class World
 {
 public:
-    World(sf::RenderWindow *window, sf::View *view);
+    World(ALLEGRO_DISPLAY* display);
 
     static World* instance();
-    static void createInstance(sf::RenderWindow *_window, sf::View *_view);
+    static void createInstance(ALLEGRO_DISPLAY *display);
 
     void update(const float elapsedTime);
     void render();
 
     void loadMap();
 
-    void handleEvent(const sf::Event& event);
-
+    void handleEvent(const ALLEGRO_EVENT& event);
 
     bool isTileSolid(const sf::Vector2f& vecDest) const;
 
@@ -121,8 +120,8 @@ private:
     Sky *m_sky = nullptr;
 
     //FIXME: just a ptr to the game.cpp one :(  same with window
-    sf::View *m_view = nullptr;
-    sf::RenderWindow *m_window = nullptr;
+//FIXME:    sf::View *m_view = nullptr;
+    ALLEGRO_DISPLAY *m_display = nullptr;
 
     sf::Shader m_shader;
 

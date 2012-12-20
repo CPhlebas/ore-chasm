@@ -134,9 +134,9 @@ set(SRC
 src/main.cpp
 src/game.cpp
 src/debug.cpp
+src/world.cpp
 #src/imagemanager.cpp
 #src/player.cpp
-#src/world.cpp
 #src/renderable.cpp
 #src/entity.cpp
 #src/block.cpp

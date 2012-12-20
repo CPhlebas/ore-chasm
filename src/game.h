@@ -18,7 +18,7 @@
 #ifndef GAME_H
 #define GAME_H
 
-//#include "world.h"
+#include "world.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -48,7 +48,7 @@ public:
     const float FPS = 60.0;
 
 private:
-    //World *m_world = nullptr;
+    World *m_world = nullptr;
     ALLEGRO_DISPLAY *m_display = nullptr;
     ALLEGRO_EVENT_QUEUE *m_events = nullptr;
     ALLEGRO_FONT *m_font = nullptr;

@@ -30,13 +30,9 @@
 #include <assert.h>
 #include <math.h>
 
-#include <SFML/Graphics/Drawable.hpp>
-#include <SFML/Graphics/Image.hpp>
-#include <SFML/System/Clock.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/Window/Keyboard.hpp>
-
 #include <GL/gl.h>
+
+#include <allegro5/allegro.h>
 
 static World* s_instance = 0;
 
@@ -46,21 +42,19 @@ World* World::instance()
     return s_instance;
 }
 
-void World::createInstance(sf::RenderWindow *_window, sf::View *_view)
+void World::createInstance(ALLEGRO_DISPLAY *display)
 {
     if (!s_instance) {
-        s_instance = new World(_window, _view);
+        s_instance = new World(display);
     } else {
         assert(0);
     }
 }
 
 
-World::World(sf::RenderWindow *window, sf::View *view)
+World::World(ALLEGRO_DISPLAY *display) :
+m_display(display)
 {
-    m_window = window;
-    m_view = view;
-
     m_player = new Player("../textures/player.png");
     m_entities.insert(m_entities.end(), m_player);
 

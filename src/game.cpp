@@ -146,7 +146,7 @@ void Game::tick()
 
         ALLEGRO_EVENT event;
         while (al_get_next_event(m_events, &event)) {
-//            m_world->handleEvent(event);
+            m_world->handleEvent(event);
             switch (event.type) {
                 // window closed
                 case ALLEGRO_EVENT_DISPLAY_CLOSE:
