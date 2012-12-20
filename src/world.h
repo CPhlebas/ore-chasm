@@ -48,7 +48,6 @@ enum Mouse {
     ALLEGRO_MOUSE_MIDDLE = 4
 };
 
-
 class World
 {
 public:

@@ -1,0 +1,7 @@
+In order to use Ore Chasm, you must compile it (I don't have time to make
+binaries each day). Before you can do that, you must install the following:
+
+* Eigen 3.1.2 http://eigen.tuxfamily.org/index.php?title=Main_Page
+* Allegro 5.1 http://liballeg.org/
+* PugiXML http://pugixml.org/
+

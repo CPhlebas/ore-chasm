@@ -110,7 +110,7 @@ list(APPEND ALLEGRO_INCLUDE_DIRS
     ${ALLEGRO5_SHADER_INCLUDE_DIRS}
 )
 
-##################
+########### ALLEGRO 5 ############
 
 find_package( PugiXML REQUIRED)
 find_package( OpenGL REQUIRED )
