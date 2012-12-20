@@ -32,6 +32,13 @@ message("PATH: " + ${CMAKE_MODULE_PATH})
 set(ore_chasm_VERSION_MAJOR 0)
 set(ore_chasm_VERSION_MINOR 1)
 
+find_package(Eigen3 3.1.2 REQUIRED)
+
+if (NOT EIGEN3_FOUND)
+    message(FATAL_ERROR "Can't find Eigen 3 library")
+endif(NOT EIGEN3_FOUND)
+
+
 ##### Allegro 5 #######
 find_package(Allegro5 REQUIRED)
 find_package(Allegro5Main REQUIRED)
