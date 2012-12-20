@@ -23,10 +23,14 @@
 
 #include <stdlib.h>
 
+#include <Eigen/Core>
+
 union ALLEGRO_EVENT;
 class ALLEGRO_DISPLAY;
 
 class Sky;
+
+
 //height
 static constexpr unsigned short WORLD_ROWCOUNT = 8400;
 //width
@@ -63,7 +67,7 @@ public:
 
     void handleEvent(const ALLEGRO_EVENT& event);
 
-    bool isTileSolid(const sf::Vector2f& vecDest) const;
+    bool isTileSolid(const Eigen::Vector2f& vecDest) const;
 
     //create containers of various entities, and implement a tile system
     //game.cpp calls into this each tick, which this descends downward into each entity
@@ -82,13 +86,13 @@ private:
     * if this is ideal or not
     * NOTE: doesn't *actually* use m_view->getViewport, just a simple SCREEN_W,H / 2
     */
-    sf::Vector2f viewportCenter() const;
+    Eigen::Vector2f viewportCenter() const;
     void calculateAttackPosition();
     void generatePixelTileMap();
     void performBlockAttack();
     void saveMap();
 
-    sf::Vector2f tileOffset() const;
+    Eigen::Vector2f tileOffset() const;
 
     /**
      * Should be called AFTER the world has been fully processed in raw block form.
@@ -158,7 +162,7 @@ private:
     /**
      * In client window coordinates (relative)
      */
-    sf::Vector2f m_relativeVectorToAttack;
+    Eigen::Vector2f m_relativeVectorToAttack;
 };
 
 #endif

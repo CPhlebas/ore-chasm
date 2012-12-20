@@ -19,7 +19,6 @@
 #define IMAGE_MANAGER_H
 
 #include <stdlib.h>
-#include <SFML/Graphics.hpp>
 
 class ImageManager
 {

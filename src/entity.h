@@ -20,8 +20,7 @@
 
 #include "renderable.h"
 
-#include <SFML/Graphics.hpp>
-#include <SFML/Graphics/RenderStates.hpp>
+#include <Eigen/Core>
 
 const float GRAVITY = 0.05f;
 
@@ -49,16 +48,16 @@ public:
      * @see update
      */
     void setPosition(float x, float y);
-    void setPosition(sf::Vector2f vect);
+    void setPosition(const Eigen::Vector2f& vect);
 
     /**
      * Sets the velocity that this entity should have. It is affected by gravity,
      * and will modify the position automatically when Entity::update() is called.
      */
-    void setVelocity(const sf::Vector2f& velocity);
+    void setVelocity(const Eigen::Vector2f& velocity);
 
 private:
-    sf::Vector2f m_velocity;
+    Eigen::Vector2f m_velocity;
 };
 
 #endif

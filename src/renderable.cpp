@@ -19,11 +19,7 @@
 #include "imagemanager.h"
 #include "game.h"
 
-#include <SFML/System/Vector2.hpp>
-
-#include <SFML/Graphics/RectangleShape.hpp>
-#include <SFML/Graphics/VertexArray.hpp>
-#include <SFML/Graphics/Shader.hpp>
+#include <Eigen/Core>
 
 Renderable::Renderable()
 {
@@ -50,10 +46,10 @@ void Renderable::setTexture(const char* texture)
 void Renderable::render(sf::RenderWindow* window)
 {
     const sf::Vector2u size = sf::Sprite::getTexture()->getSize();
-    const sf::Vector2f rectSize(size.x, size.y);
-    const sf::Vector2f pos = sf::Sprite::getPosition();
+    const Eigen::Vector2f rectSize(size.x, size.y);
+    const Eigen::Vector2f pos = sf::Sprite::getPosition();
     const sf::IntRect rect = getTextureRect();
-    const sf::Vector2f center = sf::Vector2f(rect.width * 0.5, rect.height * 0.5);
+    const Eigen::Vector2f center = Eigen::Vector2f(rect.width * 0.5, rect.height * 0.5);
 
     sf::RectangleShape outline;
     outline.setSize(rectSize);

@@ -20,9 +20,6 @@
 
 #include "renderable.h"
 
-#include <SFML/Graphics.hpp>
-#include <SFML/Graphics/RenderStates.hpp>
-
 class CloudSystem;
 
 class Sky

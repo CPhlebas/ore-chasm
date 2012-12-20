@@ -19,7 +19,6 @@
 
 #include <map>
 #include <iostream>
-#include <SFML/Graphics.hpp>
 
 static ImageManager* s_instance = 0;
 

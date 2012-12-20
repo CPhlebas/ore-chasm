@@ -20,6 +20,8 @@
 #include "world.h"
 #include "debug.h"
 
+#include <Eigen/Core>
+
 Entity::Entity(const char* texture) : Renderable(texture)
 {
 }
@@ -28,7 +30,7 @@ Entity::Entity(const char* texture) : Renderable(texture)
 //{
 //}
 
-void Entity::setVelocity(const sf::Vector2f& velocity)
+void Entity::setVelocity(const Eigen::Vector2f& velocity)
 {
     m_velocity = velocity;
 }
@@ -37,9 +39,9 @@ void Entity::update(const float elapsedTime)
 {
 //    m_velocity.y += GRAVITY;
 
-    sf::Vector2f dest = sf::Vector2f(m_velocity.x * elapsedTime, m_velocity.y * elapsedTime);
-    dest.x += getPosition().x;
-    dest.y += getPosition().y;
+    Eigen::Vector2f dest = Eigen::Vector2f(m_velocity.x() * elapsedTime, m_velocity.y() * elapsedTime);
+    dest.x() += getPosition().x();
+    dest.y() += getPosition().y();
 
     if (!World::instance()->isTileSolid(dest)) {
         Renderable::setPosition(dest);
@@ -51,7 +53,7 @@ void Entity::setPosition(float x, float y)
     Renderable::setPosition(x, y);
 }
 
-void Entity::setPosition(sf::Vector2f vect)
+void Entity::setPosition(const Eigen::Vector2f& vect)
 {
     Renderable::setPosition(vect);
 }

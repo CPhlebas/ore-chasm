@@ -21,8 +21,6 @@
 #include "entity.h"
 #include "block.h"
 
-#include <SFML/Graphics.hpp>
-
 union ALLEGRO_EVENT;
 class ALLEGRO_DISPLAY;
 

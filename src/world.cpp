@@ -32,7 +32,7 @@
 
 #include <GL/gl.h>
 
-#include <eigen3/Eigen/Core>
+#include <Eigen/Core>
 
 #include <allegro5/allegro.h>
 
@@ -165,17 +165,18 @@ void World::render()
     ALLEGRO_MOUSE_STATE state;
     al_get_mouse_state(&state);
 
-    sf::Vector2i mouse(state.x, state.y);
+    Eigen::Vector2i mouse(state.x, state.y);
 
     const float radius = 16.0f;
     const float halfRadius = radius * 0.5;
     const float halfBlockSize = Block::blockSize * 0.5;
 
     // NOTE: (SCREEN_H % Block::blockSize) is what we add so that it is aligned properly to the tile grid, even though the screen is not evenly divisible by such.
-    sf::Vector2f crosshairPosition(mouse.x - mouse.x % Block::blockSize + (SCREEN_W % Block::blockSize) - tileOffset().x + Block::blockSize, mouse.y - mouse.y % Block::blockSize + (SCREEN_H % Block::blockSize) - tileOffset().y + Block::blockSize);
+    Eigen::Vector2f crosshairPosition(mouse.x() - mouse.x() % Block::blockSize + (SCREEN_W % Block::blockSize) - tileOffset().x() + Block::blockSize,
+                                      mouse.y() - mouse.y() % Block::blockSize + (SCREEN_H % Block::blockSize) - tileOffset().y() + Block::blockSize);
 
     sf::RectangleShape crosshair = sf::RectangleShape();
-    crosshair.setSize(sf::Vector2f(radius, radius));
+    crosshair.setSize(Eigen::Vector2f(radius, radius));
     crosshair.setPosition(crosshairPosition);
     crosshair.setFillColor(sf::Color::Transparent);
     crosshair.setOutlineColor(sf::Color::Red);
@@ -281,10 +282,10 @@ unsigned char World::calculateTileMeshingType(const int tileX, const int tileY) 
     return result;
 }
 
-bool World::isTileSolid(const sf::Vector2f& vecDest) const
+bool World::isTileSolid(const Eigen::Vector2f& vecDest) const
 {
-    const int column = int(std::ceil(vecDest.x) / Block::blockSize);
-    const int row = int(std::ceil(vecDest.y) / Block::blockSize);
+    const int column = int(std::ceil(vecDest.x()) / Block::blockSize);
+    const int row = int(std::ceil(vecDest.y()) / Block::blockSize);
 
     int index = column * WORLD_ROWCOUNT + row;
     assert(index < WORLD_ROWCOUNT * WORLD_COLUMNCOUNT);
@@ -310,26 +311,26 @@ bool World::tileBlendTypeMatch(const int sourceTileX, const int sourceTileY, con
     return isMatched;
 }
 
-sf::Vector2f World::viewportCenter() const
+Eigen::Vector2f World::viewportCenter() const
 {
-    return sf::Vector2f(SCREEN_W * 0.5, SCREEN_H * 0.5);
+    return Eigen::Vector2f(SCREEN_W * 0.5, SCREEN_H * 0.5);
 }
 
 //FIXME: unused..will be used for shooting and such. not for block breaking.
 void World::calculateAttackPosition()
 {
-    /*    const sf::Vector2f _viewportCenter = viewportCenter();
+    /*    const Eigen::Vector2f _viewportCenter = viewportCenter();
 
         const sf::Vector2i mousePos = sf::Mouse::getPosition(*m_window);
 
-        sf::Vector2f diffVect;
+        Eigen::Vector2f diffVect;
         diffVect.x = mousePos.x - _viewportCenter.x;
         diffVect.y = mousePos.y - _viewportCenter.y;
 
         const double angle = atan2(diffVect.y, diffVect.x);
         const float newX = _viewportCenter.x + cos(angle) * Player::blockPickingRadius;
         const float newY= _viewportCenter.y  + sin(angle) * Player::blockPickingRadius;
-        m_relativeVectorToAttack = sf::Vector2f(newX, newY);
+        m_relativeVectorToAttack = Eigen::Vector2f(newX, newY);
     */
 }
 
@@ -338,9 +339,9 @@ void World::calculateAttackPosition()
 void World::performBlockAttack()
 {
     /*
-    const sf::Vector2f viewCenter = m_view->getCenter();
+    const Eigen::Vector2f viewCenter = m_view->getCenter();
 
-    sf::Vector2f viewPosition;
+    Eigen::Vector2f viewPosition;
     //    std::cout << "viewportcenter" << " viewportcenter y: " << viewportCenter().y << " view->getcenter() y: " << viewCenter.y << "\n";
     viewPosition.x = viewCenter.x - viewportCenter().x;
     viewPosition.y = viewCenter.y - viewportCenter().y;
@@ -354,37 +355,40 @@ void World::performBlockAttack()
     const int endColumn = (m_player->getPosition().x / Block::blockSize) + radius;
     */
 
-    sf::Vector2i mouse = sf::Mouse::getPosition(*m_window);
+    ALLEGRO_MOUSE_STATE state;
+    al_get_mouse_state(&state);
+
+    Eigen::Vector2i mouse(state.x, state.y);
 
     //FIXME: eventually will need to make this go to the players center
     // can we divide player pos by half of screen h/w ?
-    const sf::Vector2i center = sf::Vector2i(SCREEN_W * 0.5, SCREEN_H * 0.5);
+    Eigen::Vector2i center(SCREEN_W * 0.5, SCREEN_H * 0.5);
 
     // if the attempted block pick location is out of range, do nothing.
-    if (mouse.x < center.x - Player::blockPickingRadius ||
-            mouse.x > center.x + Player::blockPickingRadius ||
-            mouse.y < center.y - Player::blockPickingRadius ||
-            mouse.y > center.y + Player::blockPickingRadius) {
+    if (mouse.x() < center.x() - Player::blockPickingRadius ||
+            mouse.x() > center.x() + Player::blockPickingRadius ||
+            mouse.y() < center.y() - Player::blockPickingRadius ||
+            mouse.y() > center.y() + Player::blockPickingRadius) {
         return;
     }
 
-    mouse.x /= int(Block::blockSize);
-    mouse.y /= int(Block::blockSize);
+    mouse.x() /= int(Block::blockSize);
+    mouse.y() /= int(Block::blockSize);
 
     const int radius = Player::blockPickingRadius / Block::blockSize;
 
-    int attackX = mouse.x + (m_view->getCenter().x - SCREEN_W * 0.5) / Block::blockSize;
-    int attackY = mouse.y + (m_view->getCenter().y - SCREEN_H * 0.5) / Block::blockSize;
+    int attackX = mouse.x() + (m_view->getCenter().x() - SCREEN_W * 0.5) / Block::blockSize;
+    int attackY = mouse.y() + (m_view->getCenter().y() - SCREEN_H * 0.5) / Block::blockSize;
 
-    const sf::Vector2f playerPosition = m_player->getPosition();
+    const Eigen::Vector2f playerPosition = m_player->getPosition();
 
     //consider block map as starting at player pos == 0,0 and going down and to the right-ward
     //tilesBefore{X,Y} is only at the center of the view though..find the whole screen real estate
     // which is why startRow etc add and subtract half the screen
     //column
-    int tilesBeforeX = playerPosition.x / Block::blockSize;
+    int tilesBeforeX = playerPosition.x() / Block::blockSize;
     //row
-    int tilesBeforeY = playerPosition.y / Block::blockSize;
+    int tilesBeforeY = playerPosition.y() / Block::blockSize;
 
     const int startRow = tilesBeforeY - ((SCREEN_H * 0.5) / Block::blockSize);
     const int endRow = tilesBeforeY + ((SCREEN_H * 0.5) / Block::blockSize);
@@ -411,13 +415,13 @@ void World::performBlockAttack()
 
 void World::generatePixelTileMap()
 {
-    const sf::Vector2f playerPosition = m_player->getPosition();
+    const Eigen::Vector2f playerPosition = m_player->getPosition();
     //consider block map as starting at player pos == 0,0 and going down and to the right-ward
     //tilesBefore{X,Y} is only at the center of the view though..find the whole screen real estate
     //column
-    int tilesBeforeX = playerPosition.x / Block::blockSize;
+    int tilesBeforeX = playerPosition.x() / Block::blockSize;
     //row
-    int tilesBeforeY = playerPosition.y / Block::blockSize;
+    int tilesBeforeY = playerPosition.y() / Block::blockSize;
 
     //FIXME: only calculate this crap when we move/change tiles
     // -1 so that we render an additional row and column..to smoothly scroll
@@ -472,11 +476,11 @@ void World::generatePixelTileMap()
     m_shader.setParameter("offset", tileOffset().x, tileOffset().y);
 }
 
-sf::Vector2f World::tileOffset() const
+Eigen::Vector2f World::tileOffset() const
 {
-    const sf::Vector2f playerPosition = m_player->getPosition();
+    const Eigen::Vector2f playerPosition = m_player->getPosition();
     // to get per-pixel smooth scrolling, we get the remainders and pass it as an offset to things that need to know the tile positions
-    const sf::Vector2f ret = sf::Vector2f(int(playerPosition.x) & Block::blockSize - 1, int(playerPosition.y) & Block::blockSize - 1);
+    const Eigen::Vector2f ret = Eigen::Vector2f(int(playerPosition.x()) & Block::blockSize - 1, int(playerPosition.y()) & Block::blockSize - 1);
     return ret;
 }
 

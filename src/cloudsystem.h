@@ -20,9 +20,6 @@
 
 #include "renderable.h"
 
-#include <SFML/Graphics.hpp>
-#include <SFML/Graphics/RenderStates.hpp>
-
 const int CLOUDS_COUNT = 5;
 
 class CloudSystem

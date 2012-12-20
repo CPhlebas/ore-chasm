@@ -22,10 +22,12 @@
 
 #include <allegro5/allegro.h>
 
+#include <Eigen/Core>
+
 Player::Player(const char* texture) : Entity(texture)
 {
     const sf::IntRect rect = Renderable::getTextureRect();
-    const sf::Vector2f center = sf::Vector2f(rect.width * 0.5, rect.height * 0.5);
+    const Eigen::Vector2f center = Eigen::Vector2f(rect.width * 0.5, rect.height * 0.5);
     setOrigin(center);
 }
 
@@ -34,7 +36,7 @@ void Player::render(ALLEGRO_DISPLAY *display)
     Renderable::render(window);
 
     //debug drawing for the radius that is within the player's reach to "pick"
-    sf::RectangleShape rect = sf::RectangleShape(sf::Vector2f(Player::blockPickingRadius * 2.0f, Player::blockPickingRadius * 2.0f));
+    sf::RectangleShape rect = sf::RectangleShape(Eigen::Vector2f(Player::blockPickingRadius * 2.0f, Player::blockPickingRadius * 2.0f));
     rect.setPosition(getPosition().x - Player::blockPickingRadius, getPosition().y - Player::blockPickingRadius);
     rect.setFillColor(sf::Color::Transparent);
     rect.setOutlineColor(sf::Color::Red);
@@ -82,5 +84,5 @@ void Player::handleEvent(const ALLEGRO_EVENT& event)
         break;
     }
 
-    Entity::setVelocity(sf::Vector2f(m_inputXDirection, m_inputYDirection));
+    Entity::setVelocity(m_inputXDirection, m_inputYDirection);
 }
