@@ -28,9 +28,15 @@
 #include <string>
 
 #include <allegro5/allegro.h>
+#include <allegro5/allegro_acodec.h>
+#include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_image.h>
+#include <allegro5/allegro_native_dialog.h>
 #include <allegro5/allegro_opengl.h>
+#include <allegro5/allegro_physfs.h>
+#include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_shader.h>
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/keyboard.h>
 #include <allegro5/mouse.h>
@@ -60,8 +66,11 @@ void Game::init()
     Debug::log(Debug::Area::System) << "Using allegro version: " << major << "." << minor << "." << revision << "." << release;
 
     Debug::fatal(al_init(), Debug::Area::System, "Failure to init allegro");
-
+t
     al_init_font_addon();
+    Debug::fatal(al_init_acodec_addon(), Debug::Area::System, "Failure to init acodec addon");
+    Debug::fatal(al_init_native_dialog_addon(), Debug::Area::System, "Failure to init native dialog addon");
+    Debug::fatal(al_init_primitives_addon(), Debug::Area::System, "Failure to init primitives addon");
     Debug::fatal(al_init_ttf_addon(), Debug::Area::System, "Failure to init ttf addon");
     Debug::fatal(al_init_image_addon(), Debug::Area::System, "Failure to init image addon");
     Debug::fatal(al_install_keyboard(), Debug::Area::System, "Failure to install keyboard");
