@@ -16,6 +16,7 @@
  *****************************************************************************/
 
 #include "resourcemanager.h"
+#include "debug.h"
 
 #include <map>
 #include <iostream>
@@ -50,7 +51,7 @@ ALLEGRO_BITMAP* ResourceManager::loadTexture(const std::string& filename)
             it != m_bitmaps.end();
             ++it) {
         if (filename == it->first) {
-            std::cout << "DEBUG_MESSAGE: " << filename << " using existing texture.\n";
+            Debug::log(Debug::Area::Graphics) << "Bitmap load requested for: " << filename << ". Using cached bitmap.";
             return it->second;
         }
     }
@@ -60,7 +61,7 @@ ALLEGRO_BITMAP* ResourceManager::loadTexture(const std::string& filename)
     // Search project's main directory
     if (al_load_bitmap(filename.c_str())) {
         m_bitmaps[filename] = bitmap;
-        std::cout << "DEBUG_MESSAGE: " << filename << " loading new texture.\n";
+            Debug::log(Debug::Area::Graphics) << "Bitmap load requested for: " << filename << ". Bitmap is not cached, loading from scratch";
         return m_bitmaps[filename];
     }
 
@@ -72,12 +73,12 @@ ALLEGRO_BITMAP* ResourceManager::loadTexture(const std::string& filename)
 
         if (al_load_bitmap(fullName.c_str())) {
             m_bitmaps[filename] = bitmap;
-            std::cout << "DEBUG_MESSAGE: " << filename << " loading texture.\n";
+            Debug::log(Debug::Area::Graphics) << "Bitmap load requested for: " << filename << ". Bitmap is not cached, loading from scratch";
             return m_bitmaps[filename];
         }
     }
 
-    std::cout << "GAME_ERROR: Texture was not found. It is filled with an empty texture.\n";
+    Debug::fatal(bitmap, Debug::Area::Graphics, "Bitmap load requested for: " << filename << ". All attempts exhausted, bitmap cannot be loaded.");
 
     m_bitmaps[filename] = bitmap;
     return m_bitmaps[filename];
