@@ -42,7 +42,7 @@ void Player::render(ALLEGRO_DISPLAY *display)
     window->draw(rect);
 }
 
-void Player::handleEvent(const sf::Event& event)
+void Player::handleEvent(const ALLEGRO_EVENT& event)
 {
     switch (event.type) {
         case ALLEGRO_EVENT_KEY_DOWN:

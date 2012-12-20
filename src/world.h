@@ -42,6 +42,13 @@ static constexpr unsigned short WORLD_COLUMNCOUNT = 2400;
 
 */
 
+enum Mouse {
+    ALLEGRO_MOUSE_LEFT = 1,
+    ALLEGRO_MOUSE_RIGHT = 2,
+    ALLEGRO_MOUSE_MIDDLE = 4
+};
+
+
 class World
 {
 public:

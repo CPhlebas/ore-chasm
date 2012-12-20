@@ -164,7 +164,11 @@ for (Entity * currentEntity : m_entities) {
     m_window->setView(m_window->getDefaultView());
 
     // ==================================================
-    const sf::Vector2i mouse = sf::Mouse::getPosition(*m_window);
+    ALLEGRO_MOUSE_STATE state;
+    al_get_mouse_state(&state);
+
+    sf::Vector2i mouse(state.x, state.y);
+
     const float radius = 16.0f;
     const float halfRadius = radius * 0.5;
     const float halfBlockSize = Block::blockSize * 0.5;
@@ -220,16 +224,20 @@ void World::handleEvent(const ALLEGRO_EVENT& event)
 
         break;
 
-    case sf::Event::MouseButtonPressed:
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-            m_mouseLeftHeld = true;
-        }
+        case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
+            ALLEGRO_MOUSE_STATE state;
+            al_get_mouse_state(&state);
+            if (state.buttons & ALLEGRO_MOUSE_LEFT) {
+                m_mouseLeftHeld = true;
+            }
         break;
 
-    case sf::Event::MouseButtonReleased:
-        if (!sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-            m_mouseLeftHeld = false;
-        }
+    case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
+            ALLEGRO_MOUSE_STATE state;
+            al_get_mouse_state(&state);
+            if (state.buttons & ~ALLEGRO_MOUSE_LEFT) {
+                m_mouseLeftHeld = false;
+            }
     }
 
     m_player->handleEvent(event);
