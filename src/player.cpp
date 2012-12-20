@@ -17,7 +17,7 @@
 
 #include "player.h"
 
-#include "imagemanager.h"
+#include "resourcemanager.h"
 #include <assert.h>
 
 #include <allegro5/allegro.h>

@@ -15,27 +15,32 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#ifndef IMAGE_MANAGER_H
-#define IMAGE_MANAGER_H
+#ifndef RESORUCE_MANAGER_H
+#define RESOURCE_MANAGER_H
 
 #include <stdlib.h>
+#include <map>
+#include <vector>
 
-class ImageManager
+class ALLEGRO_BITMAP;
+
+class ResourceManager
 {
 public:
-    ImageManager();
-    static ImageManager* instance();
+    ResourceManager();
+    static ResourceManager* instance();
 
-    const sf::Texture& loadTexture(const std::string& filename);
-    void deleteTexture(const sf::Texture& texture);
-    void deleteTexture(const std::string& filename);
+    ALLEGRO_BITMAP* loadBitmap(const std::string& filename);
+    void deleteBitmap(ALLEGRO_BITMAP *bitmap);
+    void deleteBitmap(const std::string& filename);
+
     void addResourceDir(const std::string& directory);
     void removeResourceDir(const std::string& directory);
 
 private:
-    ~ImageManager();
+    ~ResourceManager();
 
-    std::map<std::string, sf::Texture> textures;
-    std::vector<std::string> resourceDirs;
+    std::map<std::string, ALLEGRO_BITMAP*> m_bitmaps;
+    std::vector<std::string> m_resourceDirs;
 };
 #endif

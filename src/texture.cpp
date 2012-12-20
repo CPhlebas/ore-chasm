@@ -26,7 +26,6 @@
 
 Texture::Texture(const char* texture)
 {
-    m_imageManager = ImageManager::instance();
     Texture::setTexture(texture);
 
     const Eigen::Vector2f texSize = size();
@@ -35,16 +34,11 @@ Texture::Texture(const char* texture)
 
 void Texture::setTexture(const char* texture)
 {
+    m_bitmap = ResourceManager::instance()->loadBitmap(texture);
 }
 
 void Texture::draw_bitmap(int flags)
 {
-    const sf::Vector2u size = sf::Sprite::getTexture()->getSize();
-    const Eigen::Vector2f rectSize(size.x, size.y);
-    const Eigen::Vector2f pos = sf::Sprite::getPosition();
-    const sf::IntRect rect = getTextureRect();
-    const Eigen::Vector2f center = Eigen::Vector2f(rect.width * 0.5, rect.height * 0.5);
-
     al_draw_bitmap(m_bitmap, m_position.x() - m_origin.x(), m_position.y() - m_origin.y(), flags);
 
     if (DEBUG_RENDERING) {

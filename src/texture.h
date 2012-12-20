@@ -18,7 +18,7 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include "imagemanager.h"
+#include "resourcemanager.h"
 
 #include <Eigen/Core>
 
@@ -72,8 +72,6 @@ private:
     void renderDebugDrawing();
 
 private:
-    ImageManager* m_imageManager = nullptr;
-
     ALLEGRO_BITMAP *m_bitmap = nullptr;
 
     Eigen::Vector2f m_position = Eigen::Vector2f(0.0f, 0.0f);

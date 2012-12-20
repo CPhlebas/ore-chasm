@@ -15,37 +15,39 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
  *****************************************************************************/
 
-#include "imagemanager.h"
+#include "resourcemanager.h"
 
 #include <map>
 #include <iostream>
 
-static ImageManager* s_instance = 0;
+#include <allegro5/allegro.h>
 
-ImageManager::ImageManager() : textures(), resourceDirs()
+static ResourceManager* s_instance = 0;
+
+ResourceManager::ResourceManager() : m_bitmaps(), m_resourceDirs()
 {
 }
 
-ImageManager::~ImageManager()
+ResourceManager::~ResourceManager()
 {
-    textures.clear();
-    resourceDirs.clear();
+    m_bitmaps.clear();
+    m_resourceDirs.clear();
 }
 
-ImageManager* ImageManager::instance()
+ResourceManager* ResourceManager::instance()
 {
     if (!s_instance) {
-        s_instance = new ImageManager();
+        s_instance = new ResourceManager();
     }
 
     return s_instance;
 }
 
-const sf::Texture& ImageManager::loadTexture(const std::string& filename)
+ALLEGRO_BITMAP* ResourceManager::loadTexture(const std::string& filename)
 {
     // Check, whether the image already exists
-    for (std::map<std::string, sf::Texture>::const_iterator it = textures.begin();
-            it != textures.end();
+    for (std::map<std::string, ALLEGRO_BITMAP*>::const_iterator it = m_bitmaps.begin();
+            it != m_bitmaps.end();
             ++it) {
         if (filename == it->first) {
             std::cout << "DEBUG_MESSAGE: " << filename << " using existing texture.\n";
@@ -53,75 +55,74 @@ const sf::Texture& ImageManager::loadTexture(const std::string& filename)
         }
     }
 
-    // The image doesen't exists. Create it and save it.
-    sf::Texture texture;
+    ALLEGRO_BITMAP *bitmap = nullptr;
 
     // Search project's main directory
-    if (texture.loadFromFile(filename)) {
-        textures[filename] = texture;
+    if (al_load_bitmap(filename.c_str())) {
+        m_bitmaps[filename] = bitmap;
         std::cout << "DEBUG_MESSAGE: " << filename << " loading new texture.\n";
-        return textures[filename];
+        return m_bitmaps[filename];
     }
 
     // If the image has still not been found, search all registered directories
-    for (std::vector<std::string>::iterator it = resourceDirs.begin();
-            it != resourceDirs.end();
-            ++it) {
-        if (texture.loadFromFile((*it) + filename)) {
-            textures[filename] = texture;
-            std::cout << "DEBUG_MESSAGE: " << filename << " loading texture.\n";
-            return textures[filename];
-        }
+    for (std::vector<std::string>::iterator it = m_resourceDirs.begin(); it != m_resourceDirs.end(); ++it) {
+        std::string fullName;
+        fullName << (*it);
+        fullName << filename;
 
+        if (al_load_bitmap(fullName.c_str())) {
+            m_bitmaps[filename] = bitmap;
+            std::cout << "DEBUG_MESSAGE: " << filename << " loading texture.\n";
+            return m_bitmaps[filename];
+        }
     }
 
     std::cout << "GAME_ERROR: Texture was not found. It is filled with an empty texture.\n";
-    textures[filename] = texture;
-    return textures[filename];
+
+    m_bitmaps[filename] = bitmap;
+    return m_bitmaps[filename];
 }
 
-void ImageManager::deleteTexture(const sf::Texture& texture)
+void ResourceManager::deleteTexture(const sf::Texture& texture)
 {
-    for (std::map<std::string, sf::Texture>::const_iterator it = textures.begin();
-            it != textures.end();
+    for (std::map<std::string, ALLEGRO_BITMAP*>::const_iterator it = m_bitmaps.begin();
+            it != m_bitmaps.end();
             ++it) {
         if (&texture == &it->second) {
-            textures.erase(it);
+            m_bitmaps.erase(it);
             return;
         }
     }
 }
 
-void ImageManager::deleteTexture(const std::string& filename)
+void ResourceManager::deleteTexture(const std::string& filename)
 {
-    std::map<std::string, sf::Texture>::const_iterator it = textures.find(filename);
-    if (it != textures.end())
-        textures.erase(it);
+    std::map<std::string, ALLEGRO_BITMAP*>::const_iterator it = m_bitmaps.find(filename);
+    if (it != m_bitmaps.end())
+        m_bitmaps.erase(it);
 }
 
-void ImageManager::addResourceDir(const std::string& directory)
+void ResourceManager::addResourceDir(const std::string& directory)
 {
     // Check whether the path already exists
-    for (std::vector<std::string>::const_iterator it  = resourceDirs.begin();
-            it != resourceDirs.end();
-            ++it) {
+    for (std::vector<std::string>::const_iterator it  = m_resourceDirs.begin(); it != m_resourceDirs.end(); ++it) {
         // The path exists. So it isn't necessary to add id once more.
         if (directory == (*it))
             return;
     }
 
     // insert the directory
-    resourceDirs.push_back(directory);
+    m_resourceDirs.push_back(directory);
 }
 
-void ImageManager::removeResourceDir(const std::string& directory)
+void ResourceManager::removeResourceDir(const std::string& directory)
 {
-    for (std::vector<std::string>::iterator it  = resourceDirs.begin();
-            it != resourceDirs.end();) {
+    for (std::vector<std::string>::iterator it  = m_resourceDirs.begin(); it != m_resourceDirs.end();) {
         // The path exists. So it isn't necessary to add id once more.
-        if (directory == (*it))
-            it = resourceDirs.erase(it);
-        else
+        if (directory == (*it)) {
+            it = m_resourceDirs.erase(it);
+        } else {
             ++it;
+        }
     }
 }
