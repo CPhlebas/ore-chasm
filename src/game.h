@@ -27,11 +27,13 @@ class ALLEGRO_FONT;
 class ALLEGRO_TIMER;
 class ALLEGRO_EVENT_QUEUE;
 class ALLEGRO_DISPLAY;
+
 //1600
 static int SCREEN_W = 1600;
 //900
 static int SCREEN_H = 900;
 
+//FIXME: make on/off via key
 static bool DEBUG_RENDERING = true;
 
 class Game

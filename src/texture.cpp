@@ -24,26 +24,17 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 
-Texture::Texture()
-{
-    m_imageManager = ImageManager::instance();
-}
-
 Texture::Texture(const char* texture)
 {
     m_imageManager = ImageManager::instance();
     Texture::setTexture(texture);
+
+    const Eigen::Vector2f texSize = size();
+    m_origin = Eigen::Vector2f(texSize.x() * 0.5, texSize.y() * 0.5);
 }
 
 void Texture::setTexture(const char* texture)
 {
-    sf::Sprite::setTexture(m_imageManager->loadTexture(texture));
-
-    if (DEBUG_RENDERING) {
-        // make things transparent so we can see, also tint them magenta
-        sf::Color color(255, 0, 255, 180);
-//        sf::Sprite::setColor(color);
-    }
 }
 
 void Texture::draw_bitmap(int flags)
@@ -54,18 +45,25 @@ void Texture::draw_bitmap(int flags)
     const sf::IntRect rect = getTextureRect();
     const Eigen::Vector2f center = Eigen::Vector2f(rect.width * 0.5, rect.height * 0.5);
 
-    al_draw_bitmap(m_bitmap, m_position.x(), m_position.y(), flags);
+    al_draw_bitmap(m_bitmap, m_position.x() - m_origin.x(), m_position.y() - m_origin.y(), flags);
 
-    renderDebugDrawing();
+    if (DEBUG_RENDERING) {
+        renderDebugDrawing();
+    }
 }
 
 void Texture::renderDebugDrawing()
 {
     ALLEGRO_COLOR color = al_map_rgb(0, 255, 0);
-    al_draw_rectangle(m_position.x(), m_position.y(), m_position.x() + size().x(), m_position.y() + size().y(), color, 1.0f);
+    al_draw_rectangle(m_position.x() - m_origin.x(), m_position.y() - m_origin.y(), m_position.x() + size().x() - m_origin.x(), m_position.y() + size().y() - m_origin.y(), color, 1.0f);
 }
 
 Eigen::Vector2i Texture::size() const
 {
     return Eigen::Vector2i(al_get_bitmap_height(m_bitmap), al_get_bitmap_width(m_bitmap));
+}
+
+void Texture::setOrigin(const Eigen::Vector2f origin)
+{
+    m_origin = origin;
 }

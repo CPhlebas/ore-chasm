@@ -28,7 +28,6 @@ class ALLEGRO_BITMAP;
 class Texture
 {
 public:
-    Texture();
 
     /**
      * A wrapper around ALLEGRO_BITMAP which automagically handles loading and
@@ -68,6 +67,8 @@ public:
     Eigen::Vector2f origin() const { return m_origin; };
 
 private:
+    Texture();
+
     void renderDebugDrawing();
 
 private:
