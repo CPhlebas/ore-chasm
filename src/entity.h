@@ -18,7 +18,7 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include "renderable.h"
+#include "texture.h"
 
 #include <Eigen/Core>
 

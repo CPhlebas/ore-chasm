@@ -22,6 +22,7 @@
 #include <Eigen/Core>
 
 #include <allegro5/allegro.h>
+#include <allegro5/allegro_primitives.h>
 
 Texture::Texture()
 {
@@ -45,7 +46,7 @@ void Texture::setTexture(const char* texture)
     }
 }
 
-void Texture::render(ALLEGRO_DISPLAY *display)
+void Texture::draw_bitmap(int flags)
 {
     const sf::Vector2u size = sf::Sprite::getTexture()->getSize();
     const Eigen::Vector2f rectSize(size.x, size.y);
@@ -53,13 +54,18 @@ void Texture::render(ALLEGRO_DISPLAY *display)
     const sf::IntRect rect = getTextureRect();
     const Eigen::Vector2f center = Eigen::Vector2f(rect.width * 0.5, rect.height * 0.5);
 
-    sf::RectangleShape outline;
-    outline.setSize(rectSize);
-    outline.setOutlineColor(sf::Color::Green);
-    outline.setOutlineThickness(-1.0f);
-    outline.setFillColor(sf::Color(0, 0, 0, 0));
-    outline.setPosition(pos);
-    outline.setOrigin(center);
+    al_draw_bitmap(m_bitmap, m_position.x(), m_position.y(), flags);
 
-    window->draw(outline);
+    renderDebugDrawing();
+}
+
+void Texture::renderDebugDrawing()
+{
+    ALLEGRO_COLOR color = al_map_rgb(0, 255, 0);
+    al_draw_rectangle(m_position.x(), m_position.y(), m_position.x() + size().x(), m_position.y() + size().y(), color, 1.0f);
+}
+
+Eigen::Vector2i Texture::size() const
+{
+    return Eigen::Vector2i(al_get_bitmap_height(m_bitmap), al_get_bitmap_width(m_bitmap));
 }
