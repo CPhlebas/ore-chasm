@@ -113,9 +113,8 @@ void Game::init()
 //    ImageManager* manager = ImageManager::instance();
 //    manager->addResourceDir("../textures/");
 
-    // World takes ownership of m_view
- //   World::createInstance(m_window, m_view);
-//    m_world = World::instance();
+    World::createInstance(m_display);
+    m_world = World::instance();
 
     // ----------------------------------------------------- initial render --------------------------------------------------
     al_clear_to_color(al_map_rgb(0, 0, 0));
