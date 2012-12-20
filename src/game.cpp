@@ -145,8 +145,7 @@ void Game::tick()
         oldTime = newTime;
 
         ALLEGRO_EVENT event;
-        al_get_next_event(m_events, &event);
-
+        while (al_get_next_event(m_events, &event)) {
 //            m_world->handleEvent(event);
             switch (event.type) {
                 // window closed
@@ -157,6 +156,7 @@ void Game::tick()
                 // key pressed
                 case ALLEGRO_EVENT_KEY_DOWN:
                 if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
+                    Debug::log(Debug::Area::System) << "shutting down...";
                     goto shutdown;
                 }
                 break;
@@ -180,6 +180,7 @@ void Game::tick()
                 default:
                     break;
             }
+        }
 
             // if there are events to process, lets suspend drawing for a tick
             al_clear_to_color(al_map_rgb(0,0,0));
