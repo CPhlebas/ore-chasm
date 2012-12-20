@@ -23,7 +23,7 @@
 
 #include <SFML/Graphics.hpp>
 
-class ALLEGRO_EVENT;
+union ALLEGRO_EVENT;
 class ALLEGRO_DISPLAY;
 
 class Player : public Entity

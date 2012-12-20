@@ -20,8 +20,6 @@
 
 #include "imagemanager.h"
 
-#include <SFML/Graphics.hpp>
-
 class Renderable : public sf::Sprite
 {
 public:

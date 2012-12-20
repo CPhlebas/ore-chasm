@@ -23,7 +23,7 @@
 
 #include <stdlib.h>
 
-class ALLEGRO_EVENT;
+union ALLEGRO_EVENT;
 class ALLEGRO_DISPLAY;
 
 class Sky;

@@ -53,9 +53,7 @@ void World::createInstance(ALLEGRO_DISPLAY *display)
     }
 }
 
-
-World::World(ALLEGRO_DISPLAY *display) :
-m_display(display)
+World::World(ALLEGRO_DISPLAY *display) : m_display(display)
 {
     m_player = new Player("../textures/player.png");
     m_entities.insert(m_entities.end(), m_player);
@@ -137,28 +135,26 @@ m_display(display)
     m_shader.setParameter("tile_types_super_texture", m_tileTypesSuperTexture);
 
     //FIXME: height
-    m_sky = new Sky(m_window, m_view, 0.0f);
+//    m_sky = new Sky(m_window, m_view, 0.0f);
 }
 
 World::~World()
 {
     delete m_player;
-    delete m_sky;
+//    delete m_sky;
 }
 
 void World::render()
 {
     //Sky at bottom layer
 
-    sf::RenderStates state;
-    state.shader = &m_shader;
     m_window->draw(m_tileMapFinalSprite, state);
 
     //set our view so that the player will stay relative to the view, in the center.
     m_window->setView(*m_view);
 
     //player drawn on top... since we don't have anything like z-ordering or layering (TODO)
-for (Entity * currentEntity : m_entities) {
+    for (Entity * currentEntity : m_entities) {
         m_window->draw(*currentEntity);
         currentEntity->render(m_window);
     }
@@ -187,7 +183,7 @@ for (Entity * currentEntity : m_entities) {
     crosshair.setOrigin(halfRadius - halfBlockSize, halfRadius - halfBlockSize);
     m_window->draw(crosshair);
     // ==================================================
-    m_sky->render();
+//    m_sky->render();
 }
 
 void World::handleEvent(const ALLEGRO_EVENT& event)
@@ -226,20 +222,23 @@ void World::handleEvent(const ALLEGRO_EVENT& event)
 
         break;
 
-        case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
+        case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN: {
             ALLEGRO_MOUSE_STATE state;
             al_get_mouse_state(&state);
             if (state.buttons & ALLEGRO_MOUSE_LEFT) {
                 m_mouseLeftHeld = true;
             }
         break;
+        }
 
-    case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
+    case ALLEGRO_EVENT_MOUSE_BUTTON_UP: {
             ALLEGRO_MOUSE_STATE state;
             al_get_mouse_state(&state);
             if (state.buttons & ~ALLEGRO_MOUSE_LEFT) {
                 m_mouseLeftHeld = false;
             }
+        break;
+    }
     }
 
     m_player->handleEvent(event);
@@ -251,7 +250,7 @@ void World::update(const float elapsedTime)
         performBlockAttack();
     }
 
-    m_sky->update(elapsedTime);
+//    m_sky->update(elapsedTime);
 
 for (Entity * currentEntity : m_entities) {
         currentEntity->update(elapsedTime);
