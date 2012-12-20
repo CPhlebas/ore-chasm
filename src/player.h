@@ -23,6 +23,9 @@
 
 #include <SFML/Graphics.hpp>
 
+class ALLEGRO_EVENT;
+class ALLEGRO_DISPLAY;
+
 class Player : public Entity
 {
 public:
@@ -33,14 +36,14 @@ public:
      */
     Player(const char* texture);
 
-    void handleEvent(const sf::Event& event);
+    void handleEvent(const ALLEGRO_EVENT& event);
 
     // radius indicating how many pixels out the player can pick
     // blocks
     static constexpr float blockPickingRadius = Block::blockSize * 8.0f;
     static constexpr float movementSpeed = 1000.0f;
 
-    void render(sf::RenderWindow *window);
+    void render(ALLEGRO_DISPLAY *display);
 
 private:
     unsigned char health = 100;

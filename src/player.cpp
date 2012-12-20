@@ -20,6 +20,8 @@
 #include "imagemanager.h"
 #include <assert.h>
 
+#include <allegro5/allegro.h>
+
 Player::Player(const char* texture) : Entity(texture)
 {
     const sf::IntRect rect = Renderable::getTextureRect();
@@ -27,7 +29,7 @@ Player::Player(const char* texture) : Entity(texture)
     setOrigin(center);
 }
 
-void Player::render(sf::RenderWindow* window)
+void Player::render(ALLEGRO_DISPLAY *display)
 {
     Renderable::render(window);
 
@@ -43,32 +45,38 @@ void Player::render(sf::RenderWindow* window)
 void Player::handleEvent(const sf::Event& event)
 {
     switch (event.type) {
-    case sf::Event::KeyPressed:
-        if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
+        case ALLEGRO_EVENT_KEY_DOWN:
+        if (event.keyboard.keycode == ALLEGRO_KEY_D || event.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
             m_inputXDirection = 1.f;
         }
-        if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
+
+        if (event.keyboard.keycode == ALLEGRO_KEY_A || event.keyboard.keycode == ALLEGRO_KEY_LEFT) {
             m_inputXDirection = -1.f;
         }
-        if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down) {
+
+        if (event.keyboard.keycode == ALLEGRO_KEY_S || event.keyboard.keycode == ALLEGRO_KEY_DOWN) {
             m_inputYDirection = 1.f;
         }
-        if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
+
+        if (event.keyboard.keycode == ALLEGRO_KEY_W || event.keyboard.keycode == ALLEGRO_KEY_UP) {
             m_inputYDirection = -1.f;
         }
         break;
 
-    case sf::Event::KeyReleased:
-        if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
+        case ALLEGRO_EVENT_KEY_UP:
+        if (event.keyboard.keycode == ALLEGRO_KEY_D || event.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
             m_inputXDirection = 0.f;
         }
-        if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
+
+        if (event.keyboard.keycode == ALLEGRO_KEY_A || event.keyboard.keycode == ALLEGRO_KEY_LEFT) {
             m_inputXDirection = 0.f;
         }
-        if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down) {
+
+        if (event.keyboard.keycode == ALLEGRO_KEY_S || event.keyboard.keycode == ALLEGRO_KEY_DOWN) {
             m_inputYDirection = 0.f;
         }
-        if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
+
+        if (event.keyboard.keycode == ALLEGRO_KEY_W || event.keyboard.keycode == ALLEGRO_KEY_UP) {
             m_inputYDirection = 0.f;
         }
         break;

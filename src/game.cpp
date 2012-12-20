@@ -190,8 +190,8 @@ void Game::tick()
             str = ss.str();
             al_draw_text(m_font, al_map_rgb(255, 255, 0), 0, 0, ALLEGRO_ALIGN_LEFT, str.c_str());
 
-    //       m_world->update(elapsedTime);
-    //        m_world->render();
+            m_world->update(static_cast<float>(delta));
+            m_world->render();
             //rendering always before this
             al_flip_display();
     }

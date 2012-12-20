@@ -107,7 +107,7 @@ m_display(display)
     */
 
     int i = 0;
-for (auto blockStruct : Block::blockTypeMap) {
+    for (auto blockStruct : Block::blockTypeMap) {
         loaded = currentTile.loadFromFile(blockStruct.second.texture);
 
         //would indicate we couldn't find a tile. obviously, we need that..
@@ -184,32 +184,40 @@ for (Entity * currentEntity : m_entities) {
     m_sky->render();
 }
 
-void World::handleEvent(const sf::Event& event)
+void World::handleEvent(const ALLEGRO_EVENT& event)
 {
 
     //FIXME:!!!! unused, we just pass events to the player..among other children (currently just player though)
     //here, the inventory ui and other stuff may need to be factored in. who knows.
     switch (event.type) {
-    case sf::Event::KeyPressed:
-        if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
+        case ALLEGRO_EVENT_KEY_DOWN:
+        if (event.keyboard.keycode == ALLEGRO_KEY_D || event.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
         }
-        if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
+
+        if (event.keyboard.keycode == ALLEGRO_KEY_A || event.keyboard.keycode == ALLEGRO_KEY_LEFT) {
         }
-        if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down) {
+
+        if (event.keyboard.keycode == ALLEGRO_KEY_S || event.keyboard.keycode == ALLEGRO_KEY_DOWN) {
         }
-        if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
+
+        if (event.keyboard.keycode == ALLEGRO_KEY_W || event.keyboard.keycode == ALLEGRO_KEY_UP) {
         }
+
         break;
 
-    case sf::Event::KeyReleased:
-        if (event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::Right) {
+        case ALLEGRO_EVENT_KEY_UP:
+        if (event.keyboard.keycode == ALLEGRO_KEY_D || event.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
         }
-        if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::Left) {
+
+        if (event.keyboard.keycode == ALLEGRO_KEY_A || event.keyboard.keycode == ALLEGRO_KEY_LEFT) {
         }
-        if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down) {
+
+        if (event.keyboard.keycode == ALLEGRO_KEY_S || event.keyboard.keycode == ALLEGRO_KEY_DOWN) {
         }
-        if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
+ 
+        if (event.keyboard.keycode == ALLEGRO_KEY_W || event.keyboard.keycode == ALLEGRO_KEY_UP) {
         }
+
         break;
 
     case sf::Event::MouseButtonPressed:
