@@ -1,0 +1,65 @@
+/******************************************************************************
+ *   Copyright (C) 2012 by Shaun Reich <sreich@kde.org>                       *
+ *                                                                            *
+ *   This program is free software; you can redistribute it and/or            *
+ *   modify it under the terms of the GNU General Public License as           *
+ *   published by the Free Software Foundation; either version 2 of           *
+ *   the License, or (at your option) any later version.                      *
+ *                                                                            *
+ *   This program is distributed in the hope that it will be useful,          *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of           *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            *
+ *   GNU General Public License for more details.                             *
+ *                                                                            *
+ *   You should have received a copy of the GNU General Public License        *
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
+ *****************************************************************************/
+
+#include "texture.h"
+#include "imagemanager.h"
+#include "game.h"
+
+#include <Eigen/Core>
+
+#include <allegro5/allegro.h>
+
+Texture::Texture()
+{
+    m_imageManager = ImageManager::instance();
+}
+
+Texture::Texture(const char* texture)
+{
+    m_imageManager = ImageManager::instance();
+    Texture::setTexture(texture);
+}
+
+void Texture::setTexture(const char* texture)
+{
+    sf::Sprite::setTexture(m_imageManager->loadTexture(texture));
+
+    if (DEBUG_RENDERING) {
+        // make things transparent so we can see, also tint them magenta
+        sf::Color color(255, 0, 255, 180);
+//        sf::Sprite::setColor(color);
+    }
+}
+
+void Texture::render(ALLEGRO_DISPLAY *display)
+{
+    const sf::Vector2u size = sf::Sprite::getTexture()->getSize();
+    const Eigen::Vector2f rectSize(size.x, size.y);
+    const Eigen::Vector2f pos = sf::Sprite::getPosition();
+    const sf::IntRect rect = getTextureRect();
+    const Eigen::Vector2f center = Eigen::Vector2f(rect.width * 0.5, rect.height * 0.5);
+
+    sf::RectangleShape outline;
+    outline.setSize(rectSize);
+    outline.setOutlineColor(sf::Color::Green);
+    outline.setOutlineThickness(-1.0f);
+    outline.setFillColor(sf::Color(0, 0, 0, 0));
+    outline.setPosition(pos);
+    outline.setOrigin(center);
+
+    window->draw(outline);
+}
