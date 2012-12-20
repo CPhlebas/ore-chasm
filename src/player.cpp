@@ -26,14 +26,14 @@
 
 Player::Player(const char* texture) : Entity(texture)
 {
-    const sf::IntRect rect = Renderable::getTextureRect();
+    const sf::IntRect rect = Texture::getTextureRect();
     const Eigen::Vector2f center = Eigen::Vector2f(rect.width * 0.5, rect.height * 0.5);
     setOrigin(center);
 }
 
 void Player::render(ALLEGRO_DISPLAY *display)
 {
-    Renderable::render(window);
+    Texture::render(window);
 
     //debug drawing for the radius that is within the player's reach to "pick"
     sf::RectangleShape rect = sf::RectangleShape(Eigen::Vector2f(Player::blockPickingRadius * 2.0f, Player::blockPickingRadius * 2.0f));

@@ -143,7 +143,7 @@ src/debug.cpp
 src/world.cpp
 #src/imagemanager.cpp
 #src/player.cpp
-#src/renderable.cpp
+src/texture.cpp
 #src/entity.cpp
 #src/block.cpp
 #src/cloudsystem.cpp

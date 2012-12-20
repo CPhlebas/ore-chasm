@@ -22,11 +22,11 @@
 
 #include <Eigen/Core>
 
-Entity::Entity(const char* texture) : Renderable(texture)
+Entity::Entity(const char* texture) : Texture(texture)
 {
 }
 
-//Entity::Entity(): Renderable("../textures/error.png")
+//Entity::Entity(): Texture("../textures/error.png")
 //{
 //}
 
@@ -44,17 +44,17 @@ void Entity::update(const float elapsedTime)
     dest.y() += getPosition().y();
 
     if (!World::instance()->isTileSolid(dest)) {
-        Renderable::setPosition(dest);
+        Texture::setPosition(dest);
     }
 }
 
 void Entity::setPosition(float x, float y)
 {
-    Renderable::setPosition(x, y);
+    Texture::setPosition(x, y);
 }
 
 void Entity::setPosition(const Eigen::Vector2f& vect)
 {
-    Renderable::setPosition(vect);
+    Texture::setPosition(vect);
 }
 

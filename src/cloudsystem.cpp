@@ -22,8 +22,8 @@
 CloudSystem::CloudSystem(sf::RenderWindow *window, sf::View *view) : m_window(window), m_view(view)
 {
     for (int i = 0; i < CLOUDS_COUNT; ++i) {
-        m_clouds[i] = new Renderable("../textures/cloud1.png");
-        Renderable *cloud = m_clouds[i];
+        m_clouds[i] = new Texture("../textures/cloud1.png");
+        Texture *cloud = m_clouds[i];
         cloud->setOrigin(cloud->getTextureRect().width * 0.5, cloud->getTextureRect().height * 0.5);
         cloud->setPosition(i * 300.0, 50.0);
     }
@@ -32,7 +32,7 @@ CloudSystem::CloudSystem(sf::RenderWindow *window, sf::View *view) : m_window(wi
 void CloudSystem::update()
 {
     for (int i = 0; i < CLOUDS_COUNT; ++i) {
-        Renderable *cloud = m_clouds[i];
+        Texture *cloud = m_clouds[i];
 
         if (cloud->getPosition().x + cloud->getTextureRect().width < SCREEN_W) {
             cloud->move(m_windspeed, 0.0f);
@@ -50,7 +50,7 @@ void CloudSystem::render()
     //FIXME: render to a sprite instead of doing a ton of draw clouds for all clouds
 
     for (int i = 0; i < CLOUDS_COUNT; ++i) {
-        Renderable *cloud = m_clouds[i];
+        Texture *cloud = m_clouds[i];
         m_window->draw(*cloud);
         cloud->render(m_window);
     }

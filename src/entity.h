@@ -24,7 +24,7 @@
 
 const float GRAVITY = 0.05f;
 
-class Entity : public Renderable
+class Entity : public Texture
 {
 public:
     /**
@@ -36,7 +36,7 @@ public:
     virtual void update(const float elapsedTime);
 
     //FIXME: unused
-    //FIXME: isolate and move further up the chain, and make Renderable privately inherited?
+    //FIXME: isolate and move further up the chain, and make Texture privately inherited?
 //    void draw(sf::RenderTarget& target, sf::RenderStates states = sf::RenderStates::Default) const;
 
     /**
