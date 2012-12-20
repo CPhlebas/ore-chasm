@@ -141,7 +141,7 @@ src/main.cpp
 src/game.cpp
 src/debug.cpp
 src/world.cpp
-#src/imagemanager.cpp
+src/resourcemanager.cpp
 #src/player.cpp
 src/texture.cpp
 #src/entity.cpp
